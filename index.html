@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/hchiam/css-boilerplate@3.2.0/style.css"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <section id="demo">
+      <template></template>
+
+      <div class="example">
+        <div class="template-instance-container">
+          <div>
+            <input id="" type="radio" name="" />
+            <label id="" for="" name="" contenteditable
+              >Editable radio label</label
+            >
+          </div>
+          <div class="template-controls remove-from-final-output">
+            <button class="copy-template" onclick="copyTemplate(this)">
+              Copy template
+            </button>
+            <button
+              class="delete-template"
+              onclick="deleteTemplateInstance(this)"
+            >
+              &nbsp;X&nbsp;
+            </button>
+          </div>
+          <textarea
+            class="notes remove-from-final-output"
+            cols="55"
+            rows="2"
+            placeholder="Notes"
+          ></textarea>
+        </div>
+
+        <div class="template-instance-container">
+          <div>
+            <input id="" type="checkbox" name="" />
+            <label id="" for="" name="" contenteditable
+              >Editable checkbox label</label
+            >
+          </div>
+          <div class="template-controls remove-from-final-output">
+            <button class="copy-template" onclick="copyTemplate(this)">
+              Copy template
+            </button>
+            <button
+              class="delete-template"
+              onclick="deleteTemplateInstance(this)"
+            >
+              &nbsp;X&nbsp;
+            </button>
+          </div>
+          <textarea
+            class="notes remove-from-final-output"
+            cols="55"
+            rows="2"
+            placeholder="Notes"
+          ></textarea>
+        </div>
+
+        <div class="template-instance-container">
+          <div class="select-container">
+            <select id="">
+              <option value="">Editable option 1</option>
+              <option value="">Editable option 2</option>
+              <option value="">Editable option 3</option>
+            </select>
+            <pre
+              class="remove-from-final-output"
+              contenteditable
+              onkeyup="editSelectOptions(this)"
+            >
+Editable option 1
+  Editable option 2
+  Editable option 3</pre
+            >
+          </div>
+          <div class="template-controls remove-from-final-output">
+            <button class="copy-template" onclick="copyTemplate(this)">
+              Copy template
+            </button>
+            <button
+              class="delete-template"
+              onclick="deleteTemplateInstance(this)"
+            >
+              &nbsp;X&nbsp;
+            </button>
+          </div>
+          <textarea
+            class="notes remove-from-final-output"
+            cols="55"
+            rows="2"
+            placeholder="Notes"
+          ></textarea>
+        </div>
+
+        <div class="template-instance-container">
+          <p contenteditable>
+            Editable paragraph template. If you edit this text and hit "Copy
+            template", the next clone that is created will have this text too.
+          </p>
+          <div class="template-controls remove-from-final-output">
+            <button class="copy-template" onclick="copyTemplate(this)">
+              Copy template
+            </button>
+            <button
+              class="delete-template"
+              onclick="deleteTemplateInstance(this)"
+            >
+              &nbsp;X&nbsp;
+            </button>
+          </div>
+          <textarea
+            class="notes remove-from-final-output"
+            cols="55"
+            rows="2"
+            placeholder="Notes"
+          ></textarea>
+        </div>
+
+        <div class="template-instance-container">
+          <p contenteditable>Kitchen sink template. Editable paragraph.</p>
+          <div>
+            <input id="" type="radio" name="" />
+            <label id="" for="" name="" contenteditable
+              >Editable radio label</label
+            >
+          </div>
+          <div>
+            <input id="" type="checkbox" name="" />
+            <label id="" for="" name="" contenteditable
+              >Editable checkbox label</label
+            >
+          </div>
+          <div class="select-container">
+            <select id="">
+              <option value="">Editable option 1</option>
+              <option value="">Editable option 2</option>
+              <option value="">Editable option 3</option>
+            </select>
+            <pre
+              class="remove-from-final-output"
+              contenteditable
+              onkeyup="editSelectOptions(this)"
+            >
+Editable option 1
+  Editable option 2
+  Editable option 3</pre
+            >
+          </div>
+          <div class="template-controls remove-from-final-output">
+            <button class="copy-template" onclick="copyTemplate(this)">
+              Copy template
+            </button>
+            <button
+              class="delete-template"
+              onclick="deleteTemplateInstance(this)"
+            >
+              &nbsp;X&nbsp;
+            </button>
+          </div>
+          <textarea
+            class="notes remove-from-final-output"
+            cols="55"
+            rows="2"
+            placeholder="Notes"
+          ></textarea>
+        </div>
+
+        <div class="template-instance-container template-generator">
+          <pre contenteditable>
+&lt;p&gt;Paste HTML here 
+  to dynamically generate 
+  a template?&lt;/p&gt;</pre
+          >
+
+          <div class="template-controls remove-from-final-output">
+            <button
+              class="copy-dynamic-template"
+              onclick="copyDynamicTemplate(this)"
+            >
+              Copy <b><i>dynamic</i></b> template
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="output">
+      <span class="remove-from-final-output" hidden></span>
+    </section>
+
+    <button id="get_output_html_string" hidden onclick="getOutputHtmlString()">
+      Get output HTML string
+    </button>
+
+    <section id="output_html_string">
+      <pre contenteditable></pre>
+    </section>
+
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/gh/hchiam/learning-js@master/prevent-link-window-opener-attacks.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/gh/hchiam/clipboard@3.4.0/copyToClipboard.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+    ></script>
+    <script>
+      /*
+        CONSIDER:
+
+        https://cdn.jsdelivr.net/gh/hchiam/clipboard@3.4.0/copyToClipboard.js
+
+        https://cdn.jsdelivr.net/gh/hchiam/draggable@master/makeElementDraggableAndEditable.js
+
+      */
+
+      hideGetOutputButton();
+
+      function deleteTemplateInstance(button) {
+        const isExample = $(button).parents(".example").length > 0;
+        if (isExample) return;
+        $(button).parents(".template-instance-container").remove();
+        clearOutputHtmlString();
+        const isOutputEmpty = !$("#output").find(
+          ":not(.remove-from-final-output)"
+        ).length;
+        if (isOutputEmpty) {
+          hideGetOutputButton();
+        }
+      }
+
+      function copyDynamicTemplate(button) {
+        const templateContainer = $(button).parents(".template-generator");
+        let templateHtmlLiteral = templateContainer
+          .find("pre")
+          .text()
+          .replaceAll("<br>", "\n")
+          .trim();
+        templateHtmlLiteral = `<div class="template-instance-container">
+    ${templateHtmlLiteral}
+    <div class="template-controls remove-from-final-output">
+      <button class="copy-template" onclick="copyTemplate(this)">Copy template</button>
+      <button class="delete-template" onclick="deleteTemplateInstance(this)">&nbsp;X&nbsp;</button>
+      </div>
+      <textarea class="notes remove-from-final-output" cols="55" rows="2" placeholder="Notes"></textarea>
+  </div>`;
+
+        const lastTemplateContainer = $("#output")
+          .find(".template-instance-container")
+          .last();
+        const lastTemplateInOutputContainer = lastTemplateContainer.length
+          ? lastTemplateContainer
+          : $("#output").children().first();
+
+        fillTemplateWith(templateHtmlLiteral);
+        const template = $("template")[0];
+        const clone = template.content.cloneNode(true);
+
+        $(clone).insertAfter(lastTemplateInOutputContainer);
+
+        stopFlashingColorAfterHoveredAClone();
+        clearOutputHtmlString();
+        showGetOutputButton();
+      }
+
+      function copyTemplate(button) {
+        const isExample = $(button).parents(".example").length > 0;
+
+        const templateContainer = $(button).parents(
+          ".template-instance-container"
+        );
+
+        const lastTemplateContainer = $("#output")
+          .find(".template-instance-container")
+          .last();
+        const lastTemplateInOutputContainer = lastTemplateContainer.length
+          ? lastTemplateContainer
+          : $("#output").children().first();
+
+        const thisHtml = `<div class="template-instance-container">${templateContainer.html()}</div>`;
+        fillTemplateWith(thisHtml);
+        const template = $("template")[0];
+        const clone = template.content.cloneNode(true);
+
+        $(clone).insertAfter(
+          isExample ? lastTemplateInOutputContainer : templateContainer
+        );
+
+        stopFlashingColorAfterHoveredAClone();
+        clearOutputHtmlString();
+        showGetOutputButton();
+      }
+
+      function fillTemplateWith(thisHtml) {
+        $("template").html(thisHtml);
+      }
+
+      function editSelectOptions(pre) {
+        const preText = $(pre).html().replaceAll("<br>", "\n").trim();
+        const options = preText.split("\n");
+        const select = $(pre).prev();
+        const newOptionsHtml = options
+          .map((x) => `<option value="${x}">${x}</option>`)
+          .join("");
+        console.log(newOptionsHtml);
+        select.html(newOptionsHtml);
+      }
+
+      function clearOutputHtmlString() {
+        $("#output_html_string pre").text("");
+      }
+
+      function getOutputHtmlString() {
+        let output = $("<div>").append($("#output").clone());
+        output.find(".remove-from-final-output").remove();
+        output = output.find("#output").html();
+        $("#output_html_string pre").text(output);
+        setTimeout(() => {
+          scrollToBottomOfElement($("#output_html_string pre"));
+        }, 200);
+      }
+
+      function scrollToBottomOfElement(jQueryElement) {
+        const newScrollPosition =
+          jQueryElement[0].scrollHeight + jQueryElement[0].offsetHeight;
+        window.scrollTo(0, newScrollPosition);
+      }
+
+      function stopFlashingColor() {
+        $(":root").css("--flash-background", "black");
+        $(":root").css("--flash-color", "white");
+        $(":root").remove("--flash-background");
+        $(":root").remove("--flash-color");
+      }
+
+      let stoppedFlashingColor = false;
+      const secondsUntilStopShowingFlash = 5;
+      function stopFlashingColorAfterHoveredAClone() {
+        $("#output")
+          .find(".template-instance-container")
+          .on("mouseenter", function () {
+            if (!stoppedFlashingColor) {
+              stoppedFlashingColor = true;
+              setTimeout(() => {
+                stopFlashingColor();
+              }, secondsUntilStopShowingFlash * 1000);
+            }
+          });
+      }
+
+      function showGetOutputButton() {
+        $("#get_output_html_string").show();
+      }
+
+      function hideGetOutputButton() {
+        $("#get_output_html_string").hide();
+      }
+    </script>
+  </body>
+</html>

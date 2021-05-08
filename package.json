@@ -1,0 +1,14 @@
+{
+  "name": "html-template-generator",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/hchiam/html-template-generator",
+  "author": "hchiam <hchiam@users.noreply.github.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "parcel index.html"
+  },
+  "devDependencies": {
+    "parcel-bundler": "1.12.3"
+  }
+}

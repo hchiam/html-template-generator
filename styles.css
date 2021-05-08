@@ -1,0 +1,132 @@
+:root {
+  --flash-background: lime;
+  --flash-color: black;
+}
+
+[contenteditable]:hover {
+  border: 1px dotted white;
+  cursor: text;
+}
+
+.template-instance-container {
+  border: 3px solid white;
+  padding: 1em;
+  margin: 1em;
+  position: relative;
+}
+
+.template-controls {
+  display: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+  text-decoration: none !important;
+}
+
+.template-instance-container:hover .template-controls {
+  display: block;
+}
+
+.template-instance-container:hover .template-controls button {
+  animation: flash-of-color 0.3s 0.3s;
+}
+
+.example {
+  display: grid;
+  flex-grow: 1;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.example .delete-template,
+.example .notes {
+  display: none;
+}
+
+select + pre {
+  position: relative;
+  margin-top: 0;
+  white-space: pre-line;
+  transition: max-height 300ms, padding-top 300ms;
+  max-height: 0;
+  overflow: hidden;
+  background: lime;
+  color: black;
+}
+
+select:hover + pre,
+select + pre:hover {
+  max-height: 100vh;
+  padding-top: 1rem;
+}
+
+select + pre:before {
+  content: " Click here and type to edit options: (new line = new option)";
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: black;
+  color: white;
+  font-size: xx-small;
+}
+
+.template-instance-container textarea {
+  width: calc(50%);
+  padding: 0;
+  border: none;
+  background: black;
+  position: absolute;
+  right: 0;
+  z-index: 1;
+  transition: max-height 0.2s;
+  max-height: 0;
+}
+
+.template-instance-container:hover textarea {
+  transition: max-height 2s;
+  max-height: 100vh;
+  border: 1px dotted white;
+  animation: flash-of-color 0.3s 0.3s;
+}
+
+.template-instance-container textarea:hover,
+.template-instance-container textarea:focus {
+  max-height: 100%;
+  padding: 8px;
+  border: 1px dotted white;
+}
+
+#output_html_string,
+#output_html_string pre {
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+}
+
+#output_html_string pre:empty {
+  pointer-events: none;
+}
+
+/* recommended usage: animation: flash-of-color 0.3s 0.3s; */
+@keyframes flash-of-color {
+  50% {
+    background: var(--flash-background);
+    color: var(--flash-color);
+  }
+}
+
+.template-generator {
+  overflow: hidden;
+  padding: 1rem;
+}
+
+.template-generator pre {
+  overflow: scroll;
+  height: 100%;
+  margin: 0;
+}
+
+button i,
+button b {
+  background: inherit;
+  color: inherit;
+}
