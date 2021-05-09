@@ -7,3 +7,8 @@
 <!-- to make it easier to review, here's a general summary of what I did to fix it or improve it: -->
 
 <!-- automated tests I ran (if available) -->
+
+# Reminders for @hchiam:
+
+- [ ] `yarn deploy` to update surge site
+- [ ] update <https://codepen.io/hchiam/pen/jOBOaqm>
