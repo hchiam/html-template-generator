@@ -125,6 +125,11 @@ select + pre:before {
   margin: 0;
 }
 
+.template-generator pre:hover {
+  background: lime;
+  color: black;
+}
+
 button i,
 button b {
   background: inherit;
