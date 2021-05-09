@@ -124,7 +124,11 @@ function fillTemplateWith(thisHtml) {
 }
 
 function editSelectOptions(pre) {
-  const preText = $(pre).html().replaceAll("<br>", "\n").trim();
+  const preText = $(pre)
+    .html()
+    .replaceAll("<br>", "\n")
+    .replaceAll("<br/>", "\n")
+    .trim();
   const options = preText.split("\n");
   const select = $(pre).prev();
   const newOptionsHtml = options
