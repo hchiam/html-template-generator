@@ -282,7 +282,7 @@ function animateMove(originJQueryElement, destinationJQueryElement) {
   const destinationHeight = $(destinationJQueryElement).outerHeight();
   const temp = original.clone();
   $("body").append(temp);
-  temp.find("*").css({ pointerEvents: "none" });
+  temp.addClass("disable-hover").find("*").css({ pointerEvents: "none" });
   temp
     .css({
       position: "fixed",

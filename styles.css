@@ -52,7 +52,7 @@ body {
   max-height: 100vh;
 }
 
-[contenteditable]:hover {
+[contenteditable]:not(.disable-hover):hover {
   border: 1px dotted white;
   cursor: text;
 }
@@ -72,11 +72,13 @@ body {
   text-decoration: none !important;
 }
 
-.template-instance-container:hover .template-controls {
+.template-instance-container:not(.disable-hover):hover .template-controls {
   display: block;
 }
 
-.template-instance-container:hover .template-controls button {
+.template-instance-container:not(.disable-hover):hover
+  .template-controls
+  button {
   animation: flash-of-color 0.3s 0.3s;
 }
 
@@ -102,8 +104,8 @@ select + pre {
   color: black;
 }
 
-select:hover + pre,
-select + pre:hover,
+select:not(.disable-hover):hover + pre,
+select + pre:not(.disable-hover):hover,
 select + pre:focus {
   max-height: 100vh;
   padding-top: 1rem;
@@ -131,14 +133,14 @@ select + pre:before {
   max-height: 0;
 }
 
-.template-instance-container:hover textarea {
+.template-instance-container:not(.disable-hover):hover textarea {
   transition: max-height 2s;
   max-height: 100vh;
   border: 1px dotted white;
   animation: flash-of-color 0.3s 0.3s;
 }
 
-.template-instance-container textarea:hover,
+.template-instance-container textarea:not(.disable-hover):hover,
 .template-instance-container textarea:focus {
   max-height: 100%;
   padding: 8px;
@@ -184,7 +186,7 @@ select + pre:before {
   margin: 0;
 }
 
-.template-generator pre:hover {
+.template-generator pre:not(.disable-hover):hover {
   background: lime;
   color: black;
 }
