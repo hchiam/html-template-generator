@@ -120,6 +120,12 @@ function copyTemplate(button) {
     isExample ? lastTemplateInOutputContainer : templateContainer
   );
 
+  const destinationElement = $(
+    isExample ? lastTemplateInOutputContainer : templateContainer
+  ).next();
+
+  animateMove(templateContainer, destinationElement);
+
   stopFlashingColorAfterHoveredAClone();
   clearOutputHtmlString();
   revealButton($("#get_output_html_string"));
@@ -150,7 +156,7 @@ function clearOutputHtmlString() {
 function getOutputHtmlString() {
   let output = $("<div>").append($("#output").clone());
   output.find(".remove-from-final-output").remove();
-  output.find("[contenteditable]").removeAttr('contenteditable');
+  output.find("[contenteditable]").removeAttr("contenteditable");
   output = formattedHtml(output.find("#output").html());
   $("#output_html_string pre").text(output);
 
@@ -263,4 +269,36 @@ function saveHtmlFile(html) {
   } catch (err) {
     window.open("data:text/txt;charset=utf-8," + escape(html), "newdoc");
   }
+}
+
+function animateMove(originJQueryElement, destinationJQueryElement) {
+  destinationJQueryElement.css("visibility", "hidden");
+  const original = $(originJQueryElement);
+  const originPosition = original.position();
+  const originalWidth = original.outerWidth();
+  const originalHeight = original.outerHeight();
+  const destinationPosition = $(destinationJQueryElement).position();
+  const destinationWidth = $(destinationJQueryElement).outerWidth();
+  const destinationHeight = $(destinationJQueryElement).outerHeight();
+  const temp = original.clone();
+  $("body").append(temp);
+  temp.find("*").css({ pointerEvents: "none" });
+  temp
+    .css({
+      position: "fixed",
+      zIndex: 1,
+      width: originalWidth,
+      height: originalHeight,
+    })
+    .offset(originPosition)
+    .animate({
+      left: destinationPosition.left,
+      top: destinationPosition.top,
+      width: destinationWidth,
+      height: destinationHeight,
+    });
+  setTimeout(() => {
+    temp.remove();
+    $(destinationJQueryElement).css("visibility", "visible");
+  }, 1000);
 }
