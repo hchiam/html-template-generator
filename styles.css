@@ -28,6 +28,11 @@ body {
   overflow: auto;
 }
 
+#output_html_controls {
+  padding: 1rem;
+  position: fixed;
+}
+
 #get_output_html_string {
   display: block;
   margin: auto;
@@ -45,11 +50,6 @@ body {
 
 #get_output_html_string.show {
   max-height: 100vh;
-}
-
-#hide_output_html_string {
-  margin: 1rem;
-  position: fixed;
 }
 
 [contenteditable]:hover {

@@ -36,6 +36,7 @@ function attachEventListeners() {
     $("#output").hide();
     $("#output_html_string").show();
     revealButton($("#hide_output_html_string"));
+    revealButton($("#export_html_file"));
     collapseButton($("#get_output_html_string"));
   });
 
@@ -44,6 +45,11 @@ function attachEventListeners() {
     $("#output_html_string").hide();
     revealButton($("#get_output_html_string"));
     collapseButton($("#hide_output_html_string"));
+    collapseButton($("#export_html_file"));
+  });
+
+  $("#export_html_file").on("click", function () {
+    saveHtmlFile(getOutputHtmlString());
   });
 }
 
@@ -151,6 +157,8 @@ function getOutputHtmlString() {
   // setTimeout(() => {
   //   scrollToBottomOfElement($("#output_html_string pre"));
   // }, 200);
+
+  return output;
 }
 
 function scrollToBottomOfElement(jQueryElement) {
@@ -231,4 +239,27 @@ function formattedHtml(htmlString, tabString = "\t") {
   }
 
   return parse(htmlString.replace(newLines, " ").replace(repeatedSpaces, ""));
+}
+
+function saveHtmlFile(html) {
+  try {
+    const date = new Date().toDateString().replaceAll(" ", "_");
+    const fileName = `html_template_generator_${date}.html`;
+    const tempElem = document.createElement("a");
+    // use encodeURIComponent instead of urlAcceptableString since saving to file
+    tempElem.setAttribute(
+      "href",
+      "data:text/plain;charset=utf-8," + encodeURIComponent(html)
+    );
+    tempElem.setAttribute("download", fileName);
+    if (document.createEvent) {
+      const event = document.createEvent("MouseEvents");
+      event.initEvent("click", true, true);
+      tempElem.dispatchEvent(event);
+    } else {
+      tempElem.click();
+    }
+  } catch (err) {
+    window.open("data:text/txt;charset=utf-8," + escape(html), "newdoc");
+  }
 }
