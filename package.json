@@ -9,7 +9,7 @@
     "start": "parcel index.html",
     "build": "parcel build index.html",
     "deploy": "yarn build && surge dist https://html-template-generator.surge.sh",
-    "reminder": "echo 'Update \n\n\u001b[1;34m https://html-template-generator.surge.sh \\033[0m\n\n and \n\n\u001b[1;34m https://codepen.io/hchiam/pen/jOBOaqm \\033[0m\n\n'"
+    "reminder": "echo 'Remember to:'; echo '\n \\033[1;34m https://html-template-generator.surge.sh \\033[0m \n and \n \n \\033[1;34m https://codepen.io/hchiam/pen/jOBOaqm \\033[0m \n'"
   },
   "devDependencies": {
     "husky": "4.3.8",
