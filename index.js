@@ -124,7 +124,10 @@ function copyTemplate(button) {
     isExample ? lastTemplateInOutputContainer : templateContainer
   ).next();
 
-  animateMove(templateContainer, destinationElement);
+  destinationElement.css("visibility", "hidden");
+  $("#output").ready(function () {
+    animateMove(templateContainer, destinationElement);
+  });
 
   stopFlashingColorAfterHoveredAClone();
   clearOutputHtmlString();
