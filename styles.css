@@ -3,6 +3,59 @@
   --flash-color: black;
 }
 
+* {
+  box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  padding: 0;
+  margin: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+
+#examples {
+  flex: 1;
+  height: 100vh;
+  overflow: auto;
+  background: black;
+  margin: 0;
+  padding: 1rem;
+  border-radius: 0;
+}
+
+#output,
+#output_html_string {
+  flex: 2;
+  height: 100vh;
+  overflow: auto;
+}
+
+#get_output_html_string {
+  display: block;
+  margin: auto;
+  transition: 0.2s;
+  width: 100%;
+}
+
+#get_output_html_string.hide {
+  max-height: 0;
+  height: 0;
+  padding: 0;
+  opacity: 0;
+  margin: -1rem;
+}
+
+#get_output_html_string.show {
+  max-height: 100vh;
+}
+
+#hide_output_html_string {
+  margin: 1rem;
+  position: fixed;
+}
+
 [contenteditable]:hover {
   border: 1px dotted white;
   cursor: text;
@@ -31,14 +84,14 @@
   animation: flash-of-color 0.3s 0.3s;
 }
 
-.example {
-  display: grid;
-  flex-grow: 1;
-  grid-template-columns: 1fr 1fr 1fr;
+#examples {
+  /* display: grid;
+  flex-grow: 1; */
+  /* grid-template-columns: 1fr 1fr 1fr; */
 }
 
-.example .delete-template,
-.example .notes {
+#examples .delete-template,
+#examples .notes {
   display: none;
 }
 
@@ -54,7 +107,8 @@ select + pre {
 }
 
 select:hover + pre,
-select + pre:hover {
+select + pre:hover,
+select + pre:focus {
   max-height: 100vh;
   padding-top: 1rem;
 }
@@ -99,11 +153,20 @@ select + pre:before {
 #output_html_string pre {
   padding: 0;
   margin: 0;
-  overflow: hidden;
+  max-height: 100vh;
+  overflow: auto;
+}
+
+#output_html_string pre {
+  margin-top: 4rem;
 }
 
 #output_html_string pre:empty {
   pointer-events: none;
+}
+
+.flash-of-color {
+  animation: flash-of-color 0.3s 0.3s;
 }
 
 /* recommended usage: animation: flash-of-color 0.3s 0.3s; */
