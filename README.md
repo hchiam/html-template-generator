@@ -2,7 +2,7 @@
 
 [Live demo](https://html-template-generator.surge.sh)
 
-[Live editable demo](https://codepen.io/hchiam/full/jOBOaqm)
+[Live editable demo](https://codepen.io/hchiam/pen/jOBOaqm)
 
 ## Local development
 
