@@ -7,40 +7,55 @@ https://cdn.jsdelivr.net/gh/hchiam/draggable@master/makeElementDraggableAndEdita
 
 */
 
-hideGetOutputButton();
+collapseButton($("#get_output_html_string"));
 attachEventListeners();
 
 function attachEventListeners() {
   $("body").on("click", ".copy-template", function () {
     copyTemplate(this);
+    $("#output").show();
+    $("#output_html_string").hide();
   });
 
   $("body").on("click", ".delete-template", function () {
     deleteTemplateInstance(this);
   });
 
-  $("body").on("click", ".edit-select-options", function () {
+  $("body").on("keyup", ".edit-select-options", function () {
     editSelectOptions(this);
   });
 
   $(".copy-dynamic-template").on("click", function () {
     copyDynamicTemplate(this);
+    $("#output").show();
+    $("#output_html_string").hide();
   });
 
   $("#get_output_html_string").on("click", function () {
     getOutputHtmlString();
+    $("#output").hide();
+    $("#output_html_string").show();
+    revealButton($("#hide_output_html_string"));
+    collapseButton($("#get_output_html_string"));
+  });
+
+  $("#hide_output_html_string").on("click", function () {
+    $("#output").show();
+    $("#output_html_string").hide();
+    revealButton($("#get_output_html_string"));
+    collapseButton($("#hide_output_html_string"));
   });
 }
 
 function deleteTemplateInstance(button) {
-  const isExample = $(button).parents(".example").length > 0;
+  const isExample = $(button).parents("#examples").length > 0;
   if (isExample) return;
   $(button).parents(".template-instance-container").remove();
   clearOutputHtmlString();
   const isOutputEmpty = !$("#output").find(":not(.remove-from-final-output)")
     .length;
   if (isOutputEmpty) {
-    hideGetOutputButton();
+    collapseButton($("#get_output_html_string"));
   }
 }
 
@@ -75,12 +90,11 @@ ${templateHtmlLiteral}
 
   stopFlashingColorAfterHoveredAClone();
   clearOutputHtmlString();
-  showGetOutputButton();
+  revealButton($("#get_output_html_string"));
 }
 
 function copyTemplate(button) {
-  console.log(button);
-  const isExample = $(button).parents(".example").length > 0;
+  const isExample = $(button).parents("#examples").length > 0;
 
   const templateContainer = $(button).parents(".template-instance-container");
 
@@ -102,7 +116,7 @@ function copyTemplate(button) {
 
   stopFlashingColorAfterHoveredAClone();
   clearOutputHtmlString();
-  showGetOutputButton();
+  revealButton($("#get_output_html_string"));
 }
 
 function fillTemplateWith(thisHtml) {
@@ -110,13 +124,16 @@ function fillTemplateWith(thisHtml) {
 }
 
 function editSelectOptions(pre) {
-  const preText = $(pre).html().replaceAll("<br>", "\n").trim();
+  const preText = $(pre)
+    .html()
+    .replaceAll("<br>", "\n")
+    .replaceAll("<br/>", "\n")
+    .trim();
   const options = preText.split("\n");
   const select = $(pre).prev();
   const newOptionsHtml = options
     .map((x) => `<option value="${x}">${x}</option>`)
     .join("");
-  console.log(newOptionsHtml);
   select.html(newOptionsHtml);
 }
 
@@ -127,11 +144,13 @@ function clearOutputHtmlString() {
 function getOutputHtmlString() {
   let output = $("<div>").append($("#output").clone());
   output.find(".remove-from-final-output").remove();
-  output = output.find("#output").html();
+  output = formattedHtml(output.find("#output").html());
   $("#output_html_string pre").text(output);
-  setTimeout(() => {
-    scrollToBottomOfElement($("#output_html_string pre"));
-  }, 200);
+
+  // // Keep this just in case I need to revert to a different UI design:
+  // setTimeout(() => {
+  //   scrollToBottomOfElement($("#output_html_string pre"));
+  // }, 200);
 }
 
 function scrollToBottomOfElement(jQueryElement) {
@@ -162,10 +181,54 @@ function stopFlashingColorAfterHoveredAClone() {
     });
 }
 
-function showGetOutputButton() {
-  $("#get_output_html_string").show();
+function revealButton(jQueryButton) {
+  jQueryButton.addClass("show flash-of-color").removeClass("hide");
+
+  setTimeout(() => {
+    jQueryButton.removeClass("flash-of-color");
+  }, 2000);
 }
 
-function hideGetOutputButton() {
-  $("#get_output_html_string").hide();
+function collapseButton(jQueryButton) {
+  jQueryButton.addClass("hide").removeClass("show");
+}
+
+function formattedHtml(htmlString, tabString = "\t") {
+  const newLines = /(\r\n|\n|\r)/gm;
+  const repeatedSpaces = / +(?= )/g;
+
+  function parse(htmlString, numberOfTabs = 0) {
+    htmlString = $.parseHTML(htmlString);
+    let outputString = "";
+
+    function getTabs() {
+      return tabString.repeat(numberOfTabs);
+    }
+
+    $.each(htmlString, function (i, el) {
+      const isTextNode = el.nodeName == "#text";
+      if (isTextNode) {
+        const hasText = $(el).text().trim().length;
+        if (hasText) {
+          outputString += getTabs() + $(el).text().trim() + "\n";
+        }
+      } else {
+        const innerHTML = $(el).html().trim();
+
+        $(el).html(innerHTML.replace(newLines, "").replace(repeatedSpaces, ""));
+
+        const needToRecursivelyParse = $(el).children().length;
+        if (needToRecursivelyParse) {
+          $(el).html("\n" + parse(innerHTML, numberOfTabs + 1) + getTabs());
+        }
+
+        const outerHTML = $(el).prop("outerHTML").trim();
+        outputString += getTabs() + outerHTML + "\n";
+      }
+    });
+
+    return outputString;
+  }
+
+  return parse(htmlString.replace(newLines, " ").replace(repeatedSpaces, ""));
 }
