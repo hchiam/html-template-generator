@@ -3,10 +3,6 @@
   --flash-color: black;
 }
 
-* {
-  box-sizing: border-box;
-}
-
 body {
   display: flex;
   padding: 0;
