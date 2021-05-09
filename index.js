@@ -144,7 +144,7 @@ function clearOutputHtmlString() {
 function getOutputHtmlString() {
   let output = $("<div>").append($("#output").clone());
   output.find(".remove-from-final-output").remove();
-  output = output.find("#output").html();
+  output = formattedHtml(output.find("#output").html());
   $("#output_html_string pre").text(output);
 
   // // Keep this just in case I need to revert to a different UI design:
@@ -191,4 +191,44 @@ function revealButton(jQueryButton) {
 
 function collapseButton(jQueryButton) {
   jQueryButton.addClass("hide").removeClass("show");
+}
+
+function formattedHtml(htmlString, tabString = "\t") {
+  const newLines = /(\r\n|\n|\r)/gm;
+  const repeatedSpaces = / +(?= )/g;
+
+  function parse(htmlString, numberOfTabs = 0) {
+    htmlString = $.parseHTML(htmlString);
+    let outputString = "";
+
+    function getTabs() {
+      return tabString.repeat(numberOfTabs);
+    }
+
+    $.each(htmlString, function (i, el) {
+      const isTextNode = el.nodeName == "#text";
+      if (isTextNode) {
+        const hasText = $(el).text().trim().length;
+        if (hasText) {
+          outputString += getTabs() + $(el).text().trim() + "\n";
+        }
+      } else {
+        const innerHTML = $(el).html().trim();
+
+        $(el).html(innerHTML.replace(newLines, "").replace(repeatedSpaces, ""));
+
+        const needToRecursivelyParse = $(el).children().length;
+        if (needToRecursivelyParse) {
+          $(el).html("\n" + parse(innerHTML, numberOfTabs + 1) + getTabs());
+        }
+
+        const outerHTML = $(el).prop("outerHTML").trim();
+        outputString += getTabs() + outerHTML + "\n";
+      }
+    });
+
+    return outputString;
+  }
+
+  return parse(htmlString.replace(newLines, " ").replace(repeatedSpaces, ""));
 }
