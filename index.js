@@ -94,7 +94,6 @@ ${templateHtmlLiteral}
 }
 
 function copyTemplate(button) {
-  console.log(button);
   const isExample = $(button).parents("#examples").length > 0;
 
   const templateContainer = $(button).parents(".template-instance-container");
@@ -131,7 +130,6 @@ function editSelectOptions(pre) {
   const newOptionsHtml = options
     .map((x) => `<option value="${x}">${x}</option>`)
     .join("");
-  console.log(newOptionsHtml);
   select.html(newOptionsHtml);
 }
 
