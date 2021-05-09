@@ -150,6 +150,7 @@ function clearOutputHtmlString() {
 function getOutputHtmlString() {
   let output = $("<div>").append($("#output").clone());
   output.find(".remove-from-final-output").remove();
+  output.find("[contenteditable]").removeAttr('contenteditable');
   output = formattedHtml(output.find("#output").html());
   $("#output_html_string pre").text(output);
 
