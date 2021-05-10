@@ -49,7 +49,7 @@ function attachEventListeners() {
   });
 
   $("#export_html_file").on("click", function () {
-    saveHtmlFile(getOutputHtmlString());
+    saveHtmlFile($("#output_html_string pre").text());
   });
 }
 
@@ -185,8 +185,6 @@ function getOutputHtmlString() {
   // setTimeout(() => {
   //   scrollToBottomOfElement($("#output_html_string pre"));
   // }, 200);
-
-  return outputClone;
 }
 
 function scrollToBottomOfElement(jQueryElement) {
