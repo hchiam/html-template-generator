@@ -157,18 +157,36 @@ function clearOutputHtmlString() {
 }
 
 function getOutputHtmlString() {
-  let output = $("<div>").append($("#output").clone());
-  output.find(".remove-from-final-output").remove();
-  output.find("[contenteditable]").removeAttr("contenteditable");
-  output = formattedHtml(output.find("#output").html());
-  $("#output_html_string pre").text(output);
+  const outputOriginal = $("#output");
+  let outputClone = $("<div>").append($("#output").clone());
+  outputClone.find(".remove-from-final-output:not(.notes)").remove();
+
+  const notesClone = outputClone.find(".notes");
+  const notes = outputOriginal.find(".notes");
+  notes.each((index, value) => {
+    const note = $(value);
+    const noteAnchor = $(notesClone[index]).prev();
+    const noteText = note
+      .val()
+      .trim()
+      .split("\n")
+      .map((x) => `<!-- ${x} -->`)
+      .join("\n");
+    $(noteText).insertAfter(noteAnchor);
+  });
+  outputClone.find(".notes").remove();
+
+  outputClone.find("[contenteditable]").removeAttr("contenteditable");
+  outputClone = formattedHtml(outputClone.find("#output").html());
+
+  $("#output_html_string pre").text(outputClone);
 
   // // Keep this just in case I need to revert to a different UI design:
   // setTimeout(() => {
   //   scrollToBottomOfElement($("#output_html_string pre"));
   // }, 200);
 
-  return output;
+  return outputClone;
 }
 
 function scrollToBottomOfElement(jQueryElement) {
@@ -225,10 +243,16 @@ function formattedHtml(htmlString, tabString = "\t") {
 
     $.each(htmlString, function (i, el) {
       const isTextNode = el.nodeName == "#text";
+      const isCommentNode = el.nodeName == "#comment";
       if (isTextNode) {
         const hasText = $(el).text().trim().length;
         if (hasText) {
           outputString += getTabs() + $(el).text().trim() + "\n";
+        }
+      } else if (isCommentNode) {
+        const commentText = el.nodeValue.trim();
+        if (commentText) {
+          outputString += getTabs() + "<!-- " + commentText + " -->" + "\n";
         }
       } else {
         const innerHTML = $(el).html().trim();
