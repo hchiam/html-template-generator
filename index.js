@@ -51,6 +51,18 @@ function attachEventListeners() {
   $("#export_html_file").on("click", function () {
     saveHtmlFile($("#output_html_string pre").text());
   });
+
+  $("#export_requirements").on("click", function () {
+    alert(
+      'This button "Export requirements" will be worked on if requested. \n\nMaybe an excel sheet will be exported. \n\nMaybe we can use jspreadsheet, which works like excel in your browser. \n\n'
+    );
+  });
+
+  $("#import_requirements").on("click", function () {
+    alert(
+      'This button "Import requirements" will be worked on if requested. \n\nMaybe an excel sheet can be imported. \n\nOr maybe we can let users import from excel into jspreadsheet in the browser. \n\n'
+    );
+  });
 }
 
 function deleteTemplateInstance(button) {
