@@ -14,7 +14,7 @@ body {
 #examples {
   flex: 1;
   height: 100vh;
-  overflow: auto;
+  overflow: scroll;
   background: black;
   margin: 0;
   padding: 1rem;
@@ -86,6 +86,26 @@ body {
   /* display: grid;
   flex-grow: 1; */
   /* grid-template-columns: 1fr 1fr 1fr; */
+}
+
+#examples:before {
+  content: "";
+  display: block;
+  position: relative;
+  top: -1rem;
+  z-index: 10;
+  height: 10px;
+  width: 100%;
+  background: white;
+}
+
+#examples:after {
+  content: "";
+  display: block;
+  bottom: 0;
+  height: 10px;
+  width: 100%;
+  background: white;
 }
 
 #examples .delete-template,
