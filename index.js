@@ -54,7 +54,7 @@ function attachEventListeners() {
   });
 
   $("#import_html_file").on("click", function () {
-    $("#html_file_input").click();
+    $("#html_file_input").click(); // trigger file selector popup
   });
 
   $("#html_file_input").on("change", function (e) {
@@ -63,7 +63,11 @@ function attachEventListeners() {
     reader.readAsText(file, "UTF-8");
     reader.onload = (readerEvent) => {
       const htmlString = readerEvent.target.result;
-      const html = $(`<div>${htmlString}</div>`);
+      const htmlStringWithCommentsAsDivs = htmlString.replace(
+        /<!-- (.*?) -->/g,
+        '<div class="notes-line remove-from-final-output">$1</div>'
+      );
+      const html = $(`<div>${htmlStringWithCommentsAsDivs}</div>`);
       html.find(".template-instance-container").append(
         `
         <div class="template-controls remove-from-final-output">
@@ -99,6 +103,12 @@ function attachEventListeners() {
               contenteditable
             >${optionsString}</pre>
           `).insertAfter(select);
+        });
+      $("#output")
+        .find(".template-instance-container")
+        .each(function () {
+          const templateInstanceContainer = $(this);
+          commentsToTextarea(templateInstanceContainer);
         });
 
       $("#output").show();
@@ -340,6 +350,21 @@ function formattedHtml(htmlString, tabString = "\t") {
   }
 
   return parse(htmlString.replace(newLines, " ").replace(repeatedSpaces, ""));
+}
+
+function commentsToTextarea(templateInstanceContainer) {
+  const selectorCommentsTurnedIntoDivs = ".notes-line";
+  const comments = templateInstanceContainer.find(
+    selectorCommentsTurnedIntoDivs
+  );
+  const noteString = Array.from(comments)
+    .map((c) => $(c).text())
+    .join("\n");
+  const notes = templateInstanceContainer.find(".notes");
+  notes.val(noteString);
+  templateInstanceContainer.ready(function () {
+    comments.remove();
+  });
 }
 
 function saveHtmlFile(html) {
