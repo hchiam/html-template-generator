@@ -180,7 +180,18 @@ a template?&lt;/p&gt;</pre
       <pre></pre>
     </section>
 
+    <section
+      id="sheet"
+      style="position: fixed; bottom: 0; right: 0; padding: 1rem"
+    >
+      <p>Copy from your excel file into this table:</p>
+      <div id="spreadsheet"></div>
+      <button id="export_sheet">Export sheet</button>
+      <button id="import_sheet" hidden>Import sheet</button>
+    </section>
+
     <input id="html_file_input" type="file" name="name" style="display: none" />
+    <input id="csv_file_input" type="file" name="name" style="display: none" />
 
     <script
       type="text/javascript"
@@ -200,6 +211,18 @@ a template?&lt;/p&gt;</pre
       type="text/javascript"
       src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
     ></script>
+    <script src="https://bossanova.uk/jspreadsheet/v4/jexcel.js"></script>
+    <script src="https://jsuites.net/v4/jsuites.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://jsuites.net/v4/jsuites.css"
+      type="text/css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://bossanova.uk/jspreadsheet/v4/jexcel.css"
+      type="text/css"
+    />
     <script src="./index.js"></script>
   </body>
 </html>

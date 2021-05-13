@@ -226,3 +226,8 @@ button b {
   background: inherit;
   color: inherit;
 }
+
+.jexcel_container thead td,
+.jexcel_container tbody td:first-child {
+  background: black !important;
+}

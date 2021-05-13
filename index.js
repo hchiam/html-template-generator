@@ -9,6 +9,7 @@ https://cdn.jsdelivr.net/gh/hchiam/draggable@master/makeElementDraggableAndEdita
 
 collapseButton($("#get_output_html_string"));
 attachEventListeners();
+setUpJSpreadsheet();
 console.log("https://codepen.io/hchiam/pen/jOBOaqm");
 
 function attachEventListeners() {
@@ -420,4 +421,56 @@ function animateMove(originJQueryElement, destinationJQueryElement) {
     temp.remove();
     $(destinationJQueryElement).css("visibility", "visible");
   }, 1000);
+}
+
+function setUpJSpreadsheet() {
+  const defaultData = [
+    ["id", "input box", true, "label", "note"],
+    ["", "dropdown", false, "", ""],
+    [],
+  ];
+
+  const columnDefinitions = [
+    { type: "text", title: "ID", width: 125 },
+    {
+      type: "dropdown",
+      title: "Type of input",
+      width: 125,
+      source: [
+        "input box",
+        "dropdown",
+        "checkbox",
+        "radio",
+        "paragraph",
+        "other",
+      ],
+    },
+    { type: "checkbox", title: "Required", width: 125 },
+    { type: "text", title: "Label", width: 125 },
+    { type: "text", title: "Note", width: 125 },
+  ];
+
+  let spreadsheet = jspreadsheet(document.getElementById("spreadsheet"), {
+    data: defaultData,
+    columns: columnDefinitions,
+  });
+
+  $("#export_sheet").on("click", function () {
+    spreadsheet.download();
+  });
+
+  $("#import_sheet").on("click", function () {
+    $("#csv_file_input").click();
+  });
+
+  $("#csv_file_input").on("change", function (e) {
+    const file = e.target.files[0];
+    // alert(file);
+    // spreadsheet = jspreadsheet(document.getElementById("spreadsheet"), {
+    //   csv: file,
+    //   csvHeaders: true,
+    //   tableOverflow: true,
+    //   columns: columnDefinitions,
+    // });
+  });
 }
