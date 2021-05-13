@@ -9,6 +9,7 @@ https://cdn.jsdelivr.net/gh/hchiam/draggable@master/makeElementDraggableAndEdita
 
 collapseButton($("#get_output_html_string"));
 attachEventListeners();
+console.log("https://codepen.io/hchiam/pen/jOBOaqm");
 
 function attachEventListeners() {
   $("body").on("click", ".copy-template", function () {
