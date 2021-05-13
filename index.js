@@ -52,6 +52,62 @@ function attachEventListeners() {
     saveHtmlFile($("#output_html_string pre").text());
   });
 
+  $("#import_html_file").on("click", function () {
+    $("#html_file_input").click();
+  });
+
+  $("#html_file_input").on("change", function (e) {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.readAsText(file, "UTF-8");
+    reader.onload = (readerEvent) => {
+      const htmlString = readerEvent.target.result;
+      const html = $(`<div>${htmlString}</div>`);
+      html.find(".template-instance-container").append(
+        `
+        <div class="template-controls remove-from-final-output">
+          <button class="copy-template">Copy template</button>
+          <button class="delete-template">&nbsp;X&nbsp;</button>
+        </div>
+        <textarea
+          class="notes remove-from-final-output"
+          cols="55"
+          rows="2"
+          placeholder="Notes"
+        ></textarea>
+      `
+      );
+
+      // $("#output_html_string pre").text(htmlString);
+      $("#output").html(
+        `<span class="remove-from-final-output" hidden></span>${html.html()}`
+      );
+
+      $("#output").find("label, p").attr("contenteditable", true);
+      $("#output")
+        .find("select")
+        .each(function () {
+          const select = $(this);
+          const options = select.find("option");
+          const optionsString = Array.from(options)
+            .map((o) => $(o).text())
+            .join("\n");
+          $(`
+            <pre
+              class="edit-select-options remove-from-final-output"
+              contenteditable
+            >${optionsString}</pre>
+          `).insertAfter(select);
+        });
+
+      $("#output").show();
+      $("#output_html_string").hide();
+      revealButton($("#get_output_html_string"));
+      collapseButton($("#hide_output_html_string"));
+      collapseButton($("#export_html_file"));
+    };
+  });
+
   $("#export_requirements").on("click", function () {
     alert(
       'This button "Export requirements" will be worked on if requested. \n\nMaybe an excel sheet will be exported. \n\nMaybe we can use jspreadsheet, which works like excel in your browser. \n\n'
