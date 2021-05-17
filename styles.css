@@ -30,7 +30,11 @@ body {
 
 #output_html_controls {
   padding: 1rem;
-  position: fixed;
+  display: none;
+}
+
+#output_html_controls button {
+  margin: 5px 1px;
 }
 
 #get_output_html_string,
@@ -55,7 +59,7 @@ body {
 }
 
 #import_html_file {
-  margin-top: 1rem;
+  margin-bottom: 5px;
 }
 
 [contenteditable]:not(.disable-hover):hover {

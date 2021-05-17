@@ -16,6 +16,7 @@ function attachEventListeners() {
   $("body").on("click", ".copy-template", function () {
     copyTemplate(this);
     $("#output").show();
+    $("#output_html_controls").hide();
     $("#output_html_string").hide();
   });
 
@@ -30,12 +31,14 @@ function attachEventListeners() {
   $(".copy-dynamic-template").on("click", function () {
     copyDynamicTemplate(this);
     $("#output").show();
+    $("#output_html_controls").hide();
     $("#output_html_string").hide();
   });
 
   $("#get_output_html_string").on("click", function () {
     getOutputHtmlString();
     $("#output").hide();
+    $("#output_html_controls").show();
     $("#output_html_string").show();
     revealButton($("#hide_output_html_string"));
     revealButton($("#export_html_file"));
@@ -44,6 +47,7 @@ function attachEventListeners() {
 
   $("#hide_output_html_string").on("click", function () {
     $("#output").show();
+    $("#output_html_controls").hide();
     $("#output_html_string").hide();
     revealButton($("#get_output_html_string"));
     collapseButton($("#hide_output_html_string"));
@@ -113,6 +117,7 @@ function attachEventListeners() {
         });
 
       $("#output").show();
+      $("#output_html_controls").hide();
       $("#output_html_string").hide();
       revealButton($("#get_output_html_string"));
       collapseButton($("#hide_output_html_string"));
