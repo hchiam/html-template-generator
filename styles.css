@@ -22,7 +22,8 @@ body {
 }
 
 #output,
-#output_html_string {
+#output_html_string,
+#sheet {
   flex: 2;
   height: 100vh;
   overflow: auto;
