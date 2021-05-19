@@ -63,15 +63,19 @@ body {
 }
 
 [contenteditable]:not(.disable-hover):hover {
-  border: 1px dotted white;
+  border: 1px dotted lime;
   cursor: text;
 }
 
 .template-instance-container {
-  border: 3px solid white;
+  border: 3px solid gray;
   padding: 1em;
   margin: 1em;
   position: relative;
+}
+
+.template-instance-container:hover {
+  border: 3px solid lime;
 }
 
 .template-controls {
@@ -170,7 +174,7 @@ select + pre:before {
 .template-instance-container:not(.disable-hover):hover textarea {
   transition: max-height 2s;
   max-height: 100vh;
-  border: 1px dotted white;
+  border: 1px dotted lime;
   animation: flash-of-color 0.3s 0.3s;
 }
 
@@ -178,7 +182,7 @@ select + pre:before {
 .template-instance-container textarea:focus {
   max-height: 100%;
   padding: 8px;
-  border: 1px dotted white;
+  border: 1px dotted lime;
 }
 
 #output_html_string,
