@@ -9,7 +9,7 @@ https://cdn.jsdelivr.net/gh/hchiam/draggable@master/makeElementDraggableAndEdita
 
 collapseButton($("#get_output_html_string"));
 attachEventListeners();
-setUpJSpreadsheet();
+const spreadsheet = setUpJSpreadsheet();
 console.log("https://codepen.io/hchiam/pen/jOBOaqm");
 
 function attachEventListeners() {
@@ -18,6 +18,8 @@ function attachEventListeners() {
     $("#output").show();
     $("#output_html_controls").hide();
     $("#output_html_string").hide();
+    $("#sheet").hide();
+    spreadsheet.resetSheet();
   });
 
   $("body").on("click", ".delete-template", function () {
@@ -33,6 +35,8 @@ function attachEventListeners() {
     $("#output").show();
     $("#output_html_controls").hide();
     $("#output_html_string").hide();
+    $("#sheet").hide();
+    spreadsheet.resetSheet();
   });
 
   $("#get_output_html_string").on("click", function () {
@@ -40,6 +44,8 @@ function attachEventListeners() {
     $("#output").hide();
     $("#output_html_controls").show();
     $("#output_html_string").show();
+    $("#sheet").hide();
+    spreadsheet.resetSheet();
     revealButton($("#hide_output_html_string"));
     revealButton($("#export_html_file"));
     collapseButton($("#get_output_html_string"));
@@ -49,6 +55,8 @@ function attachEventListeners() {
     $("#output").show();
     $("#output_html_controls").hide();
     $("#output_html_string").hide();
+    $("#sheet").hide();
+    spreadsheet.resetSheet();
     revealButton($("#get_output_html_string"));
     collapseButton($("#hide_output_html_string"));
     collapseButton($("#export_html_file"));
@@ -59,6 +67,9 @@ function attachEventListeners() {
   });
 
   $("#import_html_file").on("click", function () {
+    $("#output").show();
+    $("#sheet").hide();
+    spreadsheet.resetSheet();
     $("#html_file_input").click(); // trigger file selector popup
   });
 
@@ -119,10 +130,23 @@ function attachEventListeners() {
       $("#output").show();
       $("#output_html_controls").hide();
       $("#output_html_string").hide();
+      $("#sheet").hide();
+      spreadsheet.resetSheet();
       revealButton($("#get_output_html_string"));
       collapseButton($("#hide_output_html_string"));
       collapseButton($("#export_html_file"));
     };
+  });
+
+  $("#copy_excel_data").on("click", function () {
+    alert("NOTE: this Excel feature is still experimental.");
+    $("#output").hide();
+    $("#output_html_controls").show();
+    $("#output_html_string").hide();
+    $("#sheet").show();
+    collapseButton($("#get_output_html_string"));
+    collapseButton($("#hide_output_html_string"));
+    collapseButton($("#export_html_file"));
   });
 }
 
@@ -444,8 +468,8 @@ function setUpJSpreadsheet() {
   ];
 
   let spreadsheet = jspreadsheet(document.getElementById("spreadsheet"), {
-    data: defaultData,
-    columns: columnDefinitions,
+    data: JSON.parse(JSON.stringify(defaultData)),
+    columns: JSON.parse(JSON.stringify(columnDefinitions)),
   });
 
   $("#export_sheet").on("click", function () {
@@ -466,4 +490,13 @@ function setUpJSpreadsheet() {
     //   columns: columnDefinitions,
     // });
   });
+
+  function resetSheet() {
+    const clonedDefaultData = JSON.parse(JSON.stringify(defaultData));
+    spreadsheet.setData(clonedDefaultData);
+    // $("#spreadsheet")[0].jexcel.setData(clonedDefaultData);
+    // $("#spreadsheet")[0].jspreadsheet.setData(defaultData);
+  }
+
+  return { resetSheet };
 }
