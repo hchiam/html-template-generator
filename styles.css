@@ -137,7 +137,7 @@ select + pre {
   white-space: pre-line;
   transition: max-height 300ms, padding-top 300ms;
   max-height: 0;
-  overflow: hidden;
+  overflow: auto;
   background: lime;
   color: black;
 }
@@ -145,7 +145,7 @@ select + pre {
 select:not(.disable-hover):hover + pre,
 select + pre:not(.disable-hover):hover,
 select + pre:focus {
-  max-height: 100vh;
+  max-height: 30vh;
   padding-top: 1rem;
 }
 
