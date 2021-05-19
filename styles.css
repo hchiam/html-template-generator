@@ -27,6 +27,7 @@ body {
   flex: 2;
   height: 100vh;
   overflow: auto;
+  padding: 1rem;
 }
 
 #output_html_controls {
@@ -39,7 +40,8 @@ body {
 }
 
 #get_output_html_string,
-#import_html_file {
+#import_html_file,
+#copy_excel_data {
   display: block;
   margin: auto;
   transition: 0.2s;
@@ -59,7 +61,8 @@ body {
   max-height: 100vh;
 }
 
-#import_html_file {
+#import_html_file,
+#copy_excel_data {
   margin-bottom: 5px;
 }
 
@@ -188,14 +191,10 @@ select + pre:before {
 
 #output_html_string,
 #output_html_string pre {
-  padding: 0;
+  padding: 1rem;
   margin: 0;
   max-height: 100vh;
   overflow: auto;
-}
-
-#output_html_string pre {
-  margin-top: 4rem;
 }
 
 #output_html_string pre:empty {
