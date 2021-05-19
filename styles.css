@@ -22,18 +22,26 @@ body {
 }
 
 #output,
-#output_html_string {
+#output_html_string,
+#sheet {
   flex: 2;
   height: 100vh;
   overflow: auto;
+  padding: 1rem;
 }
 
 #output_html_controls {
   padding: 1rem;
-  position: fixed;
+  display: none;
 }
 
-#get_output_html_string {
+#output_html_controls button {
+  margin: 5px 1px;
+}
+
+#get_output_html_string,
+#import_html_file,
+#copy_excel_data {
   display: block;
   margin: auto;
   transition: 0.2s;
@@ -46,22 +54,32 @@ body {
   padding: 0;
   opacity: 0;
   margin: -1rem;
+  margin-bottom: 1rem;
 }
 
 #get_output_html_string.show {
   max-height: 100vh;
 }
 
+#import_html_file,
+#copy_excel_data {
+  margin-bottom: 5px;
+}
+
 [contenteditable]:not(.disable-hover):hover {
-  border: 1px dotted white;
+  border: 1px dotted lime;
   cursor: text;
 }
 
 .template-instance-container {
-  border: 3px solid white;
+  border: 3px solid gray;
   padding: 1em;
   margin: 1em;
   position: relative;
+}
+
+.template-instance-container:hover {
+  border: 3px solid lime;
 }
 
 .template-controls {
@@ -113,13 +131,17 @@ body {
   display: none;
 }
 
+.notes-line {
+  display: none;
+}
+
 select + pre {
   position: relative;
   margin-top: 0;
   white-space: pre-line;
   transition: max-height 300ms, padding-top 300ms;
   max-height: 0;
-  overflow: hidden;
+  overflow: auto;
   background: lime;
   color: black;
 }
@@ -127,7 +149,7 @@ select + pre {
 select:not(.disable-hover):hover + pre,
 select + pre:not(.disable-hover):hover,
 select + pre:focus {
-  max-height: 100vh;
+  max-height: 30vh;
   padding-top: 1rem;
 }
 
@@ -156,7 +178,7 @@ select + pre:before {
 .template-instance-container:not(.disable-hover):hover textarea {
   transition: max-height 2s;
   max-height: 100vh;
-  border: 1px dotted white;
+  border: 1px dotted lime;
   animation: flash-of-color 0.3s 0.3s;
 }
 
@@ -164,19 +186,15 @@ select + pre:before {
 .template-instance-container textarea:focus {
   max-height: 100%;
   padding: 8px;
-  border: 1px dotted white;
+  border: 1px dotted lime;
 }
 
 #output_html_string,
 #output_html_string pre {
-  padding: 0;
+  padding: 1rem;
   margin: 0;
   max-height: 100vh;
   overflow: auto;
-}
-
-#output_html_string pre {
-  margin-top: 4rem;
 }
 
 #output_html_string pre:empty {
@@ -215,4 +233,9 @@ button i,
 button b {
   background: inherit;
   color: inherit;
+}
+
+.jexcel_container thead td,
+.jexcel_container tbody td:first-child {
+  background: black !important;
 }

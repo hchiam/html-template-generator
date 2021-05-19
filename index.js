@@ -9,12 +9,17 @@ https://cdn.jsdelivr.net/gh/hchiam/draggable@master/makeElementDraggableAndEdita
 
 collapseButton($("#get_output_html_string"));
 attachEventListeners();
+const spreadsheet = setUpJSpreadsheet();
+console.log("https://codepen.io/hchiam/pen/jOBOaqm");
 
 function attachEventListeners() {
   $("body").on("click", ".copy-template", function () {
     copyTemplate(this);
     $("#output").show();
+    $("#output_html_controls").hide();
     $("#output_html_string").hide();
+    $("#sheet").hide();
+    spreadsheet.resetSheet();
   });
 
   $("body").on("click", ".delete-template", function () {
@@ -28,13 +33,19 @@ function attachEventListeners() {
   $(".copy-dynamic-template").on("click", function () {
     copyDynamicTemplate(this);
     $("#output").show();
+    $("#output_html_controls").hide();
     $("#output_html_string").hide();
+    $("#sheet").hide();
+    spreadsheet.resetSheet();
   });
 
   $("#get_output_html_string").on("click", function () {
     getOutputHtmlString();
     $("#output").hide();
+    $("#output_html_controls").show();
     $("#output_html_string").show();
+    $("#sheet").hide();
+    spreadsheet.resetSheet();
     revealButton($("#hide_output_html_string"));
     revealButton($("#export_html_file"));
     collapseButton($("#get_output_html_string"));
@@ -42,7 +53,10 @@ function attachEventListeners() {
 
   $("#hide_output_html_string").on("click", function () {
     $("#output").show();
+    $("#output_html_controls").hide();
     $("#output_html_string").hide();
+    $("#sheet").hide();
+    spreadsheet.resetSheet();
     revealButton($("#get_output_html_string"));
     collapseButton($("#hide_output_html_string"));
     collapseButton($("#export_html_file"));
@@ -52,16 +66,91 @@ function attachEventListeners() {
     saveHtmlFile($("#output_html_string pre").text());
   });
 
-  $("#export_requirements").on("click", function () {
-    alert(
-      'This button "Export requirements" will be worked on if requested. \n\nMaybe an excel sheet will be exported. \n\nMaybe we can use jspreadsheet, which works like excel in your browser. \n\n'
-    );
+  $("#import_html_file").on("click", function () {
+    $("#output").show();
+    $("#sheet").hide();
+    spreadsheet.resetSheet();
+    $("#html_file_input").click(); // trigger file selector popup
   });
 
-  $("#import_requirements").on("click", function () {
-    alert(
-      'This button "Import requirements" will be worked on if requested. \n\nMaybe an excel sheet can be imported. \n\nOr maybe we can let users import from excel into jspreadsheet in the browser. \n\n'
-    );
+  $("#html_file_input").on("change", function (e) {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.readAsText(file, "UTF-8");
+    reader.onload = (readerEvent) => {
+      const htmlString = readerEvent.target.result;
+      const htmlStringWithCommentsAsDivs = htmlString.replace(
+        /<!-- (.*?) -->/g,
+        '<div class="notes-line remove-from-final-output">$1</div>'
+      );
+      const html = $(`<div>${htmlStringWithCommentsAsDivs}</div>`);
+      html.find(".template-instance-container").append(
+        `
+        <div class="template-controls remove-from-final-output">
+          <button class="copy-template">Copy template</button>
+          <button class="delete-template">&nbsp;X&nbsp;</button>
+        </div>
+        <textarea
+          class="notes remove-from-final-output"
+          cols="55"
+          rows="2"
+          placeholder="Notes"
+        ></textarea>
+      `
+      );
+
+      // $("#output_html_string pre").text(htmlString);
+      $("#output").html(
+        `<span class="remove-from-final-output" hidden></span>${html.html()}`
+      );
+
+      $("#output").find("label, p").attr("contenteditable", true);
+      $("#output")
+        .find("select")
+        .each(function () {
+          const select = $(this);
+          const options = select.find("option");
+          const optionsString = Array.from(options)
+            .map((o) => $(o).text())
+            .join("\n");
+          $(`
+            <pre
+              class="edit-select-options remove-from-final-output"
+              contenteditable
+            >${optionsString}</pre>
+          `).insertAfter(select);
+        });
+      $("#output")
+        .find(".template-instance-container")
+        .each(function () {
+          const templateInstanceContainer = $(this);
+          commentsToTextarea(templateInstanceContainer);
+        });
+
+      $("#output").show();
+      $("#output_html_controls").hide();
+      $("#output_html_string").hide();
+      $("#sheet").hide();
+      spreadsheet.resetSheet();
+      revealButton($("#get_output_html_string"));
+      collapseButton($("#hide_output_html_string"));
+      collapseButton($("#export_html_file"));
+    };
+  });
+
+  $("#copy_excel_data").on("click", function () {
+    alert("NOTE: this Excel feature is still experimental.");
+    $("#output").hide();
+    $("#output_html_controls").show();
+    $("#output_html_string").hide();
+    $("#sheet").show();
+    collapseButton($("#get_output_html_string"));
+    collapseButton($("#hide_output_html_string"));
+    collapseButton($("#export_html_file"));
+  });
+
+  $("#generate_html_from_sheet").on("click", function () {
+    alert("NOTE: this Excel feature is still experimental.");
   });
 }
 
@@ -285,6 +374,21 @@ function formattedHtml(htmlString, tabString = "\t") {
   return parse(htmlString.replace(newLines, " ").replace(repeatedSpaces, ""));
 }
 
+function commentsToTextarea(templateInstanceContainer) {
+  const selectorCommentsTurnedIntoDivs = ".notes-line";
+  const comments = templateInstanceContainer.find(
+    selectorCommentsTurnedIntoDivs
+  );
+  const noteString = Array.from(comments)
+    .map((c) => $(c).text())
+    .join("\n");
+  const notes = templateInstanceContainer.find(".notes");
+  notes.val(noteString);
+  templateInstanceContainer.ready(function () {
+    comments.remove();
+  });
+}
+
 function saveHtmlFile(html) {
   try {
     const date = new Date().toDateString().replaceAll(" ", "_");
@@ -338,4 +442,65 @@ function animateMove(originJQueryElement, destinationJQueryElement) {
     temp.remove();
     $(destinationJQueryElement).css("visibility", "visible");
   }, 1000);
+}
+
+function setUpJSpreadsheet() {
+  const defaultData = [
+    ["id", "input box", true, "label", "note"],
+    ["", "dropdown", false, "", ""],
+    [],
+  ];
+
+  const columnDefinitions = [
+    { type: "text", title: "ID", width: 125 },
+    {
+      type: "dropdown",
+      title: "Type of input",
+      width: 125,
+      source: [
+        "input box",
+        "dropdown",
+        "checkbox",
+        "radio",
+        "paragraph",
+        "other",
+      ],
+    },
+    { type: "checkbox", title: "Required", width: 125 },
+    { type: "text", title: "Label", width: 125 },
+    { type: "text", title: "Note", width: 125 },
+  ];
+
+  let spreadsheet = jspreadsheet(document.getElementById("spreadsheet"), {
+    data: JSON.parse(JSON.stringify(defaultData)),
+    columns: JSON.parse(JSON.stringify(columnDefinitions)),
+  });
+
+  $("#export_sheet").on("click", function () {
+    spreadsheet.download();
+  });
+
+  $("#import_sheet").on("click", function () {
+    $("#csv_file_input").click();
+  });
+
+  $("#csv_file_input").on("change", function (e) {
+    const file = e.target.files[0];
+    // alert(file);
+    // spreadsheet = jspreadsheet(document.getElementById("spreadsheet"), {
+    //   csv: file,
+    //   csvHeaders: true,
+    //   tableOverflow: true,
+    //   columns: columnDefinitions,
+    // });
+  });
+
+  function resetSheet() {
+    const clonedDefaultData = JSON.parse(JSON.stringify(defaultData));
+    spreadsheet.setData(clonedDefaultData);
+    // $("#spreadsheet")[0].jexcel.setData(clonedDefaultData);
+    // $("#spreadsheet")[0].jspreadsheet.setData(defaultData);
+  }
+
+  return { resetSheet };
 }
