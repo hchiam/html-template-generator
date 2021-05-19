@@ -148,6 +148,10 @@ function attachEventListeners() {
     collapseButton($("#hide_output_html_string"));
     collapseButton($("#export_html_file"));
   });
+
+  $("#generate_html_from_sheet").on("click", function () {
+    alert("NOTE: this Excel feature is still experimental.");
+  });
 }
 
 function deleteTemplateInstance(button) {
