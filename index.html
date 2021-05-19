@@ -157,7 +157,10 @@ Editable option 3</pre
       </div>
 
       <div class="template-instance-container template-generator">
-        <pre contenteditable>
+        <pre
+          contenteditable
+          onpaste="return confirm('Make sure you trust the source before pasting! \n\nDo you want to continue?')"
+        >
 &lt;p&gt;Paste HTML here 
 to dynamically generate 
 a template?&lt;/p&gt;</pre
