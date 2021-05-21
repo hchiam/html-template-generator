@@ -11,6 +11,7 @@ collapseButton($("#get_output_html_string"));
 attachEventListeners();
 const spreadsheet = setUpJSpreadsheet();
 console.log("https://codepen.io/hchiam/pen/jOBOaqm");
+console.log("https://github.com/hchiam/html-template-generator/issues");
 
 function attachEventListeners() {
   $("body").on("click", ".copy-template", function () {
