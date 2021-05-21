@@ -227,7 +227,7 @@ ${templateHtmlLiteral}
   revealButton($("#get_output_html_string"));
 }
 
-function copyTemplate(button) {
+function copyTemplate(button, extraData) {
   const isExample = $(button).parents("#examples").length > 0;
 
   const templateContainer = $(button).parents(".template-instance-container");
@@ -248,6 +248,14 @@ function copyTemplate(button) {
     isExample ? lastTemplateInOutputContainer : templateContainer
   );
 
+  const lastNewTemplateContainer = $("#output")
+    .find(".template-instance-container")
+    .last();
+
+  if (extraData) {
+    useExtraData(lastNewTemplateContainer, extraData);
+  }
+
   const destinationElement = $(
     isExample ? lastTemplateInOutputContainer : templateContainer
   ).next();
@@ -264,6 +272,12 @@ function copyTemplate(button) {
 
 function fillTemplateWith(thisHtml) {
   $("template").html(thisHtml);
+}
+
+function useExtraData(jQueryTemplateClone, extraData) {
+  const { id, required, label, note } = extraData;
+  // TODO: ID? required class? label?
+  jQueryTemplateClone.find(".notes").val(note);
 }
 
 function editSelectOptions(pre) {
@@ -530,13 +544,29 @@ function generateHtmlFromSheet(headersArray, dataRows) {
   $("#sheet").hide();
   spreadsheet.resetSheet();
 
+  const idColumn = headersArray.indexOf("ID");
   const inputTypeColumn = headersArray.indexOf("Type of input");
+  const requiredColumn = headersArray.indexOf("Required");
+  const labelColumn = headersArray.indexOf("Label");
+  const noteColumn = headersArray.indexOf("Note");
   const inputs = dataRows.map((r) => r[inputTypeColumn]).filter((x) => x);
 
+  $("#output").animate({ scrollTop: $("#output")[0].scrollHeight });
   inputs.map((input, index) => {
     const template = templateMap[input];
+    const row = dataRows[index];
+    const extraData = {
+      id: row[idColumn],
+      required: row[requiredColumn],
+      label: row[labelColumn],
+      note: row[noteColumn],
+    };
     setTimeout(() => {
-      copyTemplate(template);
+      copyTemplate(template, extraData);
+      const isLastInput = index === inputs.length - 1;
+      if (isLastInput) {
+        $("#output").animate({ scrollTop: $("#output")[0].scrollHeight });
+      }
     }, 100 * index);
   });
 }
