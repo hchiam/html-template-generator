@@ -9,6 +9,30 @@ https://cdn.jsdelivr.net/gh/hchiam/draggable@master/makeElementDraggableAndEdita
 
 collapseButton($("#get_output_html_string"));
 attachEventListeners();
+const examples = $("#examples");
+const templates = [
+  "input",
+  "radio",
+  "checkbox",
+  "dropdown",
+  "paragraph",
+  "email",
+  "password",
+  "date",
+  "gender",
+  "state",
+  "file",
+  "number",
+  "slider",
+  "other",
+];
+const templateMap = {};
+templates.forEach((template) => {
+  const foundTemplate = examples.find(`.${template}-template`);
+  templateMap[template] = foundTemplate
+    ? foundTemplate.find(".copy-template")
+    : examples.find(".paragraph-template").find(".copy-template");
+});
 const spreadsheet = setUpJSpreadsheet();
 console.log("https://codepen.io/hchiam/pen/jOBOaqm");
 console.log("https://github.com/hchiam/html-template-generator/issues");
@@ -151,11 +175,9 @@ function attachEventListeners() {
   });
 
   $("#generate_html_from_sheet").on("click", function () {
-    alert("NOTE: this Excel feature is still experimental.");
     const headersArray = spreadsheet.getHeaders();
     const dataRows = spreadsheet.getRows();
-    console.log(headersArray);
-    console.log(dataRows);
+    generateHtmlFromSheet(headersArray, dataRows);
   });
 }
 
@@ -286,11 +308,6 @@ function getOutputHtmlString() {
   outputClone = formattedHtml(outputClone.find("#output").html());
 
   $("#output_html_string pre").text(outputClone);
-
-  // // Keep this just in case I need to revert to a different UI design:
-  // setTimeout(() => {
-  //   scrollToBottomOfElement($("#output_html_string pre"));
-  // }, 200);
 }
 
 function scrollToBottomOfElement(jQueryElement) {
@@ -451,25 +468,18 @@ function animateMove(originJQueryElement, destinationJQueryElement) {
 
 function setUpJSpreadsheet() {
   const defaultData = [
-    ["id", "input box", true, "label", "note"],
-    ["", "dropdown", false, "", ""],
+    ["id1", "input", true, "Name:", "Some note."],
+    ["id2", "dropdown", false, "", ""],
+    ["id3", "state", false, "State:", ""],
     [],
   ];
-
   const columnDefinitions = [
     { type: "text", title: "ID", width: 125 },
     {
       type: "dropdown",
       title: "Type of input",
       width: 125,
-      source: [
-        "input box",
-        "dropdown",
-        "checkbox",
-        "radio",
-        "paragraph",
-        "other",
-      ],
+      source: templates,
     },
     { type: "checkbox", title: "Required", width: 125 },
     { type: "text", title: "Label", width: 125 },
@@ -503,8 +513,6 @@ function setUpJSpreadsheet() {
   function resetSheet() {
     const clonedDefaultData = JSON.parse(JSON.stringify(defaultData));
     spreadsheet.setData(clonedDefaultData);
-    // $("#spreadsheet")[0].jexcel.setData(clonedDefaultData);
-    // $("#spreadsheet")[0].jspreadsheet.setData(defaultData);
   }
 
   const oldGetHeaders = spreadsheet.getHeaders;
@@ -513,4 +521,22 @@ function setUpJSpreadsheet() {
   spreadsheet.getHeaders = () => oldGetHeaders().split(",");
   spreadsheet.getRows = spreadsheet.getData;
   return spreadsheet;
+}
+
+function generateHtmlFromSheet(headersArray, dataRows) {
+  $("#output").show();
+  $("#output_html_controls").hide();
+  $("#output_html_string").hide();
+  $("#sheet").hide();
+  spreadsheet.resetSheet();
+
+  const inputTypeColumn = headersArray.indexOf("Type of input");
+  const inputs = dataRows.map((r) => r[inputTypeColumn]).filter((x) => x);
+
+  inputs.map((input, index) => {
+    const template = templateMap[input];
+    setTimeout(() => {
+      copyTemplate(template);
+    }, 100 * index);
+  });
 }
