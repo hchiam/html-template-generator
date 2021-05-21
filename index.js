@@ -152,6 +152,10 @@ function attachEventListeners() {
 
   $("#generate_html_from_sheet").on("click", function () {
     alert("NOTE: this Excel feature is still experimental.");
+    const headersArray = spreadsheet.getHeaders();
+    const dataRows = spreadsheet.getRows();
+    console.log(headersArray);
+    console.log(dataRows);
   });
 }
 
@@ -503,5 +507,10 @@ function setUpJSpreadsheet() {
     // $("#spreadsheet")[0].jspreadsheet.setData(defaultData);
   }
 
-  return { resetSheet };
+  const oldGetHeaders = spreadsheet.getHeaders;
+
+  spreadsheet.resetSheet = resetSheet;
+  spreadsheet.getHeaders = () => oldGetHeaders().split(",");
+  spreadsheet.getRows = spreadsheet.getData;
+  return spreadsheet;
 }
