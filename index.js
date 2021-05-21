@@ -29,9 +29,10 @@ const templates = [
 const templateMap = {};
 templates.forEach((template) => {
   const foundTemplate = examples.find(`.${template}-template`);
-  templateMap[template] = foundTemplate
-    ? foundTemplate.find(".copy-template")
-    : examples.find(".paragraph-template").find(".copy-template");
+  templateMap[template] =
+    foundTemplate.length > 0
+      ? foundTemplate.find(".copy-template")
+      : examples.find(".paragraph-template").find(".copy-template");
 });
 const spreadsheet = setUpJSpreadsheet();
 console.log("https://codepen.io/hchiam/pen/jOBOaqm");
