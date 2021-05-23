@@ -277,21 +277,41 @@ function fillTemplateWith(thisHtml) {
 
 function useExtraData(jQueryTemplateClone, extraData) {
   const { id, required, label, note } = extraData;
-  // TODO: ID? required class? label?
-  jQueryTemplateClone.find(".notes").val(note);
+
   const ids = jQueryTemplateClone.find("[id]");
   const fors = jQueryTemplateClone.find("[for]");
-  if (ids.length === 1) {
-    ids.prop("id", id);
-    fors.prop("for", id);
-  } else if (ids.length > 1) {
-    console.log("got in");
-    ids.each((index, element) => {
-      $(element).prop("id", id + "-" + (index + 1));
-    });
-    fors.each((index, element) => {
-      $(element).prop("for", id + "-" + (index + 1));
-    });
+  const hasOneInput = ids.length === 1;
+  const hasMultipleInputs = ids.length > 1;
+
+  if (id) {
+    if (hasOneInput) {
+      ids.prop("id", id);
+      fors.prop("for", id);
+    } else if (hasMultipleInputs) {
+      ids.each((index, element) => {
+        $(element).prop("id", id + "-" + (index + 1));
+      });
+      fors.each((index, element) => {
+        $(element).prop("for", id + "-" + (index + 1));
+      });
+    }
+  }
+
+  if ("required" in extraData) {
+    ids.toggleClass("required", required).toggleClass("notRequired", !required);
+  }
+
+  if (label) {
+    if (hasOneInput) {
+      fors.text(label);
+    } else if (hasMultipleInputs) {
+      // assumes templates with multiple inputs have a p tag to put the label into
+      jQueryTemplateClone.find("p").text(label);
+    }
+  }
+
+  if (note) {
+    jQueryTemplateClone.find(".notes").val(note);
   }
 }
 
