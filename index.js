@@ -279,6 +279,20 @@ function useExtraData(jQueryTemplateClone, extraData) {
   const { id, required, label, note } = extraData;
   // TODO: ID? required class? label?
   jQueryTemplateClone.find(".notes").val(note);
+  const ids = jQueryTemplateClone.find("[id]");
+  const fors = jQueryTemplateClone.find("[for]");
+  if (ids.length === 1) {
+    ids.prop("id", id);
+    fors.prop("for", id);
+  } else if (ids.length > 1) {
+    console.log("got in");
+    ids.each((index, element) => {
+      $(element).prop("id", id + "-" + (index + 1));
+    });
+    fors.each((index, element) => {
+      $(element).prop("for", id + "-" + (index + 1));
+    });
+  }
 }
 
 function editSelectOptions(pre) {
