@@ -237,7 +237,44 @@ button b {
 
 .jexcel_container thead td,
 .jexcel_container tbody td:first-child {
-  background: black !important;
+  color: black;
+}
+
+.jexcel tr[class="selected"] td,
+.jexcel td.selected {
+  border-color: darkgreen;
+}
+
+.jexcel td.highlight.highlight {
+  border-color: lime;
+  border-width: 3px;
+}
+
+.jexcel tr.selected td:first-child,
+.jexcel tr td.selected {
+  border-width: 3px;
+}
+
+.jexcel_contextmenu.jcontextmenu {
+  background: black;
+  padding: 0;
+  overflow: hidden;
+}
+
+.jexcel_contextmenu.jcontextmenu > div {
+  border-radius: 0;
+}
+
+.jexcel_contextmenu.jcontextmenu > div > a,
+.jexcel_contextmenu.jcontextmenu > div > span {
+  color: white;
+}
+
+.jexcel_contextmenu.jcontextmenu > div:hover,
+.jexcel_contextmenu.jcontextmenu > div:hover a,
+.jexcel_contextmenu.jcontextmenu > div:hover span {
+  background: lime;
+  color: black;
 }
 
 /* start of custom range input styling: */
