@@ -113,6 +113,7 @@ body {
 
 .toggle-template-display:hover:after {
   content: "⬛ ⬛";
+  transform: rotate(0deg);
 }
 
 .template-instance-container[style*="display: block;"]
