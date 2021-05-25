@@ -111,6 +111,10 @@ body {
   transition: transform 0.3s;
 }
 
+.toggle-template-display:hover:after {
+  content: "⬛ ⬛";
+}
+
 .template-instance-container[style*="display: block;"]
   .toggle-template-display:after {
   transform: rotate(90deg);
