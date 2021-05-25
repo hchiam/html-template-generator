@@ -120,9 +120,19 @@ body {
   transform: rotate(90deg);
 }
 
+.template-instance-container[style*="display: block;"]
+  .toggle-template-display:hover:after {
+  transform: rotate(0deg);
+}
+
 .template-instance-container[style*="display: inline-block;"]
   .toggle-template-display:after {
   transform: rotate(0deg);
+}
+
+.template-instance-container[style*="display: inline-block;"]
+  .toggle-template-display:hover:after {
+  transform: rotate(90deg);
 }
 
 .template-instance-container[style*="display: inline-block;"]
