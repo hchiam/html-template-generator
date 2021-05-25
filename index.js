@@ -48,6 +48,19 @@ function attachEventListeners() {
     spreadsheet.resetSheet();
   });
 
+  $("body").on("click", ".toggle-template-display", function (event) {
+    const button = $(event.target);
+    const template = button.closest(".template-instance-container");
+    const display = template.css("display");
+    if (display === "inline-block") {
+      button.prop("aria-label", "make template use block display");
+      template.css("display", "block");
+    } else {
+      button.prop("aria-label", "make template use inline-block display");
+      template.css("display", "inline-block");
+    }
+  });
+
   $("body").on("click", ".delete-template", function () {
     deleteTemplateInstance(this);
   });
