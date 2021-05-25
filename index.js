@@ -196,9 +196,9 @@ function attachEventListeners() {
 }
 
 function deleteTemplateInstance(button) {
-  const isExample = $(button).parents("#examples").length > 0;
+  const isExample = $(button).closest("#examples").length > 0;
   if (isExample) return;
-  $(button).parents(".template-instance-container").remove();
+  $(button).closest(".template-instance-container").remove();
   clearOutputHtmlString();
   const isOutputEmpty = !$("#output").find(":not(.remove-from-final-output)")
     .length;
@@ -208,7 +208,7 @@ function deleteTemplateInstance(button) {
 }
 
 function copyDynamicTemplate(button) {
-  const templateContainer = $(button).parents(".template-generator");
+  const templateContainer = $(button).closest(".template-generator");
   let templateHtmlLiteral = templateContainer
     .find("pre")
     .text()
@@ -242,9 +242,9 @@ ${templateHtmlLiteral}
 }
 
 function copyTemplate(button, extraData) {
-  const isExample = $(button).parents("#examples").length > 0;
+  const isExample = $(button).closest("#examples").length > 0;
 
-  const templateContainer = $(button).parents(".template-instance-container");
+  const templateContainer = $(button).closest(".template-instance-container");
 
   const lastTemplateContainer = $("#output")
     .find(".template-instance-container")
