@@ -177,8 +177,12 @@ function attachEventListeners() {
     };
   });
 
+  let showedExperimentalMessage = false;
   $("#copy_excel_data").on("click", function () {
-    alert("NOTE: this Excel feature is still experimental.");
+    if (!showedExperimentalMessage) {
+      alert("NOTE: this Excel feature is still experimental.");
+      showedExperimentalMessage = true;
+    }
     $("#output").hide();
     $("#output_html_controls").show();
     $("#output_html_string").hide();
