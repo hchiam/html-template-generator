@@ -311,7 +311,9 @@ function useExtraData(jQueryTemplateClone, extraData) {
   }
 
   if ("required" in extraData) {
-    ids.toggleClass("required", required).toggleClass("notRequired", !required);
+    ids
+      .toggleClass("isRequired", required)
+      .toggleClass("notRequired", !required);
   }
 
   if (label) {
