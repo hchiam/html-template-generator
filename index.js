@@ -61,6 +61,14 @@ function attachEventListeners() {
     }
   });
 
+  $("body").on("click", ".move-template-earlier", function () {
+    moveContainerEarlier(this);
+  });
+
+  $("body").on("click", ".move-template-later", function () {
+    moveContainerLater(this);
+  });
+
   $("body").on("click", ".delete-template", function () {
     deleteTemplateInstance(this);
   });
@@ -505,7 +513,11 @@ function saveHtmlFile(html) {
 function animateMove(originJQueryElement, destinationJQueryElement) {
   destinationJQueryElement.css("visibility", "hidden");
   const original = $(originJQueryElement);
+  const originalMarginLeft = parseInt(original.css("marginLeft"));
+  const originalMarginTop = parseInt(original.css("marginTop"));
   const originPosition = original.position();
+  originPosition.left = originPosition.left + originalMarginLeft;
+  originPosition.top = originPosition.top + originalMarginTop;
   const originalWidth = original.outerWidth();
   const originalHeight = original.outerHeight();
   const destinationPosition = $(destinationJQueryElement).position();
@@ -746,5 +758,35 @@ function generateHtmlFromSheet(headersArray, dataRows) {
         $("#output").animate({ scrollTop: $("#output")[0].scrollHeight });
       }
     }, 100 * index);
+  });
+}
+
+function moveContainerEarlier(button) {
+  const templateContainer = $(button).closest(".template-instance-container");
+  const destinationElement = templateContainer.prev(
+    ".template-instance-container"
+  );
+
+  if (!destinationElement.length) return;
+
+  $("#output").ready(function () {
+    animateMove(templateContainer, destinationElement);
+    animateMove(destinationElement, templateContainer);
+    templateContainer.insertBefore(destinationElement);
+  });
+}
+
+function moveContainerLater(button) {
+  const templateContainer = $(button).closest(".template-instance-container");
+  const destinationElement = templateContainer.next(
+    ".template-instance-container"
+  );
+
+  if (!destinationElement.length) return;
+
+  $("#output").ready(function () {
+    animateMove(templateContainer, destinationElement);
+    animateMove(destinationElement, templateContainer);
+    templateContainer.insertAfter(destinationElement);
   });
 }

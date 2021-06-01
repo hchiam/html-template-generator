@@ -141,6 +141,11 @@ body {
   display: grid;
 }
 
+#output .template-instance-container:first-of-type .move-template-earlier,
+#output .template-instance-container:last-of-type .move-template-later {
+  display: none;
+}
+
 #examples {
   /* display: grid;
   flex-grow: 1; */
@@ -169,8 +174,14 @@ body {
 
 #examples .toggle-template-display,
 #examples .delete-template,
+#examples .move-template-earlier,
+#examples .move-template-later,
 #examples .notes {
   display: none;
+}
+
+.delete-template {
+  margin-left: 1rem;
 }
 
 .notes-line {
