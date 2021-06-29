@@ -1,6 +1,5 @@
 {
   "name": "html-template-generator",
-  "version": "1.0.0",
   "main": "index.js",
   "repository": "https://github.com/hchiam/html-template-generator",
   "author": "hchiam <hchiam@users.noreply.github.com>",
