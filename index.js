@@ -383,7 +383,18 @@ function getOutputHtmlString() {
   outputClone.find("[contenteditable]").removeAttr("contenteditable");
   outputClone = formattedHtml(outputClone.find("#output").html());
 
-  $("#output_html_string pre").text(outputClone);
+  $("#output_html_string pre")
+    .text(outputClone)
+    .ready(() => {
+      createElementToClickToCopyToClipboard(
+        $("#output_html_string")[0],
+        outputClone,
+        () => {
+          alert("Copied code to clipboard!");
+        }
+      );
+      $("#output_html_string pre").css("visibility", "visible");
+    });
 }
 
 function scrollToBottomOfElement(jQueryElement) {
