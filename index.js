@@ -500,8 +500,10 @@ function commentsToTextarea(templateInstanceContainer) {
 
 function saveHtmlFile(html) {
   try {
-    const date = new Date().toDateString().replaceAll(" ", "_");
-    const fileName = `html_template_generator_${date}.html`;
+    const date = new Date();
+    const dateString = date.toDateString().replaceAll(" ", "_");
+    const timeString = `${date.getHours()}_${date.getMinutes()}_${date.getSeconds()}`;
+    const fileName = `html_template_generator_${dateString}_${timeString}.html`;
     const tempElem = document.createElement("a");
     // use encodeURIComponent instead of urlAcceptableString since saving to file
     tempElem.setAttribute(
