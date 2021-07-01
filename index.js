@@ -107,6 +107,7 @@ function attachEventListeners() {
     $("#output_html_string").hide();
     $("#html_to_excel").hide();
     $("#sheet").show();
+    $("#generate_html_from_sheet").hide();
     generateSheetFromHtml();
     collapseButton($("#get_output_html_string"));
     collapseButton($("#hide_output_html_string"));
@@ -212,6 +213,7 @@ function attachEventListeners() {
     $("#output_html_string").hide();
     $("#html_to_excel").hide();
     $("#sheet").show();
+    $("#generate_html_from_sheet").show();
     collapseButton($("#get_output_html_string"));
     collapseButton($("#hide_output_html_string"));
     collapseButton($("#export_html_file"));
@@ -282,7 +284,9 @@ function copyTemplate(button, extraData) {
     ? lastTemplateContainer
     : $("#output").children().first();
 
-  const thisHtml = `<div class="template-instance-container">${templateContainer.html()}</div>`;
+  const thisHtml = `<div class="${templateContainer.prop(
+    "class"
+  )}">${templateContainer.html()}</div>`;
   fillTemplateWith(thisHtml);
   const template = $("template")[0];
   const clone = template.content.cloneNode(true);
@@ -592,7 +596,7 @@ function setUpJSpreadsheet() {
       source: templates,
     },
     { type: "checkbox", title: "Required", width: 125 },
-    { type: "text", title: "Label", width: 125 },
+    { type: "text", title: "Label", width: 200 },
     { type: "text", title: "Note", width: 125 },
   ];
 
@@ -763,15 +767,25 @@ function generateSheetFromHtml() {
 
   const usedTemplateContainers = $("#output .template-instance-container");
 
-  const input = usedTemplateContainers.find("[id]");
-  const id = input.prop("id");
-  const type = input.prop("type");
-  const required = input.hasClass("isRequired");
-  const label = input.closest("p, label").text();
-  const note = usedTemplateContainers.find(".notes").val();
+  usedTemplateContainers.each(function () {
+    const container = $(this);
+    const input = container.find("[id]");
+    const id = input.prop("id");
+    const type = container
+      .prop("class")
+      .replace("template-instance-container", "")
+      .trim()
+      .replace("-template", "");
+    const required = input.hasClass("isRequired");
+    const label = Array.from(container.find("p, label"))
+      .map((x) => x.innerText)
+      .join(", ");
+    const note = container.find(".notes").val();
 
-  newData.push([id, type, required, label, note]);
+    newData.push([id, type, required, label, note]);
+  });
 
+  console.log(newData);
   spreadsheet.setData(newData);
 }
 

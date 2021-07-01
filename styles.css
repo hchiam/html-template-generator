@@ -294,6 +294,10 @@ button b {
   color: black;
 }
 
+.jexcel > tbody > tr > td {
+  white-space: normal !important;
+}
+
 .jexcel tr[class="selected"] td,
 .jexcel td.selected {
   border-color: darkgreen;
