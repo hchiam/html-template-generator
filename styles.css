@@ -41,14 +41,15 @@ body {
 
 #get_output_html_string,
 #import_html_file,
-#copy_excel_data {
+#copy_excel_data,
+#html_to_excel {
   display: block;
-  margin: auto;
+  margin: 0 auto 5px;
   transition: 0.2s;
   width: 100%;
 }
 
-#get_output_html_string.hide {
+.hide {
   max-height: 0;
   height: 0;
   padding: 0;
@@ -57,7 +58,7 @@ body {
   margin-bottom: 1rem;
 }
 
-#get_output_html_string.show {
+.show {
   max-height: 100vh;
 }
 
@@ -291,6 +292,10 @@ button b {
 .jexcel_container thead td,
 .jexcel_container tbody td:first-child {
   color: black;
+}
+
+.jexcel > tbody > tr > td {
+  white-space: normal !important;
 }
 
 .jexcel tr[class="selected"] td,

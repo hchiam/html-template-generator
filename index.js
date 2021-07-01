@@ -8,6 +8,7 @@ https://cdn.jsdelivr.net/gh/hchiam/draggable@master/makeElementDraggableAndEdita
 */
 
 collapseButton($("#get_output_html_string"));
+collapseButton($("#html_to_excel"));
 attachEventListeners();
 const examples = $("#examples");
 const templates = [
@@ -44,6 +45,7 @@ function attachEventListeners() {
     $("#output").show();
     $("#output_html_controls").hide();
     $("#output_html_string").hide();
+    revealButton($("#html_to_excel"));
     $("#sheet").hide();
     spreadsheet.resetSheet();
   });
@@ -91,22 +93,41 @@ function attachEventListeners() {
     $("#output").hide();
     $("#output_html_controls").show();
     $("#output_html_string").show();
+    revealButton($("#html_to_excel"));
     $("#sheet").hide();
     spreadsheet.resetSheet();
-    revealButton($("#hide_output_html_string"));
-    revealButton($("#export_html_file"));
+    revealButton($("#output_html_controls"));
     collapseButton($("#get_output_html_string"));
+  });
+
+  $("#html_to_excel").on("click", function () {
+    const usedTemplateContainers = $("#output .template-instance-container");
+    if (!usedTemplateContainers.length) {
+      collapseButton($("#html_to_excel"));
+      alert("Copy templates first.");
+    } else {
+      spreadsheet.resetSheet();
+      $("#output").hide();
+      $("#output_html_controls").show();
+      $("#output_html_string").hide();
+      collapseButton($("#html_to_excel"));
+      $("#sheet").show();
+      $("#generate_html_from_sheet").hide();
+      generateSheetFromHtml();
+      collapseButton($("#get_output_html_string"));
+      revealButton($("#output_html_controls"));
+    }
   });
 
   $("#hide_output_html_string").on("click", function () {
     $("#output").show();
     $("#output_html_controls").hide();
     $("#output_html_string").hide();
+    revealButton($("#html_to_excel"));
     $("#sheet").hide();
     spreadsheet.resetSheet();
     revealButton($("#get_output_html_string"));
-    collapseButton($("#hide_output_html_string"));
-    collapseButton($("#export_html_file"));
+    collapseButton($("#output_html_controls"));
   });
 
   $("#export_html_file").on("click", function () {
@@ -180,8 +201,7 @@ function attachEventListeners() {
       $("#sheet").hide();
       spreadsheet.resetSheet();
       revealButton($("#get_output_html_string"));
-      collapseButton($("#hide_output_html_string"));
-      collapseButton($("#export_html_file"));
+      collapseButton($("#output_html_controls"));
     };
   });
 
@@ -194,10 +214,11 @@ function attachEventListeners() {
     $("#output").hide();
     $("#output_html_controls").show();
     $("#output_html_string").hide();
+    collapseButton($("#html_to_excel"));
     $("#sheet").show();
+    $("#generate_html_from_sheet").show();
     collapseButton($("#get_output_html_string"));
-    collapseButton($("#hide_output_html_string"));
-    collapseButton($("#export_html_file"));
+    collapseButton($("#output_html_controls"));
   });
 
   $("#generate_html_from_sheet").on("click", function () {
@@ -265,7 +286,9 @@ function copyTemplate(button, extraData) {
     ? lastTemplateContainer
     : $("#output").children().first();
 
-  const thisHtml = `<div class="template-instance-container">${templateContainer.html()}</div>`;
+  const thisHtml = `<div class="${templateContainer.prop(
+    "class"
+  )}">${templateContainer.html()}</div>`;
   fillTemplateWith(thisHtml);
   const template = $("template")[0];
   const clone = template.content.cloneNode(true);
@@ -575,7 +598,7 @@ function setUpJSpreadsheet() {
       source: templates,
     },
     { type: "checkbox", title: "Required", width: 125 },
-    { type: "text", title: "Label", width: 125 },
+    { type: "text", title: "Label", width: 200 },
     { type: "text", title: "Note", width: 125 },
   ];
 
@@ -738,6 +761,34 @@ function setUpJSpreadsheetContextMenu(obj, x, y, e) {
   }
 
   return items;
+}
+
+function generateSheetFromHtml() {
+  // id, type, required, label, note
+  const newData = []; // example: [["id1", "input", true, "Name:", "Some note."]]
+
+  const usedTemplateContainers = $("#output .template-instance-container");
+
+  usedTemplateContainers.each(function () {
+    const container = $(this);
+    const input = container.find("[id]");
+    const id = input.prop("id");
+    const type = container
+      .prop("class")
+      .replace("template-instance-container", "")
+      .trim()
+      .replace("-template", "");
+    const required = input.hasClass("isRequired");
+    const label = Array.from(container.find("p, label"))
+      .map((x) => x.innerText)
+      .join(", ");
+    const note = container.find(".notes").val();
+
+    newData.push([id, type, required, label, note]);
+  });
+
+  console.log(newData);
+  spreadsheet.setData(newData);
 }
 
 function generateHtmlFromSheet(headersArray, dataRows) {
