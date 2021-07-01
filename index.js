@@ -8,6 +8,7 @@ https://cdn.jsdelivr.net/gh/hchiam/draggable@master/makeElementDraggableAndEdita
 */
 
 collapseButton($("#get_output_html_string"));
+collapseButton($("#html_to_excel"));
 attachEventListeners();
 const examples = $("#examples");
 const templates = [
@@ -44,7 +45,7 @@ function attachEventListeners() {
     $("#output").show();
     $("#output_html_controls").hide();
     $("#output_html_string").hide();
-    $("#html_to_excel").show();
+    revealButton($("#html_to_excel"));
     $("#sheet").hide();
     spreadsheet.resetSheet();
   });
@@ -92,38 +93,41 @@ function attachEventListeners() {
     $("#output").hide();
     $("#output_html_controls").show();
     $("#output_html_string").show();
-    $("#html_to_excel").show();
+    revealButton($("#html_to_excel"));
     $("#sheet").hide();
     spreadsheet.resetSheet();
-    revealButton($("#hide_output_html_string"));
-    revealButton($("#export_html_file"));
+    revealButton($("#output_html_controls"));
     collapseButton($("#get_output_html_string"));
   });
 
   $("#html_to_excel").on("click", function () {
-    spreadsheet.resetSheet();
-    $("#output").hide();
-    $("#output_html_controls").show();
-    $("#output_html_string").hide();
-    $("#html_to_excel").hide();
-    $("#sheet").show();
-    $("#generate_html_from_sheet").hide();
-    generateSheetFromHtml();
-    collapseButton($("#get_output_html_string"));
-    collapseButton($("#hide_output_html_string"));
-    collapseButton($("#export_html_file"));
+    const usedTemplateContainers = $("#output .template-instance-container");
+    if (!usedTemplateContainers.length) {
+      collapseButton($("#html_to_excel"));
+      alert("Copy templates first.");
+    } else {
+      spreadsheet.resetSheet();
+      $("#output").hide();
+      $("#output_html_controls").show();
+      $("#output_html_string").hide();
+      collapseButton($("#html_to_excel"));
+      $("#sheet").show();
+      $("#generate_html_from_sheet").hide();
+      generateSheetFromHtml();
+      collapseButton($("#get_output_html_string"));
+      revealButton($("#output_html_controls"));
+    }
   });
 
   $("#hide_output_html_string").on("click", function () {
     $("#output").show();
     $("#output_html_controls").hide();
     $("#output_html_string").hide();
-    $("#html_to_excel").show();
+    revealButton($("#html_to_excel"));
     $("#sheet").hide();
     spreadsheet.resetSheet();
     revealButton($("#get_output_html_string"));
-    collapseButton($("#hide_output_html_string"));
-    collapseButton($("#export_html_file"));
+    collapseButton($("#output_html_controls"));
   });
 
   $("#export_html_file").on("click", function () {
@@ -197,8 +201,7 @@ function attachEventListeners() {
       $("#sheet").hide();
       spreadsheet.resetSheet();
       revealButton($("#get_output_html_string"));
-      collapseButton($("#hide_output_html_string"));
-      collapseButton($("#export_html_file"));
+      collapseButton($("#output_html_controls"));
     };
   });
 
@@ -211,12 +214,11 @@ function attachEventListeners() {
     $("#output").hide();
     $("#output_html_controls").show();
     $("#output_html_string").hide();
-    $("#html_to_excel").hide();
+    collapseButton($("#html_to_excel"));
     $("#sheet").show();
     $("#generate_html_from_sheet").show();
     collapseButton($("#get_output_html_string"));
-    collapseButton($("#hide_output_html_string"));
-    collapseButton($("#export_html_file"));
+    collapseButton($("#output_html_controls"));
   });
 
   $("#generate_html_from_sheet").on("click", function () {
