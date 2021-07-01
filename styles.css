@@ -41,9 +41,10 @@ body {
 
 #get_output_html_string,
 #import_html_file,
-#copy_excel_data {
+#copy_excel_data,
+#html_to_excel {
   display: block;
-  margin: auto;
+  margin: 0 auto 5px;
   transition: 0.2s;
   width: 100%;
 }

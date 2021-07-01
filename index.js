@@ -44,6 +44,7 @@ function attachEventListeners() {
     $("#output").show();
     $("#output_html_controls").hide();
     $("#output_html_string").hide();
+    $("#html_to_excel").show();
     $("#sheet").hide();
     spreadsheet.resetSheet();
   });
@@ -91,6 +92,7 @@ function attachEventListeners() {
     $("#output").hide();
     $("#output_html_controls").show();
     $("#output_html_string").show();
+    $("#html_to_excel").show();
     $("#sheet").hide();
     spreadsheet.resetSheet();
     revealButton($("#hide_output_html_string"));
@@ -98,10 +100,24 @@ function attachEventListeners() {
     collapseButton($("#get_output_html_string"));
   });
 
+  $("#html_to_excel").on("click", function () {
+    spreadsheet.resetSheet();
+    $("#output").hide();
+    $("#output_html_controls").show();
+    $("#output_html_string").hide();
+    $("#html_to_excel").hide();
+    $("#sheet").show();
+    generateSheetFromHtml();
+    collapseButton($("#get_output_html_string"));
+    collapseButton($("#hide_output_html_string"));
+    collapseButton($("#export_html_file"));
+  });
+
   $("#hide_output_html_string").on("click", function () {
     $("#output").show();
     $("#output_html_controls").hide();
     $("#output_html_string").hide();
+    $("#html_to_excel").show();
     $("#sheet").hide();
     spreadsheet.resetSheet();
     revealButton($("#get_output_html_string"));
@@ -194,6 +210,7 @@ function attachEventListeners() {
     $("#output").hide();
     $("#output_html_controls").show();
     $("#output_html_string").hide();
+    $("#html_to_excel").hide();
     $("#sheet").show();
     collapseButton($("#get_output_html_string"));
     collapseButton($("#hide_output_html_string"));
@@ -738,6 +755,24 @@ function setUpJSpreadsheetContextMenu(obj, x, y, e) {
   }
 
   return items;
+}
+
+function generateSheetFromHtml() {
+  // id, type, required, label, note
+  const newData = []; // example: [["id1", "input", true, "Name:", "Some note."]]
+
+  const usedTemplateContainers = $("#output .template-instance-container");
+
+  const input = usedTemplateContainers.find("[id]");
+  const id = input.prop("id");
+  const type = input.prop("type");
+  const required = input.hasClass("isRequired");
+  const label = input.closest("p, label").text();
+  const note = usedTemplateContainers.find(".notes").val();
+
+  newData.push([id, type, required, label, note]);
+
+  spreadsheet.setData(newData);
 }
 
 function generateHtmlFromSheet(headersArray, dataRows) {
