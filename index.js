@@ -795,6 +795,7 @@ function generateHtmlFromSheet(headersArray, dataRows) {
   $("#output").show();
   $("#output_html_controls").hide();
   $("#output_html_string").hide();
+  revealButton($("#html_to_excel"));
   $("#sheet").hide();
   spreadsheet.resetSheet();
 
