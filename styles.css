@@ -93,6 +93,16 @@ body {
 
 .template-instance-container:not(.disable-hover):hover .template-controls {
   display: block;
+  white-space: nowrap;
+  right: 0;
+  overflow: auto;
+  background: transparent;
+}
+
+.template-instance-container:not(.disable-hover):hover[style*="display: inline-block"]
+  .template-controls {
+  left: 0;
+  top: -1rem;
 }
 
 .template-instance-container:not(.disable-hover):hover
