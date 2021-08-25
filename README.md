@@ -16,6 +16,7 @@ or
 
 ```bash
 yarn
+yarn global add parcel-bundler
 yarn start
 # open http://localhost:1234/
 ```
