@@ -1,5 +1,7 @@
 # `html-template-generator` [![version](https://img.shields.io/github/release/hchiam/html-template-generator)](https://github.com/hchiam/html-template-generator/releases)
 
+Generate HTML from a visual UI!
+
 [Live demo](https://html-template-generator.surge.sh)
 
 [Live editable demo](https://codepen.io/hchiam/pen/jOBOaqm)
