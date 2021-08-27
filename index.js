@@ -38,6 +38,7 @@ templates.forEach((template) => {
 const spreadsheet = setUpJSpreadsheet();
 console.log("https://codepen.io/hchiam/pen/jOBOaqm");
 console.log("https://github.com/hchiam/html-template-generator/issues");
+getVersionNumber(showVersionNumber);
 
 function attachEventListeners() {
   $("body").on("click", ".copy-template", function () {
@@ -854,4 +855,16 @@ function moveContainerLater(button) {
     animateMove(destinationElement, templateContainer);
     templateContainer.insertAfter(destinationElement);
   });
+}
+
+function showVersionNumber(versionNumber) {
+  $("#version_number").text(`You're using version ${versionNumber}`);
+}
+
+function getVersionNumber(callback) {
+  fetch("https://api.github.com/repos/hchiam/html-template-generator/releases")
+    .then((r) => r.json())
+    .then((r) => {
+      if (callback) callback(r[0].name);
+    });
 }
