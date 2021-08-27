@@ -305,6 +305,11 @@ button b {
   color: inherit;
 }
 
+.version-number-container {
+  width: 100%;
+  text-align: center;
+}
+
 .jexcel_container thead td,
 .jexcel_container tbody td:first-child {
   color: black;
