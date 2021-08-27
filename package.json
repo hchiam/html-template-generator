@@ -5,13 +5,15 @@
   "author": "hchiam <hchiam@users.noreply.github.com>",
   "license": "MIT",
   "scripts": {
+    "dev": "yarn start",
     "start": "parcel index.html",
     "build": "parcel build index.html",
     "deploy": "yarn build && surge dist https://html-template-generator.surge.sh",
-    "reminder": "echo 'Remember to:'; echo '\n \\033[1;34m https://html-template-generator.surge.sh \\033[0m \n and \n \n \\033[1;34m https://codepen.io/hchiam/pen/jOBOaqm \\033[0m \n'"
+    "reminder": "echo 'Remember to deploy to:'; echo '\n \\033[1;34m https://html-template-generator.surge.sh \\033[0m \n and update: \n \n \\033[1;34m https://codepen.io/hchiam/pen/jOBOaqm \\033[0m \n'"
   },
   "devDependencies": {
-    "husky": "4.3.8"
+    "husky": "4.3.8",
+    "parcel-bundler": "1.12.3"
   },
   "husky": {
     "hooks": {

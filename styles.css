@@ -95,14 +95,15 @@ body {
   display: block;
   white-space: nowrap;
   right: 0;
-  overflow: auto;
+  overflow-x: auto;
+  overflow-y: hidden;
   background: transparent;
 }
 
 .template-instance-container:not(.disable-hover):hover[style*="display: inline-block"]
   .template-controls {
   left: 0;
-  top: -1rem;
+  top: -2rem;
 }
 
 .template-instance-container:not(.disable-hover):hover
@@ -263,6 +264,11 @@ select + pre:before {
 
 #output_html_string pre:empty {
   pointer-events: none;
+}
+
+#output_html_string pre:hover,
+#output_html_string pre:focus {
+  background: #333;
 }
 
 .flash-of-color {
