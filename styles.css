@@ -11,6 +11,45 @@ body {
   overflow: hidden;
 }
 
+h1,
+h2,
+h3 {
+  text-align: center;
+  background: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+#template_demo_container {
+  z-index: 15;
+  animation: slide-left 15s forwards;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#template_demo_container h1 {
+  font-size: 3rem;
+}
+
+#template_demo_container *:not(#template_demo) {
+  z-index: 1;
+  margin: 0;
+  background: transparent;
+}
+
+#template_demo {
+  box-shadow: 0 0 100px 100vw rgba(0, 0, 0, 0.75),
+    0 0 20px 20px rgba(0, 0, 0, 0.75);
+}
+
 #examples {
   flex: 1;
   height: 100vh;
@@ -19,6 +58,17 @@ body {
   margin: 0;
   padding: 1rem;
   border-radius: 0;
+  box-shadow: inset 0 -30px 30px -30px black;
+}
+
+#examples:after {
+  content: "";
+  width: 100%;
+  height: 1rem;
+  display: block;
+  position: sticky;
+  bottom: -1rem;
+  background: linear-gradient(transparent, black) !important;
 }
 
 #output,
@@ -35,6 +85,12 @@ body {
   display: none;
 }
 
+#output_html_controls div {
+  display: flex;
+  justify-content: space-between;
+  background: transparent;
+}
+
 #output_html_controls button {
   margin: 5px 1px;
 }
@@ -49,6 +105,10 @@ body {
   width: 100%;
 }
 
+#get_output_html_string {
+  width: auto;
+}
+
 .hide {
   max-height: 0;
   height: 0;
@@ -56,6 +116,7 @@ body {
   opacity: 0;
   margin: -1rem;
   margin-bottom: 1rem;
+  pointer-events: none;
 }
 
 .show {
@@ -75,7 +136,7 @@ body {
 .template-instance-container {
   border: 3px solid gray;
   padding: 1em;
-  margin: 1em;
+  margin: 2rem 1rem -1rem;
   position: relative;
 }
 
@@ -158,6 +219,24 @@ body {
   display: none;
 }
 
+#fixed_side_panel_top {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  outline: 1rem solid black;
+  background: inherit;
+  box-shadow: 0 0 20px 20px black;
+  margin-bottom: 1rem;
+}
+
+#fixed_side_panel_top h2 {
+  font-size: 2.5rem;
+}
+
+#fixed_side_panel_top h3 {
+  font-size: 1.3rem;
+}
+
 #examples {
   /* display: grid;
   flex-grow: 1; */
@@ -175,7 +254,7 @@ body {
   background: white;
 }
 
-#examples:after {
+.version-number-container:after {
   content: "";
   display: block;
   bottom: 0;
@@ -446,3 +525,81 @@ input[type="range"]:focus::-ms-fill-upper {
 }
 
 /* :end of custom range input styling */
+
+#toggle_advanced_container {
+  text-align: center;
+  background: inherit;
+  margin-bottom: 1rem;
+  margin-top: -1rem;
+}
+
+#toggle_advanced {
+  margin: auto;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+}
+
+#toggle_advanced:focus {
+  text-decoration: none;
+}
+
+.center-container {
+  display: flex;
+  justify-content: space-between;
+  background: transparent;
+}
+
+.center-container > * {
+  margin: auto;
+}
+
+@keyframes slide-left {
+  90% {
+    opacity: 1;
+    left: 0;
+  }
+  100% {
+    opacity: 0;
+    left: -100%;
+  }
+}
+
+.export-html-file:first-of-type:not(.hide):after {
+  content: "➘\a      Click this to get an .html file, \a      which you can give to a developer, \a      and speed up writing the code.";
+  white-space: pre;
+  text-align: left;
+  position: fixed;
+  display: flow-root;
+  background: lime;
+  color: black;
+  padding: 0.1rem 1rem 1rem 0.25rem;
+  border-radius: 0 0.5rem 0.5rem 0.5rem;
+  margin-left: 10ch;
+  animation: reveal-from-left 1s forwards, auto-hide 7s forwards;
+  transform-origin: left;
+}
+
+.export-html-file:first-of-type:not(.hide):hover:after {
+  background: green;
+  color: white;
+}
+
+@keyframes reveal-from-left {
+  from {
+    opacity: 0;
+    transform: rotate(2deg) scaleX(0);
+  }
+  to {
+    opacity: 0.9;
+    transform: rotate(2deg) scaleX(1);
+  }
+}
+
+@keyframes auto-hide {
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}

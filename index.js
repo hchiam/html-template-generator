@@ -39,6 +39,10 @@ const spreadsheet = setUpJSpreadsheet();
 console.log("https://codepen.io/hchiam/pen/jOBOaqm");
 console.log("https://github.com/hchiam/html-template-generator/issues");
 getVersionNumber(showVersionNumber);
+const secondsToShowIntroGif = 15000;
+setTimeout(() => {
+  $("#examples").click();
+}, secondsToShowIntroGif);
 
 function attachEventListeners() {
   $("body").on("click", ".copy-template", function () {
@@ -47,6 +51,7 @@ function attachEventListeners() {
     $("#output_html_controls").hide();
     $("#output_html_string").hide();
     revealButton($("#html_to_excel"));
+    revealButton($(".export-html-file"));
     $("#sheet").hide();
     spreadsheet.resetSheet();
   });
@@ -131,7 +136,7 @@ function attachEventListeners() {
     collapseButton($("#output_html_controls"));
   });
 
-  $("#export_html_file").on("click", function () {
+  $("#export_html_file, .export-html-file").on("click", function () {
     saveHtmlFile($("#output_html_string pre").text());
   });
 
@@ -227,6 +232,21 @@ function attachEventListeners() {
     const dataRows = spreadsheet.getRows();
     generateHtmlFromSheet(headersArray, dataRows);
   });
+
+  $("#toggle_advanced").on("click", function () {
+    const willShow = $("#advanced_buttons_group").hasClass("hide");
+    $("#advanced_buttons_group").toggleClass("hide", !willShow);
+    $("#toggle_advanced").text(willShow ? "-" : "+");
+    $("#examples").animate(
+      {
+        scrollTop:
+          $("#examples")[0].scrollHeight - $("#examples")[0].clientHeight,
+      },
+      200
+    );
+  });
+
+  $("#template_demo_container").on("click", hideIntroGif);
 }
 
 function deleteTemplateInstance(button) {
@@ -425,6 +445,7 @@ function scrollToBottomOfElement(jQueryElement) {
   const newScrollPosition =
     jQueryElement[0].scrollHeight + jQueryElement[0].offsetHeight;
   window.scrollTo(0, newScrollPosition);
+  console.log(jQueryElement[0].scrollHeight, newScrollPosition);
 }
 
 function stopFlashingColor() {
@@ -867,4 +888,8 @@ function getVersionNumber(callback) {
     .then((r) => {
       if (callback) callback(r[0].name);
     });
+}
+
+function hideIntroGif() {
+  $("#template_demo_container").hide();
 }
