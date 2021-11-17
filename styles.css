@@ -53,7 +53,7 @@ button {
 #examples {
   flex: 1;
   height: 100vh;
-  overflow: scroll;
+  overflow-y: scroll;
   background: black;
   margin: 0;
   padding: 1rem;

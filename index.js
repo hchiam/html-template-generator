@@ -137,6 +137,7 @@ function attachEventListeners() {
   });
 
   $("#export_html_file, .export-html-file").on("click", function () {
+    getOutputHtmlString();
     saveHtmlFile($("#output_html_string pre").text());
   });
 
