@@ -568,13 +568,13 @@ input[type="range"]:focus::-ms-fill-upper {
   content: "➘\a      Click this to get an .html file, \a      which you can give to a developer, \a      and speed up writing the code.";
   white-space: pre;
   text-align: left;
-  position: fixed;
+  position: absolute;
   display: flow-root;
   background: lime;
   color: black;
   padding: 0.1rem 1rem 1rem 0.25rem;
   border-radius: 0 0.5rem 0.5rem 0.5rem;
-  margin-left: 10ch;
+  margin-left: 1ch;
   animation: reveal-from-left 1s forwards, auto-hide 7s forwards;
   transform-origin: left;
 }
