@@ -9,7 +9,7 @@ Generate HTML from a visual UI!
 ## Local development
 
 ```bash
-open src/index.html
+open index.html
 ```
 
 or
