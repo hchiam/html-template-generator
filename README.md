@@ -21,4 +21,4 @@ yarn start
 # open http://localhost:1234/
 ```
 
-(You'll need [`yarn`](https://github.com/hchiam/learning-yarn) and [`surge`](https://github.com/hchiam/learning-surge) and set up.)
+(You'll need [`yarn`](https://github.com/hchiam/learning-yarn) and [`surge`](https://github.com/hchiam/learning-surge) set up.)
