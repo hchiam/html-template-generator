@@ -332,6 +332,21 @@ function copyTemplate(button, extraData) {
   ).next();
 
   destinationElement.css("visibility", "hidden");
+
+  const allNextElements = destinationElement.next(
+    ".template-instance-container"
+  );
+  allNextElements
+    .css({
+      position: "relative",
+      top: -destinationElement.height(),
+    })
+    .animate(
+      {
+        top: 0,
+      },
+      100
+    );
   $("#output").ready(function () {
     animateMove(templateContainer, destinationElement);
   });
