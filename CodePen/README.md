@@ -2,6 +2,8 @@
 
 https://codepen.io/hchiam/pen/jOBOaqm
 
+This CodePen folder helps with easier file diffing, and also serves as a backup.
+
 ## Settings
 
 ### CSS
