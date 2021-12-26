@@ -612,5 +612,6 @@ input[type="range"]:focus::-ms-fill-upper {
   }
   100% {
     opacity: 0;
+    pointer-events: none;
   }
 }
