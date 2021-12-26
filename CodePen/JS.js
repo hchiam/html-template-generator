@@ -240,6 +240,7 @@ function attachEventListeners() {
   $("#toggle_advanced").on("click", function () {
     const willShow = $("#advanced_buttons_group").hasClass("hide");
     $("#advanced_buttons_group").toggleClass("hide", !willShow);
+    $(".template-generator").toggleClass("hide", !willShow);
     $("#toggle_advanced").text(willShow ? "-" : "+");
     $("#examples").animate(
       {
