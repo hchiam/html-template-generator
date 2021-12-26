@@ -1,0 +1,615 @@
+body > p:first-child {
+  position: absolute;
+  top: 0;
+  z-index: 9999;
+  padding: 0;
+  margin: auto;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+:root {
+  --flash-background: lime;
+  --flash-color: black;
+}
+
+body {
+  display: flex;
+  padding: 0;
+  margin: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+
+h1,
+h2,
+h3 {
+  text-align: center;
+  background: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+#template_demo_container {
+  z-index: 15;
+  animation: slide-left 15s forwards;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#template_demo_container h1 {
+  font-size: 3rem;
+}
+
+#template_demo_container *:not(#template_demo) {
+  z-index: 1;
+  margin: 0;
+  background: transparent;
+}
+
+#template_demo {
+  box-shadow: 0 0 100px 100vw rgba(0, 0, 0, 0.75),
+    0 0 20px 20px rgba(0, 0, 0, 0.75);
+}
+
+#examples {
+  flex: 1;
+  height: 100vh;
+  overflow-y: scroll;
+  background: black;
+  margin: 0;
+  padding: 1rem;
+  border-radius: 0;
+  box-shadow: inset 0 -30px 30px -30px black;
+}
+
+#examples:after {
+  content: "";
+  width: 100%;
+  height: 1rem;
+  display: block;
+  position: sticky;
+  bottom: -1rem;
+  background: linear-gradient(transparent, black) !important;
+}
+
+#output,
+#output_html_string,
+#sheet {
+  flex: 2;
+  height: 100vh;
+  overflow: auto;
+  padding: 1rem;
+}
+
+#output_html_controls {
+  padding: 1rem;
+  display: none;
+}
+
+#output_html_controls div {
+  display: flex;
+  justify-content: space-between;
+  background: transparent;
+}
+
+#output_html_controls button {
+  margin: 5px 1px;
+}
+
+#get_output_html_string,
+#import_html_file,
+#copy_excel_data,
+#html_to_excel {
+  display: block;
+  margin: 0 auto 5px;
+  transition: 0.2s;
+  width: 100%;
+}
+
+#get_output_html_string {
+  width: auto;
+}
+
+.hide {
+  max-height: 0;
+  height: 0;
+  padding: 0;
+  opacity: 0;
+  margin: -1rem;
+  margin-bottom: 1rem;
+  pointer-events: none;
+}
+
+.show {
+  max-height: 100vh;
+}
+
+#import_html_file,
+#copy_excel_data {
+  margin-bottom: 5px;
+}
+
+[contenteditable]:not(.disable-hover):hover {
+  border: 1px dotted lime;
+  cursor: text;
+}
+
+.template-instance-container {
+  border: 3px solid gray;
+  padding: 1em;
+  margin: 2rem 1rem -1rem;
+  position: relative;
+}
+
+.template-instance-container:hover {
+  border: 3px solid lime;
+}
+
+.template-controls {
+  display: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+  text-decoration: none !important;
+}
+
+.template-instance-container:not(.disable-hover):hover .template-controls {
+  display: block;
+  white-space: nowrap;
+  right: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  background: transparent;
+}
+
+.template-instance-container:not(.disable-hover):hover[style*="display: inline-block"]
+  .template-controls {
+  left: 0;
+  top: -2rem;
+}
+
+.template-instance-container:not(.disable-hover):hover
+  .template-controls
+  button {
+  animation: flash-of-color 0.3s 0.3s;
+}
+
+.toggle-template-display {
+  text-decoration: none;
+}
+
+.toggle-template-display:after {
+  content: "⬜ ⬜";
+  display: block;
+  transform: rotate(90deg);
+  transition: transform 0.3s;
+}
+
+.toggle-template-display:hover:after {
+  content: "⬛ ⬛";
+  transform: rotate(0deg);
+}
+
+.template-instance-container[style*="display: block;"]
+  .toggle-template-display:after {
+  transform: rotate(90deg);
+}
+
+.template-instance-container[style*="display: block;"]
+  .toggle-template-display:hover:after {
+  transform: rotate(0deg);
+}
+
+.template-instance-container[style*="display: inline-block;"]
+  .toggle-template-display:after {
+  transform: rotate(0deg);
+}
+
+.template-instance-container[style*="display: inline-block;"]
+  .toggle-template-display:hover:after {
+  transform: rotate(90deg);
+}
+
+.template-instance-container[style*="display: inline-block;"]
+  .can-be-made-1-column {
+  display: grid;
+}
+
+#output .template-instance-container:first-of-type .move-template-earlier,
+#output .template-instance-container:last-of-type .move-template-later {
+  display: none;
+}
+
+#fixed_side_panel_top {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  outline: 1rem solid black;
+  background: inherit;
+  box-shadow: 0 0 20px 20px black;
+  margin-bottom: 1rem;
+}
+
+#fixed_side_panel_top h2 {
+  font-size: 2.5rem;
+}
+
+#fixed_side_panel_top h3 {
+  font-size: 1.3rem;
+}
+
+#examples {
+  /* display: grid;
+  flex-grow: 1; */
+  /* grid-template-columns: 1fr 1fr 1fr; */
+}
+
+#examples:before {
+  content: "";
+  display: block;
+  position: relative;
+  top: -1rem;
+  z-index: 10;
+  height: 10px;
+  width: 100%;
+  background: white;
+}
+
+.version-number-container:after {
+  content: "";
+  display: block;
+  bottom: 0;
+  height: 10px;
+  width: 100%;
+  background: white;
+}
+
+#examples .toggle-template-display,
+#examples .delete-template,
+#examples .move-template-earlier,
+#examples .move-template-later,
+#examples .notes {
+  display: none;
+}
+
+.delete-template {
+  margin-left: 1rem;
+}
+
+.notes-line {
+  display: none;
+}
+
+select + pre {
+  position: relative;
+  margin-top: 0;
+  white-space: pre-line;
+  transition: max-height 300ms, padding-top 300ms;
+  max-height: 0;
+  overflow: auto;
+  background: lime;
+  color: black;
+}
+
+select:not(.disable-hover):hover + pre,
+select + pre:not(.disable-hover):hover,
+select + pre:focus {
+  max-height: 30vh;
+  padding-top: 1rem;
+}
+
+select + pre:before {
+  content: " Click here and type to edit options: (new line = new option)";
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: black;
+  color: white;
+  font-size: xx-small;
+}
+
+.template-instance-container textarea {
+  width: calc(50%);
+  padding: 0;
+  border: none;
+  background: black;
+  position: absolute;
+  right: 0;
+  z-index: 1;
+  transition: max-height 0.2s;
+  max-height: 0;
+}
+
+.template-instance-container:not(.disable-hover):hover textarea {
+  transition: max-height 2s;
+  max-height: 100vh;
+  border: 1px dotted lime;
+  animation: flash-of-color 0.3s 0.3s;
+}
+
+.template-instance-container textarea:not(.disable-hover):hover,
+.template-instance-container textarea:focus {
+  max-height: 100%;
+  padding: 8px;
+  border: 1px dotted lime;
+}
+
+#output_html_string,
+#output_html_string pre {
+  padding: 1rem;
+  margin: 0;
+  max-height: 100vh;
+  overflow: auto;
+}
+
+#output_html_string pre:empty {
+  pointer-events: none;
+}
+
+#output_html_string pre:hover,
+#output_html_string pre:focus {
+  background: #333;
+}
+
+.flash-of-color {
+  animation: flash-of-color 0.3s 0.3s;
+}
+
+/* recommended usage: animation: flash-of-color 0.3s 0.3s; */
+@keyframes flash-of-color {
+  50% {
+    background: var(--flash-background);
+    color: var(--flash-color);
+  }
+}
+
+.template-generator {
+  overflow: hidden;
+  padding: 1rem;
+}
+
+.template-generator pre {
+  overflow: scroll;
+  height: 100%;
+  margin: 0;
+}
+
+.template-generator pre:not(.disable-hover):hover {
+  background: lime;
+  color: black;
+}
+
+button i,
+button b {
+  background: inherit;
+  color: inherit;
+}
+
+.version-number-container {
+  width: 100%;
+  text-align: center;
+}
+
+.jexcel_container thead td,
+.jexcel_container tbody td:first-child {
+  color: black;
+}
+
+.jexcel > tbody > tr > td {
+  white-space: normal !important;
+}
+
+.jexcel tr[class="selected"] td,
+.jexcel td.selected {
+  border-color: darkgreen;
+}
+
+.jexcel td.highlight.highlight {
+  border-color: lime;
+  border-width: 3px;
+}
+
+.jexcel tr.selected td:first-child,
+.jexcel tr td.selected {
+  border-width: 3px;
+}
+
+.jexcel_contextmenu.jcontextmenu {
+  background: black;
+  padding: 0;
+  overflow: hidden;
+}
+
+.jexcel_contextmenu.jcontextmenu > div {
+  border-radius: 0;
+}
+
+.jexcel_contextmenu.jcontextmenu > div > a,
+.jexcel_contextmenu.jcontextmenu > div > span {
+  color: white;
+}
+
+.jexcel_contextmenu.jcontextmenu > div:hover,
+.jexcel_contextmenu.jcontextmenu > div:hover a,
+.jexcel_contextmenu.jcontextmenu > div:hover span {
+  background: lime;
+  color: black;
+}
+
+/* start of custom range input styling: */
+/* reference: https://css-tricks.com/styling-cross-browser-compatible-range-inputs-css/ */
+
+input[type="range"] {
+  -webkit-appearance: none;
+  margin: 18px 0;
+  width: 100%;
+}
+input[type="range"]:focus {
+  outline: none;
+}
+input[type="range"]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 8.4px;
+  cursor: pointer;
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  background: #3071a9;
+  border-radius: 1.3px;
+  border: 0.2px solid #010101;
+}
+input[type="range"]::-webkit-slider-thumb {
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  border: 1px solid #000000;
+  height: 36px;
+  width: 16px;
+  border-radius: 3px;
+  background: #ffffff;
+  cursor: pointer;
+  -webkit-appearance: none;
+  margin-top: -14px;
+}
+input[type="range"]:focus::-webkit-slider-runnable-track {
+  background: #367ebd;
+}
+input[type="range"]::-moz-range-track {
+  width: 100%;
+  height: 8.4px;
+  cursor: pointer;
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  background: #3071a9;
+  border-radius: 1.3px;
+  border: 0.2px solid #010101;
+}
+input[type="range"]::-moz-range-thumb {
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  border: 1px solid #000000;
+  height: 36px;
+  width: 16px;
+  border-radius: 3px;
+  background: #ffffff;
+  cursor: pointer;
+}
+input[type="range"]::-ms-track {
+  width: 100%;
+  height: 8.4px;
+  cursor: pointer;
+  background: transparent;
+  border-color: transparent;
+  border-width: 16px 0;
+  color: transparent;
+}
+input[type="range"]::-ms-fill-lower {
+  background: #2a6495;
+  border: 0.2px solid #010101;
+  border-radius: 2.6px;
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+}
+input[type="range"]::-ms-fill-upper {
+  background: #3071a9;
+  border: 0.2px solid #010101;
+  border-radius: 2.6px;
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+}
+input[type="range"]::-ms-thumb {
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  border: 1px solid #000000;
+  height: 36px;
+  width: 16px;
+  border-radius: 3px;
+  background: #ffffff;
+  cursor: pointer;
+}
+input[type="range"]:focus::-ms-fill-lower {
+  background: #3071a9;
+}
+input[type="range"]:focus::-ms-fill-upper {
+  background: #367ebd;
+}
+
+/* :end of custom range input styling */
+
+#toggle_advanced_container {
+  text-align: center;
+  background: inherit;
+  margin-bottom: 1rem;
+  margin-top: -1rem;
+}
+
+#toggle_advanced {
+  margin: auto;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+}
+
+#toggle_advanced:focus {
+  text-decoration: none;
+}
+
+.center-container {
+  display: flex;
+  justify-content: space-between;
+  background: transparent;
+}
+
+.center-container > * {
+  margin: auto;
+}
+
+@keyframes slide-left {
+  90% {
+    opacity: 1;
+    left: 0;
+  }
+  100% {
+    opacity: 0;
+    left: -100%;
+  }
+}
+
+.export-html-file:first-of-type:not(.hide):after {
+  content: "➘\a      Click this to get an .html file, \a      which you can give to a developer, \a      and speed up writing the code.";
+  white-space: pre;
+  text-align: left;
+  position: absolute;
+  display: flow-root;
+  background: lime;
+  color: black;
+  padding: 0.1rem 1rem 1rem 0.25rem;
+  border-radius: 0 0.5rem 0.5rem 0.5rem;
+  margin-left: 1ch;
+  animation: reveal-from-left 1s forwards, auto-hide 7s forwards;
+  transform-origin: left;
+}
+
+.export-html-file:first-of-type:not(.hide):hover:after {
+  background: green;
+  color: white;
+}
+
+@keyframes reveal-from-left {
+  from {
+    opacity: 0;
+    transform: rotate(2deg) scaleX(0);
+  }
+  to {
+    opacity: 0.9;
+    transform: rotate(2deg) scaleX(1);
+  }
+}
+
+@keyframes auto-hide {
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}

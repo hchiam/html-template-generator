@@ -1,0 +1,576 @@
+<!-- https://codepen.io/hchiam/pen/jOBOaqm -->
+
+<template></template>
+
+<section id="examples">
+  <div id="fixed_side_panel_top">
+    <div class="center-container">
+      <button
+        id="export_html_file"
+        class="export-html-file hide"
+        title="This creates a file that a developer can use to finish faster."
+      >
+        Export to .html file
+      </button>
+    </div>
+    <h2>Templates</h2>
+    <h3>Click on a template to edit/copy:</h3>
+  </div>
+
+  <div class="template-instance-container input-template">
+    <div>
+      <label for="" name="" contenteditable>Editable input label:</label>
+      <input id="_" name="" />
+    </div>
+    <div class="template-controls remove-from-final-output">
+      <button class="copy-template">Copy template</button>
+      <button
+        class="toggle-template-display"
+        aria-label="make template use inline-block display"
+        data-display="block"
+        title="Toggle template display"
+      ></button>
+      <button class="move-template-earlier">△ Move earlier</button>
+      <button class="move-template-later">▽ Move later</button>
+      <button class="delete-template">&nbsp;X&nbsp;</button>
+    </div>
+    <textarea
+      class="notes remove-from-final-output"
+      cols="55"
+      rows="2"
+      placeholder="Notes"
+    ></textarea>
+  </div>
+
+  <div class="template-instance-container radio-template">
+    <div>
+      <p contenteditable>Editable text</p>
+      <ul style="padding: 0">
+        <li style="list-style: none">
+          <input id="_" type="radio" name="" />
+          <label for="" name="" contenteditable>Editable radio label</label>
+        </li>
+        <li style="list-style: none">
+          <input id="_" type="radio" name="" />
+          <label for="" name="" contenteditable>Editable radio label</label>
+        </li>
+      </ul>
+    </div>
+    <div class="template-controls remove-from-final-output">
+      <button class="copy-template">Copy template</button>
+      <button
+        class="toggle-template-display"
+        aria-label="make template use inline-block display"
+        data-display="block"
+        title="Toggle template display"
+      ></button>
+      <button class="move-template-earlier">△ Move earlier</button>
+      <button class="move-template-later">▽ Move later</button>
+      <button class="delete-template">&nbsp;X&nbsp;</button>
+    </div>
+    <textarea
+      class="notes remove-from-final-output"
+      cols="55"
+      rows="2"
+      placeholder="Notes"
+    ></textarea>
+  </div>
+
+  <div class="template-instance-container checkbox-template">
+    <div>
+      <p contenteditable>Editable text</p>
+      <ul style="padding: 0">
+        <li style="list-style: none">
+          <input id="_" type="checkbox" name="" />
+          <label for="" name="" contenteditable>Editable checkbox label</label>
+        </li>
+      </ul>
+    </div>
+    <div class="template-controls remove-from-final-output">
+      <button class="copy-template">Copy template</button>
+      <button
+        class="toggle-template-display"
+        aria-label="make template use inline-block display"
+        data-display="block"
+        title="Toggle template display"
+      ></button>
+      <button class="move-template-earlier">△ Move earlier</button>
+      <button class="move-template-later">▽ Move later</button>
+      <button class="delete-template">&nbsp;X&nbsp;</button>
+    </div>
+    <textarea
+      class="notes remove-from-final-output"
+      cols="55"
+      rows="2"
+      placeholder="Notes"
+    ></textarea>
+  </div>
+
+  <div class="template-instance-container dropdown-template">
+    <label for="" name="" contenteditable>Editable dropdown label</label>
+    <div class="select-container">
+      <select id="_">
+        <option value="">-- Please select --</option>
+        <option value="Editable option 1">Editable option 1</option>
+        <option value="Editable option 2">Editable option 2</option>
+        <option value="Editable option 3">Editable option 3</option>
+      </select>
+      <pre class="edit-select-options remove-from-final-output" contenteditable>
+-- Please select --
+Editable option 1
+Editable option 2
+Editable option 3</pre
+      >
+    </div>
+    <div class="template-controls remove-from-final-output">
+      <button class="copy-template">Copy template</button>
+      <button
+        class="toggle-template-display"
+        aria-label="make template use inline-block display"
+        data-display="block"
+        title="Toggle template display"
+      ></button>
+      <button class="move-template-earlier">△ Move earlier</button>
+      <button class="move-template-later">▽ Move later</button>
+      <button class="delete-template">&nbsp;X&nbsp;</button>
+    </div>
+    <textarea
+      class="notes remove-from-final-output"
+      cols="55"
+      rows="2"
+      placeholder="Notes"
+    ></textarea>
+  </div>
+
+  <div class="template-instance-container paragraph-template">
+    <p contenteditable>
+      Editable paragraph template. If you edit this text and hit "Copy
+      template", the clone created from this template will have this text too.
+    </p>
+    <div class="template-controls remove-from-final-output">
+      <button class="copy-template">Copy template</button>
+      <button class="move-template-earlier">△ Move earlier</button>
+      <button class="move-template-later">▽ Move later</button>
+      <button class="delete-template">&nbsp;X&nbsp;</button>
+    </div>
+    <textarea
+      class="notes remove-from-final-output"
+      cols="55"
+      rows="2"
+      placeholder="Notes"
+    ></textarea>
+  </div>
+
+  <div class="template-instance-container email-template">
+    <div class="can-be-made-1-column">
+      <label for="" name="" contenteditable>Editable email label:</label>
+      <input type="email" name="" />
+      <label for="" name="" contenteditable>Please re-type to confirm:</label>
+      <input type="email" name="" />
+    </div>
+    <div class="template-controls remove-from-final-output">
+      <button class="copy-template">Copy template</button>
+      <button
+        class="toggle-template-display"
+        aria-label="make template use inline-block display"
+        data-display="block"
+        title="Toggle template display"
+      ></button>
+      <button class="move-template-earlier">△ Move earlier</button>
+      <button class="move-template-later">▽ Move later</button>
+      <button class="delete-template">&nbsp;X&nbsp;</button>
+    </div>
+    <textarea
+      class="notes remove-from-final-output"
+      cols="55"
+      rows="2"
+      placeholder="Notes"
+    ></textarea>
+  </div>
+
+  <div class="template-instance-container password-template">
+    <div class="can-be-made-1-column">
+      <label for="" name="" contenteditable>Editable password label:</label>
+      <input id="_" type="password" name="" />
+      <label for="" name="" contenteditable>Please re-type to confirm:</label>
+      <input id="_" type="password" name="" />
+    </div>
+    <div class="template-controls remove-from-final-output">
+      <button class="copy-template">Copy template</button>
+      <button
+        class="toggle-template-display"
+        aria-label="make template use inline-block display"
+        data-display="block"
+        title="Toggle template display"
+      ></button>
+      <button class="move-template-earlier">△ Move earlier</button>
+      <button class="move-template-later">▽ Move later</button>
+      <button class="delete-template">&nbsp;X&nbsp;</button>
+    </div>
+    <textarea
+      class="notes remove-from-final-output"
+      cols="55"
+      rows="2"
+      placeholder="Notes"
+    ></textarea>
+  </div>
+
+  <div class="template-instance-container date-template">
+    <div>
+      <label for="" name="" contenteditable>Editable date label:</label>
+      <input id="_" type="date" name="" />
+    </div>
+    <div class="template-controls remove-from-final-output">
+      <button class="copy-template">Copy template</button>
+      <button
+        class="toggle-template-display"
+        aria-label="make template use inline-block display"
+        data-display="block"
+        title="Toggle template display"
+      ></button>
+      <button class="move-template-earlier">△ Move earlier</button>
+      <button class="move-template-later">▽ Move later</button>
+      <button class="delete-template">&nbsp;X&nbsp;</button>
+    </div>
+    <textarea
+      class="notes remove-from-final-output"
+      cols="55"
+      rows="2"
+      placeholder="Notes"
+    ></textarea>
+  </div>
+
+  <div class="template-instance-container gender-template">
+    <label for="" name="" contenteditable>Gender:</label>
+    <div class="select-container">
+      <select id="_">
+        <option value="">-- Please select --</option>
+        <option value="Female">Female</option>
+        <option value="Male">Male</option>
+        <option value="Other">Other</option>
+        <option value="Prefer not to say">Prefer not to say</option>
+      </select>
+      <pre class="edit-select-options remove-from-final-output" contenteditable>
+-- Please select --
+Female
+Male
+Other
+Prefer not to say</pre
+      >
+    </div>
+    <div class="template-controls remove-from-final-output">
+      <button class="copy-template">Copy template</button>
+      <button
+        class="toggle-template-display"
+        aria-label="make template use inline-block display"
+        data-display="block"
+        title="Toggle template display"
+      ></button>
+      <button class="move-template-earlier">△ Move earlier</button>
+      <button class="move-template-later">▽ Move later</button>
+      <button class="delete-template">&nbsp;X&nbsp;</button>
+    </div>
+    <textarea
+      class="notes remove-from-final-output"
+      cols="55"
+      rows="2"
+      placeholder="Notes"
+    ></textarea>
+  </div>
+
+  <div class="template-instance-container state-template">
+    <label for="" name="" contenteditable>State:</label>
+    <div class="select-container">
+      <select id="_">
+        <option value="">-- Please select --</option>
+        <option value="Alabama">Alabama</option>
+        <option value="Alaska">Alaska</option>
+        <option value="Arizona">Arizona</option>
+        <option value="Arkansas">Arkansas</option>
+        <option value="California">California</option>
+        <option value="Colorado">Colorado</option>
+        <option value="Connecticut">Connecticut</option>
+        <option value="Delaware">Delaware</option>
+        <option value="Florida">Florida</option>
+        <option value="Georgia">Georgia</option>
+        <option value="Hawaii">Hawaii</option>
+        <option value="Idaho">Idaho</option>
+        <option value="Illinois">Illinois</option>
+        <option value="Indiana">Indiana</option>
+        <option value="Iowa">Iowa</option>
+        <option value="Kansas">Kansas</option>
+        <option value="Kentucky">Kentucky</option>
+        <option value="Louisiana">Louisiana</option>
+        <option value="Maine">Maine</option>
+        <option value="Maryland">Maryland</option>
+        <option value="Massachusetts">Massachusetts</option>
+        <option value="Michigan">Michigan</option>
+        <option value="Minnesota">Minnesota</option>
+        <option value="Mississippi">Mississippi</option>
+        <option value="Missouri">Missouri</option>
+        <option value="Montana">Montana</option>
+        <option value="Nebraska">Nebraska</option>
+        <option value="Nevada">Nevada</option>
+        <option value="New Hampshire">New Hampshire</option>
+        <option value="New Jersey">New Jersey</option>
+        <option value="New Mexico">New Mexico</option>
+        <option value="New York">New York</option>
+        <option value="North Carolina">North Carolina</option>
+        <option value="North Dakota">North Dakota</option>
+        <option value="Ohio">Ohio</option>
+        <option value="Oklahoma">Oklahoma</option>
+        <option value="Oregon">Oregon</option>
+        <option value="Pennsylvania">Pennsylvania</option>
+        <option value="Rhode Island">Rhode Island</option>
+        <option value="South Carolina">South Carolina</option>
+        <option value="South Dakota">South Dakota</option>
+        <option value="Tennessee">Tennessee</option>
+        <option value="Texas">Texas</option>
+        <option value="Utah">Utah</option>
+        <option value="Vermont">Vermont</option>
+        <option value="Virginia">Virginia</option>
+        <option value="Washington">Washington</option>
+        <option value="West Virginia">West Virginia</option>
+        <option value="Wisconsin">Wisconsin</option>
+        <option value="Wyoming">Wyoming</option>
+      </select>
+      <pre class="edit-select-options remove-from-final-output" contenteditable>
+-- Please select --
+Alabama
+Alaska
+Arizona
+Arkansas
+California
+Colorado
+Connecticut
+Delaware
+Florida
+Georgia
+Hawaii
+Idaho
+Illinois
+Indiana
+Iowa
+Kansas
+Kentucky
+Louisiana
+Maine
+Maryland
+Massachusetts
+Michigan
+Minnesota
+Mississippi
+Missouri
+Montana
+Nebraska
+Nevada
+New Hampshire
+New Jersey
+New Mexico
+New York
+North Carolina
+North Dakota
+Ohio
+Oklahoma
+Oregon
+Pennsylvania
+Rhode Island
+South Carolina
+South Dakota
+Tennessee
+Texas
+Utah
+Vermont
+Virginia
+Washington
+West Virginia
+Wisconsin
+Wyoming</pre
+      >
+    </div>
+    <div class="template-controls remove-from-final-output">
+      <button class="copy-template">Copy template</button>
+      <button
+        class="toggle-template-display"
+        aria-label="make template use inline-block display"
+        data-display="block"
+        title="Toggle template display"
+      ></button>
+      <button class="move-template-earlier">△ Move earlier</button>
+      <button class="move-template-later">▽ Move later</button>
+      <button class="delete-template">&nbsp;X&nbsp;</button>
+    </div>
+    <textarea
+      class="notes remove-from-final-output"
+      cols="55"
+      rows="2"
+      placeholder="Notes"
+    ></textarea>
+  </div>
+
+  <div class="template-instance-container file-template">
+    <div>
+      <label for="" name="" contenteditable>Editable file label:</label>
+      <input id="_" type="file" name="" />
+    </div>
+    <div class="template-controls remove-from-final-output">
+      <button class="copy-template">Copy template</button>
+      <button
+        class="toggle-template-display"
+        aria-label="make template use inline-block display"
+        data-display="block"
+        title="Toggle template display"
+      ></button>
+      <button class="move-template-earlier">△ Move earlier</button>
+      <button class="move-template-later">▽ Move later</button>
+      <button class="delete-template">&nbsp;X&nbsp;</button>
+    </div>
+    <textarea
+      class="notes remove-from-final-output"
+      cols="55"
+      rows="2"
+      placeholder="Notes"
+    ></textarea>
+  </div>
+
+  <div class="template-instance-container number-template">
+    <div>
+      <label for="" name="" contenteditable>Editable number label:</label>
+      <input id="_" type="number" name="" />
+    </div>
+    <div class="template-controls remove-from-final-output">
+      <button class="copy-template">Copy template</button>
+      <button
+        class="toggle-template-display"
+        aria-label="make template use inline-block display"
+        data-display="block"
+        title="Toggle template display"
+      ></button>
+      <button class="move-template-earlier">△ Move earlier</button>
+      <button class="move-template-later">▽ Move later</button>
+      <button class="delete-template">&nbsp;X&nbsp;</button>
+    </div>
+    <textarea
+      class="notes remove-from-final-output"
+      cols="55"
+      rows="2"
+      placeholder="Notes"
+    ></textarea>
+  </div>
+
+  <div class="template-instance-container slider-template">
+    <div>
+      <label for="" name="" contenteditable>Editable range label:</label>
+      <span>
+        <input id="_" type="range" name="" />
+      </span>
+    </div>
+    <div class="template-controls remove-from-final-output">
+      <button class="copy-template">Copy template</button>
+      <button
+        class="toggle-template-display"
+        aria-label="make template use inline-block display"
+        data-display="block"
+        title="Toggle template display"
+      ></button>
+      <button class="move-template-earlier">△ Move earlier</button>
+      <button class="move-template-later">▽ Move later</button>
+      <button class="delete-template">&nbsp;X&nbsp;</button>
+    </div>
+    <textarea
+      class="notes remove-from-final-output"
+      cols="55"
+      rows="2"
+      placeholder="Notes"
+    ></textarea>
+  </div>
+
+  <div class="template-instance-container template-generator">
+    <pre
+      contenteditable
+      onpaste="return confirm('Make sure you trust the source before pasting! \n\nDo you want to continue?')"
+    >
+&lt;p&gt;Paste HTML here 
+to dynamically generate 
+a template?&lt;/p&gt;</pre
+    >
+    <div class="template-controls remove-from-final-output">
+      <button class="copy-dynamic-template">
+        Copy <b><i>dynamic</i></b> template
+      </button>
+    </div>
+  </div>
+
+  <h2>Advanced:</h2>
+  <div id="toggle_advanced_container">
+    <button id="toggle_advanced">+</button>
+  </div>
+  <div id="advanced_buttons_group" class="hide">
+    <button id="get_output_html_string" class="hide">Show HTML code</button>
+    <div id="output_html_controls">
+      <div>
+        <button
+          id="hide_output_html_string"
+          title="Show the view that's closer to what a user would see."
+        >
+          Show normal view
+        </button>
+        <button
+          id="export_html_file"
+          class="export-html-file"
+          title="You could give an HTML file a developer, to speed up writing the code."
+        >
+          Export to .html file
+        </button>
+      </div>
+    </div>
+    <button id="copy_excel_data">Copy Excel data</button>
+    <button id="import_html_file">Import HTML file</button>
+    <button id="html_to_excel" class="hide">HTML -&gt; Excel</button>
+  </div>
+
+  <div class="version-number-container">
+    <a
+      id="version_number"
+      href="https://github.com/hchiam/html-template-generator/releases"
+      target="_blank"
+      title="See release notes"
+      >?</a
+    >
+  </div>
+</section>
+
+<div id="template_demo_container">
+  <h1>Edit and use a template:</h1>
+  <p>(Click on a template to start.)</p>
+  <img
+    id="template_demo"
+    src="https://html-template-generator.surge.sh/template_demo.aa0c2e9c.gif"
+    alt=""
+    aria-label="template demo"
+  />
+</div>
+
+<section id="output">
+  <span class="remove-from-final-output" hidden></span>
+</section>
+
+<section id="output_html_string" hidden>
+  <pre></pre>
+</section>
+
+<section id="sheet" hidden>
+  <p>You can copy your Excel data into this table:</p>
+  <div id="spreadsheet"></div>
+  <p>
+    <i><b>NOTE:</b></i> This is still experimental!
+  </p>
+  <div>
+    <button id="generate_html_from_sheet">Generate HTML</button>
+    <button id="export_sheet">Export sheet</button>
+    <button id="import_sheet" hidden>Import sheet</button>
+  </div>
+</section>
+
+<input id="html_file_input" type="file" name="name" style="display: none" />
+<input id="csv_file_input" type="file" name="name" style="display: none" />
