@@ -52,13 +52,15 @@ button {
 
 #examples {
   flex: 1;
-  height: 100vh;
-  overflow-y: scroll;
+  /* height: 100vh; */
+  /* overflow-y: scroll; */
   background: black;
   margin: 0;
-  padding: 1rem;
+  padding: 0.5rem;
   border-radius: 0;
   box-shadow: inset 0 -30px 30px -30px black;
+  display: flex;
+  flex-direction: column;
 }
 
 #examples:after {
@@ -220,9 +222,9 @@ button {
 }
 
 #fixed_side_panel_top {
-  position: sticky;
-  top: 0;
-  z-index: 1;
+  /* position: sticky; */
+  /* top: 0; */
+  /* z-index: 1; */
   outline: 1rem solid black;
   background: inherit;
   box-shadow: 0 0 20px 20px black;
@@ -231,6 +233,7 @@ button {
 
 #fixed_side_panel_top h2 {
   font-size: 2.5rem;
+  margin: 0;
 }
 
 #fixed_side_panel_top h3 {
@@ -244,17 +247,43 @@ button {
 }
 
 #examples:before {
-  content: "";
+  /* content: "";
   display: block;
   position: relative;
   top: -1rem;
   z-index: 10;
   height: 10px;
   width: 100%;
-  background: white;
+  background: white; */
 }
 
 .version-number-container:after {
+  /* content: "";
+  display: block;
+  bottom: 0;
+  height: 10px;
+  width: 100%;
+  background: white; */
+}
+
+#examples .templates {
+  overflow-y: scroll;
+  overflow-x: hidden;
+  border-radius: 0;
+  padding: 5px;
+}
+
+#examples .templates:before {
+  content: "";
+  display: block;
+  position: relative;
+  z-index: 10;
+  height: 10px;
+  width: 100%;
+  background: white;
+}
+
+#examples .templates:after {
   content: "";
   display: block;
   bottom: 0;
