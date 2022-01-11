@@ -633,3 +633,25 @@ input[type="range"]:focus::-ms-fill-upper {
     pointer-events: none;
   }
 }
+
+#no_mobile_message {
+  display: none;
+  position: fixed;
+  width: 90%;
+  max-width: 40ch;
+  inset: 0;
+  margin: auto;
+}
+
+#no_mobile_message p {
+  text-indent: 1rem;
+}
+
+@media only screen and (max-width: 500px) {
+  #no_mobile_message {
+    display: block;
+  }
+  body > *:not(#no_mobile_message) {
+    display: none;
+  }
+}
