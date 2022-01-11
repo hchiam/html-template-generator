@@ -899,7 +899,8 @@ function moveContainerLater(button) {
 }
 
 function showVersionNumber(versionNumber) {
-  $("#version_number").text(`You're using version ${versionNumber}`);
+  $(".version-number-container .version-number-link").text(`You're using version ${versionNumber}`);
+  $("#no_mobile_message .version-number-link").text(`as of version ${versionNumber}`);
 }
 
 function getVersionNumber(callback) {
