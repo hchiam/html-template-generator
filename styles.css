@@ -152,14 +152,14 @@ button {
   top: 0;
   right: 0;
   text-decoration: none !important;
+  z-index: 1;
 }
 
-.template-instance-container:not(.disable-hover):hover .template-controls {
+.template-instance-container:not(.disable-hover):hover .template-controls,
+.template-controls:hover {
   display: block;
   white-space: nowrap;
   right: 0;
-  overflow-x: auto;
-  overflow-y: hidden;
   background: transparent;
 }
 
@@ -298,10 +298,6 @@ button {
 #examples .move-template-later,
 #examples .notes {
   display: none;
-}
-
-.delete-template {
-  margin-left: 1rem;
 }
 
 .notes-line {
