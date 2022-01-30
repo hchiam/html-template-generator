@@ -6,10 +6,11 @@
   "license": "MIT",
   "scripts": {
     "dev": "yarn start",
-    "start": "parcel index.html",
-    "build": "parcel build index.html",
+    "start": "yarn codepen; parcel index.html",
+    "build": "yarn codepen; parcel build index.html",
     "deploy": "yarn build && surge dist https://html-template-generator.surge.sh",
-    "reminder": "echo 'Remember to deploy to:'; echo '\n \\033[1;34m https://html-template-generator.surge.sh \\033[0m \n and update: \n \n \\033[1;34m https://codepen.io/hchiam/pen/jOBOaqm \\033[0m \n'"
+    "reminder": "echo 'Remember to deploy to:'; echo '\n \\033[1;34m https://html-template-generator.surge.sh \\033[0m \n and update: \n \n \\033[1;34m https://codepen.io/hchiam/pen/jOBOaqm \\033[0m \n'",
+    "codepen": "bash concat_for_codepen.sh"
   },
   "devDependencies": {
     "husky": "4.3.8",
