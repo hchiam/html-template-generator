@@ -46,6 +46,7 @@ setTimeout(() => {
 
 function attachEventListeners() {
   $("body").on("click", ".copy-template", function () {
+    $("#output").attr("data-animating", true);
     copyTemplate(this);
     $("#output").show();
     $("#output_html_controls").hide();
@@ -586,39 +587,43 @@ function saveHtmlFile(html) {
 }
 
 function animateMove(originJQueryElement, destinationJQueryElement) {
-  destinationJQueryElement.css("visibility", "hidden");
-  const original = $(originJQueryElement);
-  const originalMarginLeft = parseInt(original.css("marginLeft"));
-  const originalMarginTop = parseInt(original.css("marginTop"));
-  const originPosition = original.position();
-  originPosition.left = originPosition.left + originalMarginLeft;
-  originPosition.top = originPosition.top + originalMarginTop;
-  const originalWidth = original.outerWidth();
-  const originalHeight = original.outerHeight();
-  const destinationPosition = $(destinationJQueryElement).position();
-  const destinationWidth = $(destinationJQueryElement).outerWidth();
-  const destinationHeight = $(destinationJQueryElement).outerHeight();
-  const temp = original.clone();
-  $("body").append(temp);
-  temp.addClass("disable-hover").find("*").css({ pointerEvents: "none" });
-  temp
-    .css({
-      position: "fixed",
-      zIndex: 1,
-      width: originalWidth,
-      height: originalHeight,
-    })
-    .offset(originPosition)
-    .animate({
-      left: destinationPosition.left,
-      top: destinationPosition.top,
-      width: destinationWidth,
-      height: destinationHeight,
-    });
   setTimeout(() => {
-    temp.remove();
-    $(destinationJQueryElement).css("visibility", "visible");
-  }, 1000);
+    destinationJQueryElement.css("visibility", "hidden");
+    const original = $(originJQueryElement);
+    const originalMarginLeft = parseInt(original.css("marginLeft"));
+    const originalMarginTop = parseInt(original.css("marginTop"));
+    const originPosition = original.position();
+    originPosition.left = originPosition.left + originalMarginLeft;
+    originPosition.top = originPosition.top + originalMarginTop;
+    const originalWidth = original.outerWidth();
+    const originalHeight = original.outerHeight();
+    const destinationPosition = $(destinationJQueryElement).position();
+    const destinationWidth = $(destinationJQueryElement).outerWidth();
+    const destinationHeight = $(destinationJQueryElement).outerHeight();
+    const temp = original.clone();
+    $("body").append(temp);
+    temp.addClass("temp");
+    temp.addClass("disable-hover").find("*").css({ pointerEvents: "none" });
+    temp
+      .css({
+        position: "fixed",
+        zIndex: 1,
+        width: originalWidth,
+        height: originalHeight,
+      })
+      .offset(originPosition)
+      .animate({
+        left: destinationPosition.left,
+        top: destinationPosition.top,
+        width: destinationWidth,
+        height: "auto", // destinationHeight,
+      });
+    setTimeout(() => {
+      temp.remove();
+      $(destinationJQueryElement).css("visibility", "visible");
+      $("#output").removeAttr("data-animating", "");
+    }, 1000);
+  }, 300);
 }
 
 function setUpJSpreadsheet() {
@@ -896,8 +901,12 @@ function moveContainerLater(button) {
 }
 
 function showVersionNumber(versionNumber) {
-  $(".version-number-container .version-number-link").text(`You're using version ${versionNumber}`);
-  $("#no_mobile_message .version-number-link").text(`as of version ${versionNumber}`);
+  $(".version-number-container .version-number-link").text(
+    `You're using version ${versionNumber}`
+  );
+  $("#no_mobile_message .version-number-link").text(
+    `as of version ${versionNumber}`
+  );
 }
 
 function getVersionNumber(callback) {
