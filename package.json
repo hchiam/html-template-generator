@@ -10,7 +10,7 @@
     "build": "yarn codepen; parcel build index.html",
     "deploy": "yarn build && surge dist https://html-template-generator.surge.sh",
     "reminder": "echo 'Remember to deploy to:'; echo '\n \\033[1;34m https://html-template-generator.surge.sh \\033[0m \n and update: \n \n \\033[1;34m https://codepen.io/hchiam/pen/jOBOaqm \\033[0m \n'",
-    "codepen": "bash concat_for_codepen.sh"
+    "codepen": "echo '\n\nauto-generating CodePen files\n\n'; bash concat_for_codepen.sh"
   },
   "devDependencies": {
     "husky": "4.3.8",
@@ -18,7 +18,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "yarn reminder"
+      "pre-commit": "yarn codepen; yarn reminder"
     }
   }
 }

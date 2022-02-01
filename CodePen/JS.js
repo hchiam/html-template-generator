@@ -1,6 +1,5 @@
 const codePenIdentifier = "";
 _showRedirectLinkAsNeeded("jOBOaqm");
-
 /*
 CONSIDER:
 
@@ -49,6 +48,7 @@ setTimeout(() => {
 
 function attachEventListeners() {
   $("body").on("click", ".copy-template", function () {
+    $("#output").attr("data-animating", true);
     copyTemplate(this);
     $("#output").show();
     $("#output_html_controls").hide();
@@ -589,39 +589,43 @@ function saveHtmlFile(html) {
 }
 
 function animateMove(originJQueryElement, destinationJQueryElement) {
-  destinationJQueryElement.css("visibility", "hidden");
-  const original = $(originJQueryElement);
-  const originalMarginLeft = parseInt(original.css("marginLeft"));
-  const originalMarginTop = parseInt(original.css("marginTop"));
-  const originPosition = original.position();
-  originPosition.left = originPosition.left + originalMarginLeft;
-  originPosition.top = originPosition.top + originalMarginTop;
-  const originalWidth = original.outerWidth();
-  const originalHeight = original.outerHeight();
-  const destinationPosition = $(destinationJQueryElement).position();
-  const destinationWidth = $(destinationJQueryElement).outerWidth();
-  const destinationHeight = $(destinationJQueryElement).outerHeight();
-  const temp = original.clone();
-  $("body").append(temp);
-  temp.addClass("disable-hover").find("*").css({ pointerEvents: "none" });
-  temp
-    .css({
-      position: "fixed",
-      zIndex: 1,
-      width: originalWidth,
-      height: originalHeight,
-    })
-    .offset(originPosition)
-    .animate({
-      left: destinationPosition.left,
-      top: destinationPosition.top,
-      width: destinationWidth,
-      height: destinationHeight,
-    });
   setTimeout(() => {
-    temp.remove();
-    $(destinationJQueryElement).css("visibility", "visible");
-  }, 1000);
+    destinationJQueryElement.css("visibility", "hidden");
+    const original = $(originJQueryElement);
+    const originalMarginLeft = parseInt(original.css("marginLeft"));
+    const originalMarginTop = parseInt(original.css("marginTop"));
+    const originPosition = original.position();
+    originPosition.left = originPosition.left + originalMarginLeft;
+    originPosition.top = originPosition.top + originalMarginTop;
+    const originalWidth = original.outerWidth();
+    const originalHeight = original.outerHeight();
+    const destinationPosition = $(destinationJQueryElement).position();
+    const destinationWidth = $(destinationJQueryElement).outerWidth();
+    const destinationHeight = $(destinationJQueryElement).outerHeight();
+    const temp = original.clone();
+    $("body").append(temp);
+    temp.addClass("temp");
+    temp.addClass("disable-hover").find("*").css({ pointerEvents: "none" });
+    temp
+      .css({
+        position: "fixed",
+        zIndex: 1,
+        width: originalWidth,
+        height: originalHeight,
+      })
+      .offset(originPosition)
+      .animate({
+        left: destinationPosition.left,
+        top: destinationPosition.top,
+        width: destinationWidth,
+        height: "auto", // destinationHeight,
+      });
+    setTimeout(() => {
+      temp.remove();
+      $(destinationJQueryElement).css("visibility", "visible");
+      $("#output").removeAttr("data-animating", "");
+    }, 1000);
+  }, 300);
 }
 
 function setUpJSpreadsheet() {
@@ -899,8 +903,12 @@ function moveContainerLater(button) {
 }
 
 function showVersionNumber(versionNumber) {
-  $(".version-number-container .version-number-link").text(`You're using version ${versionNumber}`);
-  $("#no_mobile_message .version-number-link").text(`as of version ${versionNumber}`);
+  $(".version-number-container .version-number-link").text(
+    `You're using version ${versionNumber}`
+  );
+  $("#no_mobile_message .version-number-link").text(
+    `as of version ${versionNumber}`
+  );
 }
 
 function getVersionNumber(callback) {
@@ -913,4 +921,132 @@ function getVersionNumber(callback) {
 
 function hideIntroGif() {
   $("#template_demo_container").hide();
+}
+makeInputLabelsSmarter("radio");
+makeInputLabelsSmarter("checkbox");
+
+$("body").on("click", ".copy-template", function () {
+  setTimeout(function () {
+    makeInputLabelsSmarter("radio");
+    makeInputLabelsSmarter("checkbox");
+  }, 0);
+});
+
+function makeInputLabelsSmarter(type, inputLabels) {
+  (inputLabels || $(`input[type="${type}"] + label`)).each(function () {
+    const inputLabel = $(this);
+    inputLabel.off("keyup").on("keyup", function (event) {
+      if (hitEnter(event)) {
+        appendInputAndLabel(type, inputLabel);
+      } else if (hitBackspaceOrDelete(event)) {
+        removeInputAndLabel(inputLabel);
+      }
+    });
+  });
+}
+
+function hitEnter(event) {
+  const key = event.key || event.code || event.keyCode || event.which || event;
+  return key === "Enter" || key === "ENTER" || key === 13;
+}
+
+function hitBackspaceOrDelete(event) {
+  const key = event.key || event.code || event.keyCode || event.which || event;
+  return key === "Backspace" || key === "Delete" || key === 8 || key === 46;
+}
+
+/**
+ * assumes `<li><input><label></label></li>`
+ */
+function appendInputAndLabel(type, inputLabel) {
+  const currentRow = inputLabel.parent("li");
+  const preAndPostBreak = currentRow
+    .find("label")
+    .html()
+    .replace(/&nbsp;/g, " ")
+    .split("<br>");
+  const preBreak = preAndPostBreak[0].trim() || "Editable input label";
+  const postBreak = preAndPostBreak[1].trim() || "Editable input label";
+
+  currentRow.find("label").text(preBreak);
+
+  currentRow.after(`<li style="list-style: none">
+  <input id="_" type="${type}" name="" />
+  <label for="" name="" contenteditable
+    >${postBreak || "Editable input label"}</label
+  >
+</li>`);
+
+  const newRow = currentRow.next();
+  newRow.find("label").text(postBreak).focus();
+  makeInputLabelsSmarter(type, newRow.find("label"));
+}
+
+/**
+ * assumes `<li><input><label></label></li>`
+ */
+function removeInputAndLabel(inputLabel) {
+  const currentRow = inputLabel.parent("li");
+  const previousRow = currentRow.prev("li");
+  const nextRow = currentRow.next("li");
+
+  const hasText = inputLabel.text() !== "";
+  const cursorPosition = getCursorPosition();
+  const willCombine = hasText && cursorPosition === 0 && previousRow.length;
+  const willDelete = !hasText;
+
+  if (willCombine || willDelete) {
+    if (previousRow.length) {
+      previousRow.find("label").focus();
+    } else {
+      nextRow.find("label").focus();
+    }
+    if (isLastInputLabelInTemplate(currentRow)) {
+      currentRow.find("label").text("Editable input label");
+    } else {
+      currentRow.remove();
+    }
+  }
+
+  if (willCombine) {
+    const endPositionOfPreviousText = previousRow.find("label").text().length;
+    previousRow
+      .find("label")
+      .text(previousRow.find("label").text() + inputLabel.text());
+    setCursorPosition(previousRow.find("label"), endPositionOfPreviousText);
+  }
+}
+
+function isLastInputLabelInTemplate(inputLabel) {
+  return (
+    inputLabel.parents(".template-instance-container").find("label").length ===
+    1
+  );
+}
+
+function getCursorPosition() {
+  return window.getSelection().getRangeAt(0).endOffset;
+}
+
+function setCursorPosition(jQueryElement, cursorPosition) {
+  if (!jQueryElement[0]) return;
+
+  const range = document.createRange();
+  const sel = window.getSelection();
+
+  range.setStart(jQueryElement[0].childNodes[0], cursorPosition);
+  range.collapse(true);
+
+  sel.removeAllRanges();
+  sel.addRange(range);
+}
+$("body").on("keyup", function (event) {
+  if (hitTab(event)) {
+    $("#output").attr("data-tab-user", true);
+  }
+});
+
+function hitTab(event) {
+  const key = event.key || event.code || event.keyCode || event.which || event;
+  return key === "Tab" || key === 9;
 }
