@@ -8,7 +8,6 @@ body > p:first-child {
   left: 50%;
   transform: translateX(-50%);
 }
-
 :root {
   --flash-background: lime;
   --flash-color: black;
@@ -153,8 +152,25 @@ button {
   position: relative;
 }
 
+#output:not([data-animating]) .template-instance-container {
+  border: 3px solid transparent;
+  padding: 0;
+}
+
+.temp {
+  padding: 1em;
+  height: auto;
+}
+
+#output:hover .template-instance-container,
+#output[data-animating] .template-instance-container,
+#output[data-tab-user] .template-instance-container {
+  border: 3px solid gray;
+  padding: 1em;
+}
+
 .template-instance-container:hover {
-  border: 3px solid lime;
+  border: 3px solid lime !important;
 }
 
 .template-controls {
@@ -163,24 +179,34 @@ button {
   top: 0;
   right: 0;
   text-decoration: none !important;
+  z-index: 1;
 }
 
-.template-instance-container:not(.disable-hover):hover .template-controls {
+.template-instance-container:not(.disable-hover):hover .template-controls,
+.template-controls:hover,
+#output[data-tab-user]
+  .template-instance-container:not(.disable-hover)
+  .template-controls {
   display: block;
   white-space: nowrap;
   right: 0;
-  overflow-x: auto;
-  overflow-y: hidden;
   background: transparent;
 }
 
 .template-instance-container:not(.disable-hover):hover[style*="display: inline-block"]
+  .template-controls,
+#output[data-tab-user]
+  .template-instance-container:not(.disable-hover)[style*="display: inline-block"]
   .template-controls {
   left: 0;
   top: -2rem;
 }
 
 .template-instance-container:not(.disable-hover):hover
+  .template-controls
+  button,
+#output[data-tab-user]
+  .template-instance-container:not(.disable-hover)
   .template-controls
   button {
   animation: flash-of-color 0.3s 0.3s;
@@ -311,10 +337,6 @@ button {
   display: none;
 }
 
-.delete-template {
-  margin-left: 1rem;
-}
-
 .notes-line {
   display: none;
 }
@@ -359,7 +381,10 @@ select + pre:before {
   max-height: 0;
 }
 
-.template-instance-container:not(.disable-hover):hover textarea {
+.template-instance-container:not(.disable-hover):hover textarea,
+#output[data-tab-user]
+  .template-instance-container:not(.disable-hover)
+  textarea {
   transition: max-height 2s;
   max-height: 100vh;
   border: 1px dotted lime;
@@ -371,6 +396,7 @@ select + pre:before {
   max-height: 100%;
   padding: 8px;
   border: 1px dotted lime;
+  z-index: 2;
 }
 
 #output_html_string,
