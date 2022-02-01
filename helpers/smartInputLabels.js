@@ -41,8 +41,8 @@ function appendInputAndLabel(type, inputLabel) {
     .html()
     .replace(/&nbsp;/g, " ")
     .split("<br>");
-  const preBreak = preAndPostBreak[0];
-  const postBreak = preAndPostBreak[1];
+  const preBreak = preAndPostBreak[0].trim() || "Editable input label";
+  const postBreak = preAndPostBreak[1].trim() || "Editable input label";
 
   currentRow.find("label").text(preBreak);
 
@@ -77,7 +77,11 @@ function removeInputAndLabel(inputLabel) {
     } else {
       nextRow.find("label").focus();
     }
-    currentRow.remove();
+    if (isLastInputLabelInTemplate(currentRow)) {
+      currentRow.find("label").text("Editable input label");
+    } else {
+      currentRow.remove();
+    }
   }
 
   if (willCombine) {
@@ -87,10 +91,13 @@ function removeInputAndLabel(inputLabel) {
       .text(previousRow.find("label").text() + inputLabel.text());
     setCursorPosition(previousRow.find("label"), endPositionOfPreviousText);
   }
+}
 
-  if (willCombine || willDelete) {
-    currentRow.remove();
-  }
+function isLastInputLabelInTemplate(inputLabel) {
+  return (
+    inputLabel.parents(".template-instance-container").find("label").length ===
+    1
+  );
 }
 
 function getCursorPosition() {
