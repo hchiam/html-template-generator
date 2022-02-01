@@ -77,7 +77,9 @@ function removeInputAndLabel(inputLabel) {
     } else {
       nextRow.find("label").focus();
     }
-    currentRow.remove();
+    if (!isLastInputLabelInTemplate(currentRow)) {
+      currentRow.remove();
+    }
   }
 
   if (willCombine) {
@@ -87,10 +89,13 @@ function removeInputAndLabel(inputLabel) {
       .text(previousRow.find("label").text() + inputLabel.text());
     setCursorPosition(previousRow.find("label"), endPositionOfPreviousText);
   }
+}
 
-  if (willCombine || willDelete) {
-    currentRow.remove();
-  }
+function isLastInputLabelInTemplate(inputLabel) {
+  return (
+    inputLabel.parents(".template-instance-container").find("label").length ===
+    1
+  );
 }
 
 function getCursorPosition() {
