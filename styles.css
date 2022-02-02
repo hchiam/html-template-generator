@@ -154,7 +154,7 @@ button {
 
 #output:hover .template-instance-container,
 #output[data-animating] .template-instance-container,
-#output[data-tab-user] .template-instance-container {
+[data-tab-user] #output .template-instance-container {
   border: 3px solid gray;
   padding: 1em;
 }
@@ -174,7 +174,7 @@ button {
 
 .template-instance-container:not(.disable-hover):hover .template-controls,
 .template-controls:hover,
-#output[data-tab-user]
+[data-tab-user]
   .template-instance-container:not(.disable-hover)
   .template-controls {
   display: block;
@@ -185,7 +185,7 @@ button {
 
 .template-instance-container:not(.disable-hover):hover[style*="display: inline-block"]
   .template-controls,
-#output[data-tab-user]
+[data-tab-user]
   .template-instance-container:not(.disable-hover)[style*="display: inline-block"]
   .template-controls {
   left: 0;
@@ -195,7 +195,7 @@ button {
 .template-instance-container:not(.disable-hover):hover
   .template-controls
   button,
-#output[data-tab-user]
+[data-tab-user]
   .template-instance-container:not(.disable-hover)
   .template-controls
   button {
@@ -372,9 +372,7 @@ select + pre:before {
 }
 
 .template-instance-container:not(.disable-hover):hover textarea,
-#output[data-tab-user]
-  .template-instance-container:not(.disable-hover)
-  textarea {
+[data-tab-user] .template-instance-container:not(.disable-hover) textarea {
   transition: max-height 2s;
   max-height: 100vh;
   border: 1px dotted lime;

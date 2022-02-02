@@ -1,6 +1,6 @@
 $("body").on("keyup", function (event) {
   if (hitTab(event)) {
-    $("#output").attr("data-tab-user", true);
+    $("body").attr("data-tab-user", true);
   }
 });
 
