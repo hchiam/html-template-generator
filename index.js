@@ -333,6 +333,11 @@ function copyTemplate(button, extraData) {
     isExample ? lastTemplateInOutputContainer : templateContainer
   ).next();
 
+  const note = templateContainer.find(".notes").val();
+  if (note) {
+    destinationElement.find(".notes").val(note);
+  }
+
   destinationElement.css("visibility", "hidden");
 
   const allNextElements = destinationElement.next(
