@@ -141,7 +141,7 @@ button {
 }
 
 [contenteditable]:not(.disable-hover):hover {
-  border: 1px dotted lime;
+  outline: 1px dotted lime;
   cursor: text;
 }
 
