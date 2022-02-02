@@ -43,6 +43,7 @@ const secondsToShowIntroGif = 15000;
 setTimeout(() => {
   $("#examples").click();
 }, secondsToShowIntroGif);
+removeStylingFromPastedText();
 
 function attachEventListeners() {
   $("body").on("click", ".copy-template", function () {
@@ -924,4 +925,12 @@ function getVersionNumber(callback) {
 
 function hideIntroGif() {
   $("#template_demo_container").hide();
+}
+
+function removeStylingFromPastedText() {
+  $(window).on("paste", function (event) {
+    event.preventDefault();
+    var data = event.originalEvent.clipboardData.getData("Text");
+    document.execCommand("insertText", false, data);
+  });
 }
