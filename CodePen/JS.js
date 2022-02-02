@@ -45,6 +45,7 @@ const secondsToShowIntroGif = 15000;
 setTimeout(() => {
   $("#examples").click();
 }, secondsToShowIntroGif);
+removeStylingFromPastedText();
 
 function attachEventListeners() {
   $("body").on("click", ".copy-template", function () {
@@ -927,6 +928,14 @@ function getVersionNumber(callback) {
 function hideIntroGif() {
   $("#template_demo_container").hide();
 }
+
+function removeStylingFromPastedText() {
+  $(window).on("paste", function (event) {
+    event.preventDefault();
+    var data = event.originalEvent.clipboardData.getData("Text");
+    document.execCommand("insertText", false, data);
+  });
+}
 makeInputLabelsSmarter("radio");
 makeInputLabelsSmarter("checkbox");
 
@@ -945,6 +954,8 @@ function makeInputLabelsSmarter(type, inputLabels) {
         appendInputAndLabel(type, inputLabel);
       } else if (hitBackspaceOrDelete(event)) {
         removeInputAndLabel(inputLabel);
+      } else if (isMultilineText(inputLabel[0].innerText)) {
+        appendInputAndLabel(type, inputLabel);
       }
     });
   });
@@ -960,6 +971,10 @@ function hitBackspaceOrDelete(event) {
   return key === "Backspace" || key === "Delete" || key === 8 || key === 46;
 }
 
+function isMultilineText(text) {
+  return text.includes("\n") || text.includes("\r");
+}
+
 /**
  * assumes `<li><input><label></label></li>`
  */
@@ -969,9 +984,27 @@ function appendInputAndLabel(type, inputLabel) {
     .find("label")
     .html()
     .replace(/&nbsp;/g, " ")
-    .split("<br>");
+    .split("<br>")
+    .filter((text) => text);
   const preBreak = preAndPostBreak[0].trim() || "Editable input label";
-  const postBreak = preAndPostBreak[1].trim() || "Editable input label";
+  const postBreak = preAndPostBreak[1]
+    ? preAndPostBreak[1].trim()
+    : "Editable input label";
+
+  let more = "";
+  if (preAndPostBreak.length > 2) {
+    more = preAndPostBreak
+      .filter((x, i) => i > 1)
+      .map(function (text) {
+        return `<li style="list-style: none">
+  <input id="_" type="${type}" name="" />
+  <label for="" name="" contenteditable
+    >${text.trim() || "Editable input label"}</label
+  >
+</li>`;
+      })
+      .join("");
+  }
 
   currentRow.find("label").text(preBreak);
 
@@ -980,11 +1013,12 @@ function appendInputAndLabel(type, inputLabel) {
   <label for="" name="" contenteditable
     >${postBreak || "Editable input label"}</label
   >
-</li>`);
+</li>${more}`);
 
   const newRow = currentRow.next();
   newRow.find("label").text(postBreak).focus();
-  makeInputLabelsSmarter(type, newRow.find("label"));
+  // makeInputLabelsSmarter(type, newRow.find("label"));
+  makeInputLabelsSmarter(type);
 }
 
 /**
