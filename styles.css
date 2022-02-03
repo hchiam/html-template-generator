@@ -135,6 +135,11 @@ button {
   cursor: text;
 }
 
+.template-instance-container:hover [contenteditable]:empty:not(:focus) {
+  padding-left: 1ch;
+  background: lime;
+}
+
 .template-instance-container {
   border: 3px solid gray;
   padding: 1em;
