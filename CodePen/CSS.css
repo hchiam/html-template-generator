@@ -357,6 +357,13 @@ select + pre {
   color: black;
 }
 
+select + pre div,
+select + pre p {
+  background: inherit;
+  color: inherit;
+  margin: 0;
+}
+
 select:not(.disable-hover):hover + pre,
 select + pre:not(.disable-hover):hover,
 select + pre:focus {

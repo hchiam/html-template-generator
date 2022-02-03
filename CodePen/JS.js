@@ -85,6 +85,7 @@ function attachEventListeners() {
     deleteTemplateInstance(this);
   });
 
+  document.execCommand("defaultParagraphSeparator", false, "br");
   $("body").on("keyup", ".edit-select-options", function () {
     editSelectOptions(this);
   });
@@ -417,6 +418,7 @@ function editSelectOptions(pre) {
     .html()
     .replaceAll("<br>", "\n")
     .replaceAll("<br/>", "\n")
+    .replace(/<div>(.+?)<\/div>/g, "\n$1")
     .trim();
   const options = preText.split("\n");
   const select = $(pre).prev();
