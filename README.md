@@ -1,6 +1,6 @@
 # `html-template-generator` [![version](https://img.shields.io/github/release/hchiam/html-template-generator)](https://github.com/hchiam/html-template-generator/releases)
 
-Generate HTML from a visual UI!
+Generate code without typing code! This visual UI can generate HTML form template code for you.
 
 [Live demo](https://html-template-generator.surge.sh)
 
