@@ -159,6 +159,7 @@ button {
 
 #output:not([data-animating]) .template-instance-container {
   border: 3px solid transparent;
+  padding: 0;
 }
 
 .temp {
