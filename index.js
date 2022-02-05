@@ -595,6 +595,7 @@ function saveHtmlFile(html) {
 }
 
 function animateMove(originJQueryElement, destinationJQueryElement) {
+  setTimeout(() => {
     destinationJQueryElement.css("visibility", "hidden");
     const original = $(originJQueryElement);
     const originalMarginLeft = parseInt(original.css("marginLeft"));
@@ -630,6 +631,7 @@ function animateMove(originJQueryElement, destinationJQueryElement) {
       $(destinationJQueryElement).css("visibility", "visible");
       $("#output").removeAttr("data-animating", "");
     }, 1000);
+  }, 300);
 }
 
 function setUpJSpreadsheet() {
