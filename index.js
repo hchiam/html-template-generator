@@ -40,10 +40,8 @@ console.log("https://codepen.io/hchiam/pen/jOBOaqm");
 console.log("https://github.com/hchiam/html-template-generator/issues");
 getVersionNumber((version) => {
   showVersionNumber(version);
-  setCSSVariable(
-    "--accent-colour",
-    getBackgroundColourWithModulo(Number(version.replaceAll(".", "")))
-  );
+  const accentColour = getAccentColourFromVersion(version);
+  $(":root").css("--accent-colour", accentColour);
 });
 const secondsToShowIntroGif = 15000;
 setTimeout(() => {
@@ -929,8 +927,9 @@ function getVersionNumber(callback) {
     });
 }
 
-function getBackgroundColourWithModulo(number) {
-  var colours = [
+function getAccentColourFromVersion(version) {
+  const number = Number(version.replaceAll(".", ""));
+  const colours = [
     "orange",
     "coral",
     "yellow",
@@ -939,12 +938,8 @@ function getBackgroundColourWithModulo(number) {
     "aqua",
     "lightblue",
   ];
-  var index = number % colours.length;
+  const index = number % colours.length;
   return colours[index];
-}
-
-function setCSSVariable(name, value) {
-  document.querySelector(":root").style.setProperty(name, value);
 }
 
 function hideIntroGif() {
