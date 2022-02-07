@@ -38,7 +38,13 @@ templates.forEach((template) => {
 const spreadsheet = setUpJSpreadsheet();
 console.log("https://codepen.io/hchiam/pen/jOBOaqm");
 console.log("https://github.com/hchiam/html-template-generator/issues");
-getVersionNumber(showVersionNumber);
+getVersionNumber((version) => {
+  showVersionNumber(version);
+  setCSSVariable(
+    "--accent-colour",
+    getBackgroundColourWithModulo(Number(version.replaceAll(".", "")))
+  );
+});
 const secondsToShowIntroGif = 15000;
 setTimeout(() => {
   $("#examples").click();
@@ -921,6 +927,24 @@ function getVersionNumber(callback) {
     .then((r) => {
       if (callback) callback(r[0].name);
     });
+}
+
+function getBackgroundColourWithModulo(number) {
+  var colours = [
+    "orange",
+    "coral",
+    "yellow",
+    "lime",
+    "lightgreen",
+    "aqua",
+    "lightblue",
+  ];
+  var index = number % colours.length;
+  return colours[index];
+}
+
+function setCSSVariable(name, value) {
+  document.querySelector(":root").style.setProperty(name, value);
 }
 
 function hideIntroGif() {
