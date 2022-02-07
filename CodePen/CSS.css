@@ -9,7 +9,7 @@ body > p:first-child {
   transform: translateX(-50%);
 }
 :root {
-  --accent-colour: yellow;
+  --accent-colour: lime;
   --flash-background: var(--accent-colour);
   --flash-color: black;
 }
