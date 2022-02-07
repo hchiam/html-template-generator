@@ -40,7 +40,11 @@ templates.forEach((template) => {
 const spreadsheet = setUpJSpreadsheet();
 console.log("https://codepen.io/hchiam/pen/jOBOaqm");
 console.log("https://github.com/hchiam/html-template-generator/issues");
-getVersionNumber(showVersionNumber);
+getVersionNumber((version) => {
+  showVersionNumber(version);
+  const accentColour = getAccentColourFromVersion(version);
+  $(":root").css("--accent-colour", accentColour);
+});
 const secondsToShowIntroGif = 15000;
 setTimeout(() => {
   $("#examples").click();
@@ -923,6 +927,21 @@ function getVersionNumber(callback) {
     .then((r) => {
       if (callback) callback(r[0].name);
     });
+}
+
+function getAccentColourFromVersion(version) {
+  const number = Number(version.replaceAll(".", ""));
+  const colours = [
+    "orange",
+    "coral",
+    "yellow",
+    "lime",
+    "lightgreen",
+    "aqua",
+    "lightblue",
+  ];
+  const index = number % colours.length;
+  return colours[index];
 }
 
 function hideIntroGif() {

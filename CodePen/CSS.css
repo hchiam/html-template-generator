@@ -9,7 +9,8 @@ body > p:first-child {
   transform: translateX(-50%);
 }
 :root {
-  --flash-background: lime;
+  --accent-colour: lime;
+  --flash-background: var(--accent-colour);
   --flash-color: black;
 }
 
@@ -30,6 +31,21 @@ h3 {
 
 button {
   cursor: pointer;
+}
+
+button:not(:disabled):hover,
+input:not(:disabled):hover,
+textarea:not(:disabled):hover,
+button:not(:disabled):focus,
+input:not(:disabled):focus,
+textarea:not(:disabled):focus {
+  background: var(--accent-colour);
+  color: black;
+}
+
+a:not(:disabled):hover,
+a:not(:disabled):focus {
+  color: var(--accent-colour);
 }
 
 #template_demo_container {
@@ -141,13 +157,13 @@ button {
 }
 
 [contenteditable]:not(.disable-hover):hover {
-  outline: 1px dotted lime;
+  outline: 1px dotted var(--accent-colour);
   cursor: text;
 }
 
 .template-instance-container:hover [contenteditable]:empty:not(:focus) {
   padding-left: 1ch;
-  background: lime;
+  background: var(--accent-colour);
 }
 
 .template-instance-container {
@@ -174,7 +190,7 @@ button {
 }
 
 .template-instance-container:hover {
-  border: 3px solid lime !important;
+  border: 3px solid var(--accent-colour) !important;
 }
 
 .template-controls {
@@ -352,7 +368,7 @@ select + pre {
   transition: max-height 300ms, padding-top 300ms;
   max-height: 0;
   overflow: auto;
-  background: lime;
+  background: var(--accent-colour);
   color: black;
 }
 
@@ -396,7 +412,7 @@ select + pre:before {
 [data-tab-user] .template-instance-container:not(.disable-hover) textarea {
   transition: max-height 2s;
   max-height: 100vh;
-  border: 1px dotted lime;
+  border: 1px dotted var(--accent-colour);
   animation: flash-of-color 0.3s 0.3s;
 }
 
@@ -404,7 +420,7 @@ select + pre:before {
 .template-instance-container textarea:focus {
   max-height: 100%;
   padding: 8px;
-  border: 1px dotted lime;
+  border: 1px dotted var(--accent-colour);
   z-index: 2;
 }
 
@@ -449,7 +465,7 @@ select + pre:before {
 }
 
 .template-generator pre:not(.disable-hover):hover {
-  background: lime;
+  background: var(--accent-colour);
   color: black;
 }
 
@@ -479,7 +495,7 @@ button b {
 }
 
 .jexcel td.highlight.highlight {
-  border-color: lime;
+  border-color: var(--accent-colour);
   border-width: 3px;
 }
 
@@ -506,7 +522,7 @@ button b {
 .jexcel_contextmenu.jcontextmenu > div:hover,
 .jexcel_contextmenu.jcontextmenu > div:hover a,
 .jexcel_contextmenu.jcontextmenu > div:hover span {
-  background: lime;
+  background: var(--accent-colour);
   color: black;
 }
 
@@ -645,7 +661,7 @@ input[type="range"]:focus::-ms-fill-upper {
   text-align: left;
   position: absolute;
   display: flow-root;
-  background: lime;
+  background: var(--accent-colour);
   color: black;
   padding: 0.1rem 1rem 1rem 0.25rem;
   border-radius: 0 0.5rem 0.5rem 0.5rem;
