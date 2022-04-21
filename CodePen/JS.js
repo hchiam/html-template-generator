@@ -710,6 +710,7 @@ function generateHtmlFromSheet() {
         $("#output").animate({ scrollTop: $("#output")[0].scrollHeight });
       }
     }, 100 * index);
+    revealButton($(".export-html-file"));
   });
 }
 
