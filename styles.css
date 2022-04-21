@@ -23,6 +23,11 @@ button {
   cursor: pointer;
 }
 
+input,
+pre[contenteditable]:not(.edit-select-options) {
+  border: 1px solid gray;
+}
+
 button:not(:disabled):hover,
 input:not(:disabled):hover,
 textarea:not(:disabled):hover,
