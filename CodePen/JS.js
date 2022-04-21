@@ -118,8 +118,6 @@ function deleteTemplateInstance(button) {
   if (isExample) return;
   $(button).closest(".template-instance-container").remove();
   clearOutputHtmlString();
-  const isOutputEmpty = !$("#output").find(":not(.remove-from-final-output)")
-    .length;
 }
 
 function copyDynamicTemplate(button) {
