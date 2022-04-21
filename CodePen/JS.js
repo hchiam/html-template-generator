@@ -93,6 +93,10 @@ function attachEventListeners() {
     generateSheetFromHtml();
   });
 
+  $("body").on("change", "#output [contenteditable]", function () {
+    generateSheetFromHtml();
+  });
+
   $(".copy-dynamic-template").on("click", function () {
     copyDynamicTemplate(this);
     $("#output").show();
@@ -645,6 +649,8 @@ function setUpJSpreadsheetContextMenu(obj, x, y, e) {
 }
 
 function generateSheetFromHtml() {
+  // TODO: need to handle options, labels, width state, etc.
+
   // id, type, required, label, note
   const newData = []; // example: [["id1", "input", true, "Name:", "Some note."]]
 
