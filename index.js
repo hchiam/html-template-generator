@@ -7,7 +7,6 @@ https://cdn.jsdelivr.net/gh/hchiam/draggable@master/makeElementDraggableAndEdita
 
 */
 
-collapseButton($("#html_to_excel"));
 attachEventListeners();
 const examples = $("#examples");
 const templates = [
@@ -55,7 +54,6 @@ function attachEventListeners() {
     $("#output").show();
     $("#output_html_controls").hide();
     $("#output_html_string").hide();
-    revealButton($("#html_to_excel"));
     revealButton($(".export-html-file"));
     spreadsheet.resetSheet();
   });
@@ -101,68 +99,6 @@ function attachEventListeners() {
   $("#export_html_file, .export-html-file").on("click", function () {
     getOutputHtmlString();
     saveHtmlFile($("#output_html_string pre").text());
-  });
-
-  $("#html_file_input").on("change", function (e) {
-    const file = e.target.files[0];
-    const reader = new FileReader();
-    reader.readAsText(file, "UTF-8");
-    reader.onload = (readerEvent) => {
-      const htmlString = readerEvent.target.result;
-      const htmlStringWithCommentsAsDivs = htmlString.replace(
-        /<!-- (.*?) -->/g,
-        '<div class="notes-line remove-from-final-output">$1</div>'
-      );
-      const html = $(`<div>${htmlStringWithCommentsAsDivs}</div>`);
-      html.find(".template-instance-container").append(
-        `
-        <div class="template-controls remove-from-final-output">
-          <button class="copy-template">Copy template</button>
-          <button class="delete-template">&nbsp;X&nbsp;</button>
-        </div>
-        <textarea
-          class="notes remove-from-final-output"
-          cols="55"
-          rows="2"
-          placeholder="Notes"
-        ></textarea>
-      `
-      );
-
-      // $("#output_html_string pre").text(htmlString);
-      $("#output").html(
-        `<span class="remove-from-final-output" hidden></span>${html.html()}`
-      );
-
-      $("#output").find("label, p").attr("contenteditable", true);
-      $("#output")
-        .find("select")
-        .each(function () {
-          const select = $(this);
-          const options = select.find("option");
-          const optionsString = Array.from(options)
-            .map((o) => $(o).text())
-            .join("\n");
-          $(`
-            <pre
-              class="edit-select-options remove-from-final-output"
-              contenteditable
-            >${optionsString}</pre>
-          `).insertAfter(select);
-        });
-      $("#output")
-        .find(".template-instance-container")
-        .each(function () {
-          const templateInstanceContainer = $(this);
-          commentsToTextarea(templateInstanceContainer);
-        });
-
-      $("#output").show();
-      $("#output_html_controls").hide();
-      $("#output_html_string").hide();
-      spreadsheet.resetSheet();
-      collapseButton($("#output_html_controls"));
-    };
   });
 
   $("#template_demo_container").on("click", hideIntroGif);
@@ -565,6 +501,9 @@ function setUpJSpreadsheet() {
     data: JSON.parse(JSON.stringify(defaultData)),
     columns: JSON.parse(JSON.stringify(columnDefinitions)),
     contextMenu: setUpJSpreadsheetContextMenu,
+    onchange: () => {
+      generateHtmlFromSheet();
+    },
   });
 
   $("#export_sheet").on("click", function () {
@@ -735,12 +674,14 @@ function generateSheetFromHtml() {
   spreadsheet.setData(newData);
 }
 
-function generateHtmlFromSheet(headersArray, dataRows) {
-  $("#output").show();
+function generateHtmlFromSheet() {
+  const headersArray = spreadsheet.getHeaders();
+  const dataRows = spreadsheet.getRows();
+
+  $("#output").html('<span class="remove-from-final-output" hidden></span>');
   $("#output_html_controls").hide();
   $("#output_html_string").hide();
-  revealButton($("#html_to_excel"));
-  spreadsheet.resetSheet();
+  // spreadsheet.resetSheet();
 
   const idColumn = headersArray.indexOf("ID");
   const inputTypeColumn = headersArray.indexOf("Type of input");
