@@ -9,7 +9,6 @@ https://cdn.jsdelivr.net/gh/hchiam/draggable@master/makeElementDraggableAndEdita
 
 */
 
-collapseButton($("#get_output_html_string"));
 collapseButton($("#html_to_excel"));
 attachEventListeners();
 const examples = $("#examples");
@@ -60,7 +59,6 @@ function attachEventListeners() {
     $("#output_html_string").hide();
     revealButton($("#html_to_excel"));
     revealButton($(".export-html-file"));
-    $("#sheet").hide();
     spreadsheet.resetSheet();
   });
 
@@ -99,62 +97,12 @@ function attachEventListeners() {
     $("#output").show();
     $("#output_html_controls").hide();
     $("#output_html_string").hide();
-    $("#sheet").hide();
     spreadsheet.resetSheet();
-  });
-
-  $("#get_output_html_string").on("click", function () {
-    getOutputHtmlString();
-    $("#output").hide();
-    $("#output_html_controls").show();
-    $("#output_html_string").show();
-    revealButton($("#html_to_excel"));
-    $("#sheet").hide();
-    spreadsheet.resetSheet();
-    revealButton($("#output_html_controls"));
-    collapseButton($("#get_output_html_string"));
-  });
-
-  $("#html_to_excel").on("click", function () {
-    const usedTemplateContainers = $("#output .template-instance-container");
-    if (!usedTemplateContainers.length) {
-      collapseButton($("#html_to_excel"));
-      alert("Copy templates first.");
-    } else {
-      spreadsheet.resetSheet();
-      $("#output").hide();
-      $("#output_html_controls").show();
-      $("#output_html_string").hide();
-      collapseButton($("#html_to_excel"));
-      $("#sheet").show();
-      $("#generate_html_from_sheet").hide();
-      generateSheetFromHtml();
-      collapseButton($("#get_output_html_string"));
-      revealButton($("#output_html_controls"));
-    }
-  });
-
-  $("#hide_output_html_string").on("click", function () {
-    $("#output").show();
-    $("#output_html_controls").hide();
-    $("#output_html_string").hide();
-    revealButton($("#html_to_excel"));
-    $("#sheet").hide();
-    spreadsheet.resetSheet();
-    revealButton($("#get_output_html_string"));
-    collapseButton($("#output_html_controls"));
   });
 
   $("#export_html_file, .export-html-file").on("click", function () {
     getOutputHtmlString();
     saveHtmlFile($("#output_html_string pre").text());
-  });
-
-  $("#import_html_file").on("click", function () {
-    $("#output").show();
-    $("#sheet").hide();
-    spreadsheet.resetSheet();
-    $("#html_file_input").click(); // trigger file selector popup
   });
 
   $("#html_file_input").on("change", function (e) {
@@ -214,47 +162,9 @@ function attachEventListeners() {
       $("#output").show();
       $("#output_html_controls").hide();
       $("#output_html_string").hide();
-      $("#sheet").hide();
       spreadsheet.resetSheet();
-      revealButton($("#get_output_html_string"));
       collapseButton($("#output_html_controls"));
     };
-  });
-
-  let showedExperimentalMessage = false;
-  $("#copy_excel_data").on("click", function () {
-    if (!showedExperimentalMessage) {
-      alert("NOTE: this Excel feature is still experimental.");
-      showedExperimentalMessage = true;
-    }
-    $("#output").hide();
-    $("#output_html_controls").show();
-    $("#output_html_string").hide();
-    collapseButton($("#html_to_excel"));
-    $("#sheet").show();
-    $("#generate_html_from_sheet").show();
-    collapseButton($("#get_output_html_string"));
-    collapseButton($("#output_html_controls"));
-  });
-
-  $("#generate_html_from_sheet").on("click", function () {
-    const headersArray = spreadsheet.getHeaders();
-    const dataRows = spreadsheet.getRows();
-    generateHtmlFromSheet(headersArray, dataRows);
-  });
-
-  $("#toggle_advanced").on("click", function () {
-    const willShow = $("#advanced_buttons_group").hasClass("hide");
-    $("#advanced_buttons_group").toggleClass("hide", !willShow);
-    $(".template-generator").toggleClass("hide", !willShow);
-    $("#toggle_advanced").text(willShow ? "-" : "+");
-    $("#examples").animate(
-      {
-        scrollTop:
-          $("#examples")[0].scrollHeight - $("#examples")[0].clientHeight,
-      },
-      200
-    );
   });
 
   $("#template_demo_container").on("click", hideIntroGif);
@@ -267,9 +177,6 @@ function deleteTemplateInstance(button) {
   clearOutputHtmlString();
   const isOutputEmpty = !$("#output").find(":not(.remove-from-final-output)")
     .length;
-  if (isOutputEmpty) {
-    collapseButton($("#get_output_html_string"));
-  }
 }
 
 function copyDynamicTemplate(button) {
@@ -303,7 +210,6 @@ ${templateHtmlLiteral}
 
   stopFlashingColorAfterHoveredAClone();
   clearOutputHtmlString();
-  revealButton($("#get_output_html_string"));
 }
 
 function copyTemplate(button, extraData) {
@@ -368,7 +274,6 @@ function copyTemplate(button, extraData) {
 
   stopFlashingColorAfterHoveredAClone();
   clearOutputHtmlString();
-  revealButton($("#get_output_html_string"));
 }
 
 function fillTemplateWith(thisHtml) {
@@ -668,21 +573,6 @@ function setUpJSpreadsheet() {
     spreadsheet.download();
   });
 
-  $("#import_sheet").on("click", function () {
-    $("#csv_file_input").click();
-  });
-
-  $("#csv_file_input").on("change", function (e) {
-    const file = e.target.files[0];
-    // alert(file);
-    // spreadsheet = jspreadsheet(document.getElementById("spreadsheet"), {
-    //   csv: file,
-    //   csvHeaders: true,
-    //   tableOverflow: true,
-    //   columns: columnDefinitions,
-    // });
-  });
-
   function resetSheet() {
     const clonedDefaultData = JSON.parse(JSON.stringify(defaultData));
     spreadsheet.setData(clonedDefaultData);
@@ -852,7 +742,6 @@ function generateHtmlFromSheet(headersArray, dataRows) {
   $("#output_html_controls").hide();
   $("#output_html_string").hide();
   revealButton($("#html_to_excel"));
-  $("#sheet").hide();
   spreadsheet.resetSheet();
 
   const idColumn = headersArray.indexOf("ID");
