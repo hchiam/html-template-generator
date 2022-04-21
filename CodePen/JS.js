@@ -57,7 +57,7 @@ function attachEventListeners() {
     $("#output_html_controls").hide();
     $("#output_html_string").hide();
     revealButton($(".export-html-file"));
-    spreadsheet.resetSheet();
+    generateSheetFromHtml();
   });
 
   $("body").on("click", ".toggle-template-display", function (event) {
@@ -71,23 +71,26 @@ function attachEventListeners() {
       button.prop("aria-label", "make template use inline-block display");
       template.css("display", "inline-block");
     }
+    generateSheetFromHtml();
   });
 
   $("body").on("click", ".move-template-earlier", function () {
-    moveContainerEarlier(this);
+    moveContainerEarlier(this, generateSheetFromHtml);
   });
 
   $("body").on("click", ".move-template-later", function () {
-    moveContainerLater(this);
+    moveContainerLater(this, generateSheetFromHtml);
   });
 
   $("body").on("click", ".delete-template", function () {
     deleteTemplateInstance(this);
+    generateSheetFromHtml();
   });
 
   document.execCommand("defaultParagraphSeparator", false, "br");
   $("body").on("keyup", ".edit-select-options", function () {
     editSelectOptions(this);
+    generateSheetFromHtml();
   });
 
   $(".copy-dynamic-template").on("click", function () {
@@ -95,7 +98,7 @@ function attachEventListeners() {
     $("#output").show();
     $("#output_html_controls").hide();
     $("#output_html_string").hide();
-    spreadsheet.resetSheet();
+    generateSheetFromHtml();
   });
 
   $("#export_html_file, .export-html-file").on("click", function () {
@@ -480,12 +483,7 @@ function animateMove(originJQueryElement, destinationJQueryElement) {
 }
 
 function setUpJSpreadsheet() {
-  const defaultData = [
-    ["id1", "input", true, "Name:", "Some note."],
-    ["id2", "dropdown", false, "", ""],
-    ["id3", "state", false, "State:", ""],
-    [],
-  ];
+  const defaultData = [[]];
   const columnDefinitions = [
     { type: "text", title: "ID", width: 125 },
     {
@@ -503,9 +501,7 @@ function setUpJSpreadsheet() {
     data: JSON.parse(JSON.stringify(defaultData)),
     columns: JSON.parse(JSON.stringify(columnDefinitions)),
     contextMenu: setUpJSpreadsheetContextMenu,
-    onchange: () => {
-      generateHtmlFromSheet();
-    },
+    onchange: generateHtmlFromSheet,
   });
 
   $("#export_sheet").on("click", function () {
@@ -683,7 +679,6 @@ function generateHtmlFromSheet() {
   $("#output").html('<span class="remove-from-final-output" hidden></span>');
   $("#output_html_controls").hide();
   $("#output_html_string").hide();
-  // spreadsheet.resetSheet();
 
   const idColumn = headersArray.indexOf("ID");
   const inputTypeColumn = headersArray.indexOf("Type of input");
@@ -712,7 +707,7 @@ function generateHtmlFromSheet() {
   });
 }
 
-function moveContainerEarlier(button) {
+function moveContainerEarlier(button, callback) {
   const templateContainer = $(button).closest(".template-instance-container");
   const destinationElement = templateContainer.prev(
     ".template-instance-container"
@@ -724,10 +719,11 @@ function moveContainerEarlier(button) {
     animateMove(templateContainer, destinationElement);
     animateMove(destinationElement, templateContainer);
     templateContainer.insertBefore(destinationElement);
+    if (callback) callback();
   });
 }
 
-function moveContainerLater(button) {
+function moveContainerLater(button, callback) {
   const templateContainer = $(button).closest(".template-instance-container");
   const destinationElement = templateContainer.next(
     ".template-instance-container"
@@ -739,6 +735,7 @@ function moveContainerLater(button) {
     animateMove(templateContainer, destinationElement);
     animateMove(destinationElement, templateContainer);
     templateContainer.insertAfter(destinationElement);
+    if (callback) callback();
   });
 }
 
