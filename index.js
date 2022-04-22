@@ -151,7 +151,7 @@ ${templateHtmlLiteral}
   clearOutputHtmlString();
 }
 
-function copyTemplate(button, extraData) {
+function copyTemplate(button, extraData, animationTime = 100) {
   const isExample = $(button).closest("#examples").length > 0;
 
   const templateContainer = $(button).closest(".template-instance-container");
@@ -205,10 +205,10 @@ function copyTemplate(button, extraData) {
       {
         top: 0,
       },
-      100
+      animationTime
     );
   $("#output").ready(function () {
-    animateMove(templateContainer, destinationElement);
+    animateMove(templateContainer, destinationElement, animationTime);
   });
 
   stopFlashingColorAfterHoveredAClone();
@@ -444,7 +444,11 @@ function saveHtmlFile(html) {
   }
 }
 
-function animateMove(originJQueryElement, destinationJQueryElement) {
+function animateMove(
+  originJQueryElement,
+  destinationJQueryElement,
+  animationTime = 100
+) {
   destinationJQueryElement.css("visibility", "hidden");
   const original = $(originJQueryElement);
   const originalMarginLeft = parseInt(original.css("marginLeft"));
@@ -469,17 +473,20 @@ function animateMove(originJQueryElement, destinationJQueryElement) {
       height: originalHeight,
     })
     .offset(originPosition)
-    .animate({
-      left: destinationPosition.left,
-      top: destinationPosition.top,
-      width: destinationWidth,
-      height: "auto", // destinationHeight,
-    });
+    .animate(
+      {
+        left: destinationPosition.left,
+        top: destinationPosition.top,
+        width: destinationWidth,
+        height: "auto", // destinationHeight,
+      },
+      animationTime
+    );
   setTimeout(() => {
     temp.remove();
     $(destinationJQueryElement).css("visibility", "visible");
     $("#output").removeAttr("data-animating", "");
-  }, 1000);
+  }, animationTime * 10);
 }
 
 function setUpJSpreadsheet() {
@@ -674,6 +681,7 @@ function generateSheetFromHtml() {
   spreadsheet.setData(newData);
 }
 
+let animatedOnceForGenerateHtmlFromSheet = false;
 function generateHtmlFromSheet() {
   const headersArray = spreadsheet.getHeaders();
   const dataRows = spreadsheet.getRows();
@@ -689,7 +697,12 @@ function generateHtmlFromSheet() {
   const noteColumn = headersArray.indexOf("Note");
   const inputs = dataRows.map((r) => r[inputTypeColumn]).filter((x) => x);
 
-  $("#output").animate({ scrollTop: $("#output")[0].scrollHeight });
+  const animationTime = 0;
+
+  $("#output").animate(
+    { scrollTop: $("#output")[0].scrollHeight },
+    animationTime
+  );
   inputs.map((input, index) => {
     const template = templateMap[input];
     const row = dataRows[index];
@@ -700,12 +713,15 @@ function generateHtmlFromSheet() {
       note: row[noteColumn],
     };
     setTimeout(() => {
-      copyTemplate(template, extraData);
+      copyTemplate(template, extraData, animationTime);
       const isLastInput = index === inputs.length - 1;
       if (isLastInput) {
-        $("#output").animate({ scrollTop: $("#output")[0].scrollHeight });
+        $("#output").animate(
+          { scrollTop: $("#output")[0].scrollHeight },
+          animationTime
+        );
       }
-    }, 100 * index);
+    }, animationTime * index);
     revealButton($(".export-html-file"));
   });
 }
