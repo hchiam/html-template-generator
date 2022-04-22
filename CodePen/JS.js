@@ -222,7 +222,7 @@ function fillTemplateWith(thisHtml) {
 }
 
 function useExtraData(jQueryTemplateClone, extraData) {
-  const { id, required, label, note } = extraData;
+  const { id, required, note, label } = extraData;
 
   const ids = jQueryTemplateClone.find("[id]");
   const fors = jQueryTemplateClone.find("[for]");
@@ -502,8 +502,8 @@ function setUpJSpreadsheet() {
       source: templates,
     },
     { type: "checkbox", title: "Required", width: 125 },
-    { type: "text", title: "Label", width: 200 },
     { type: "text", title: "Note", width: 125 },
+    { type: "text", title: "Label", width: 200 },
   ];
 
   let spreadsheet = jspreadsheet(document.getElementById("spreadsheet"), {
@@ -556,6 +556,7 @@ function setUpJSpreadsheetContextMenu(obj, x, y, e) {
           obj.deleteColumn(
             obj.getSelectedColumns().length ? undefined : parseInt(x)
           );
+          generateHtmlFromSheet();
         },
       });
     }
@@ -565,6 +566,7 @@ function setUpJSpreadsheetContextMenu(obj, x, y, e) {
         title: obj.options.text.renameThisColumn,
         onclick: function () {
           obj.setHeader(x);
+          generateHtmlFromSheet();
         },
       });
     }
@@ -576,12 +578,14 @@ function setUpJSpreadsheetContextMenu(obj, x, y, e) {
         title: obj.options.text.orderAscending,
         onclick: function () {
           obj.orderBy(x, 0);
+          generateHtmlFromSheet();
         },
       });
       items.push({
         title: obj.options.text.orderDescending,
         onclick: function () {
           obj.orderBy(x, 1);
+          generateHtmlFromSheet();
         },
       });
     }
@@ -607,6 +611,7 @@ function setUpJSpreadsheetContextMenu(obj, x, y, e) {
         title: obj.options.text.deleteSelectedRows,
         onclick: function () {
           obj.deleteRow(obj.getSelectedRows().length ? undefined : parseInt(y));
+          generateHtmlFromSheet();
         },
       });
     }
@@ -656,8 +661,8 @@ function setUpJSpreadsheetContextMenu(obj, x, y, e) {
 function generateSheetFromHtml() {
   // TODO: need to handle options, labels, width state, etc.
 
-  // id, type, required, label, note
-  const newData = []; // example: [["id1", "input", true, "Name:", "Some note."]]
+  // id, type, required, note, label
+  const newData = []; // example: [["id1", "input", true, "Some notes.", "Name:"]]
 
   const usedTemplateContainers = $("#output .template-instance-container");
 
@@ -676,7 +681,7 @@ function generateSheetFromHtml() {
       .join(", ");
     const note = container.find(".notes").val();
 
-    newData.push([id, type, required, label, note]);
+    newData.push([id, type, required, note, label]);
   });
 
   console.log(newData);
@@ -696,8 +701,8 @@ function generateHtmlFromSheet() {
   const idColumn = headersArray.indexOf("ID");
   const inputTypeColumn = headersArray.indexOf("Type of input");
   const requiredColumn = headersArray.indexOf("Required");
-  const labelColumn = headersArray.indexOf("Label");
   const noteColumn = headersArray.indexOf("Note");
+  const labelColumn = headersArray.indexOf("Label");
   const inputs = dataRows.map((r) => r[inputTypeColumn]).filter((x) => x);
 
   const animationTime = animatedOnceForGenerateHtmlFromSheet ? 0 : 100;
@@ -713,8 +718,8 @@ function generateHtmlFromSheet() {
     const extraData = {
       id: row[idColumn],
       required: row[requiredColumn],
-      label: row[labelColumn],
       note: row[noteColumn],
+      label: row[labelColumn],
     };
     setTimeout(() => {
       copyTemplate(template, extraData, animationTime);
