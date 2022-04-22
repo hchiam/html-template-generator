@@ -91,7 +91,7 @@ function attachEventListeners() {
     generateSheetFromHtml();
   });
 
-  $("body").on("change", "#output [contenteditable]", function () {
+  $("body").on("keyup", "#output [contenteditable]", function () {
     generateSheetFromHtml();
   });
 
@@ -141,9 +141,7 @@ ${templateHtmlLiteral}
     ? lastTemplateContainer
     : $("#output").children().first();
 
-  fillTemplateWith(templateHtmlLiteral);
-  const template = $("template")[0];
-  const clone = template.content.cloneNode(true);
+  const clone = cloneTemplateWith(templateHtmlLiteral);
 
   $(clone).insertAfter(lastTemplateInOutputContainer);
 
@@ -166,9 +164,8 @@ function copyTemplate(button, extraData, animationTime = 100) {
   const thisHtml = `<div class="${templateContainer.prop(
     "class"
   )}">${templateContainer.html()}</div>`;
-  fillTemplateWith(thisHtml);
-  const template = $("template")[0];
-  const clone = template.content.cloneNode(true);
+
+  const clone = cloneTemplateWith(thisHtml);
 
   $(clone).insertAfter(
     isExample ? lastTemplateInOutputContainer : templateContainer
@@ -215,13 +212,21 @@ function copyTemplate(button, extraData, animationTime = 100) {
   clearOutputHtmlString();
 }
 
+function cloneTemplateWith(thisHtml) {
+  fillTemplateWith(thisHtml);
+  const template = $("template")[0];
+  const clone = template.content.cloneNode(true);
+  return clone;
+}
+
 function fillTemplateWith(thisHtml) {
   $("template").html(thisHtml);
 }
 
 function useExtraData(jQueryTemplateClone, extraData) {
-  const { id, required, note, label } = extraData;
+  const { id, type, required, texts, note } = extraData;
 
+  const textElements = [...jQueryTemplateClone.find("p, label, pre")];
   const ids = jQueryTemplateClone.find("[id]");
   const fors = jQueryTemplateClone.find("[for]");
   const hasOneInput = ids.length === 1;
@@ -247,13 +252,48 @@ function useExtraData(jQueryTemplateClone, extraData) {
       .toggleClass("notRequired", !required);
   }
 
-  if (label) {
-    if (hasOneInput) {
-      fors.text(label);
-    } else if (hasMultipleInputs) {
-      // assumes templates with multiple inputs have a p tag to put the label into
-      jQueryTemplateClone.find("p").text(label);
-    }
+  if (texts) {
+    texts.split(", ").forEach((text, index) => {
+      if (textElements[index]) {
+        textElements[index].innerText = text;
+        switch (type) {
+          case "radio":
+          case "checkbox":
+            makeInputLabelsSmarter(type);
+            $(textElements[index]).on("click", function (e) {
+              e.preventDefault(); // prevent click on label from selecting radio/checkbox
+            });
+            break;
+        }
+      } else {
+        // could be creating more inputs for radio / checkbox / dropdown:
+        switch (type) {
+          case "radio":
+            const radioHtml = $(".radio-template ul li:last-child")[0]
+              .outerHTML;
+            const radioHtmlClone = $(cloneTemplateWith(radioHtml));
+            radioHtmlClone.find("label").text(text);
+            radioHtmlClone.appendTo(jQueryTemplateClone.find("ul"));
+            break;
+          case "checkbox":
+            const checkboxHtml = $(".checkbox-template ul li:last-child")[0]
+              .outerHTML;
+            const checkboxHtmlClone = $(cloneTemplateWith(checkboxHtml));
+            checkboxHtmlClone.find("label").text(text);
+            checkboxHtmlClone.appendTo(jQueryTemplateClone.find("ul"));
+            break;
+          case "dropdown":
+          case "gender":
+          case "state":
+            // append to contenteditable text
+            const pre = jQueryTemplateClone.find("pre.edit-select-options");
+            // const options = texts.split(", ").slice(1);
+            pre.text(pre.text() + "\n" + text);
+            editSelectOptions(pre);
+            break;
+        }
+      }
+    });
   }
 
   if (note) {
@@ -264,6 +304,8 @@ function useExtraData(jQueryTemplateClone, extraData) {
 function editSelectOptions(pre) {
   const preText = $(pre)
     .html()
+    .replaceAll("<div>", "\n")
+    .replaceAll("</div>", "")
     .replaceAll("<br>", "\n")
     .replaceAll("<br/>", "\n")
     .replace(/<div>(.+?)<\/div>/g, "\n$1")
@@ -315,13 +357,6 @@ function getOutputHtmlString() {
       );
       $("#output_html_string pre").css("visibility", "visible");
     });
-}
-
-function scrollToBottomOfElement(jQueryElement) {
-  const newScrollPosition =
-    jQueryElement[0].scrollHeight + jQueryElement[0].offsetHeight;
-  window.scrollTo(0, newScrollPosition);
-  console.log(jQueryElement[0].scrollHeight, newScrollPosition);
 }
 
 function stopFlashingColor() {
@@ -500,8 +535,8 @@ function setUpJSpreadsheet() {
       source: templates,
     },
     { type: "checkbox", title: "Required", width: 125 },
+    { type: "text", title: "Texts", width: 200 },
     { type: "text", title: "Note", width: 125 },
-    { type: "text", title: "Label", width: 200 },
   ];
 
   let spreadsheet = jspreadsheet(document.getElementById("spreadsheet"), {
@@ -659,8 +694,8 @@ function setUpJSpreadsheetContextMenu(obj, x, y, e) {
 function generateSheetFromHtml() {
   // TODO: need to handle options, labels, width state, etc.
 
-  // id, type, required, note, label
-  const newData = []; // example: [["id1", "input", true, "Some notes.", "Name:"]]
+  // id, type, required, texts, note
+  const newData = []; // example: [["id1", "input", true, "Name:", "Some notes."]]
 
   const usedTemplateContainers = $("#output .template-instance-container");
 
@@ -674,19 +709,31 @@ function generateSheetFromHtml() {
       .trim()
       .replace("-template", "");
     const required = input.hasClass("isRequired");
-    const label = Array.from(container.find("p, label"))
-      .map((x) => x.innerText)
+    const texts = Array.from(container.find("p, label, pre"))
+      .map((x) => {
+        console.log(x.innerHTML);
+        const parsed = x.innerHTML
+          .replaceAll("<div>", ", ")
+          .replaceAll("</div>", "")
+          .replaceAll("<br>", ", ")
+          .replaceAll("<br/>", ", ")
+          .replaceAll("\n", ", ")
+          .replaceAll("&nbsp;", " ");
+        return parsed;
+      })
+      .filter((hasValue) => hasValue)
       .join(", ");
+    // console.log(texts);
     const note = container.find(".notes").val();
 
-    newData.push([id, type, required, note, label]);
+    newData.push([id, type, required, texts, note]);
   });
 
-  console.log(newData);
+  if (!newData.length) newData.push([]);
+
   spreadsheet.setData(newData);
 }
 
-let animatedOnceForGenerateHtmlFromSheet = false;
 function generateHtmlFromSheet() {
   // TODO: need to handle options, labels, width state, etc.
   const headersArray = spreadsheet.getHeaders();
@@ -700,33 +747,29 @@ function generateHtmlFromSheet() {
   const inputTypeColumn = headersArray.indexOf("Type of input");
   const requiredColumn = headersArray.indexOf("Required");
   const noteColumn = headersArray.indexOf("Note");
-  const labelColumn = headersArray.indexOf("Label");
+  const textColumn = headersArray.indexOf("Texts");
   const inputs = dataRows.map((r) => r[inputTypeColumn]).filter((x) => x);
 
-  const animationTime = animatedOnceForGenerateHtmlFromSheet ? 0 : 100;
-  animatedOnceForGenerateHtmlFromSheet = true;
+  const animationTime = 0;
 
-  $("#output").animate(
-    { scrollTop: $("#output")[0].scrollHeight },
-    animationTime
-  );
+  const previousScrollTop = $("#output").scrollTop();
+
+  $("#output").animate({ scrollTop: previousScrollTop }, animationTime);
   inputs.map((input, index) => {
     const template = templateMap[input];
     const row = dataRows[index];
     const extraData = {
       id: row[idColumn],
+      type: row[inputTypeColumn],
       required: row[requiredColumn],
       note: row[noteColumn],
-      label: row[labelColumn],
+      texts: row[textColumn],
     };
     setTimeout(() => {
       copyTemplate(template, extraData, animationTime);
       const isLastInput = index === inputs.length - 1;
       if (isLastInput) {
-        $("#output").animate(
-          { scrollTop: $("#output")[0].scrollHeight },
-          animationTime
-        );
+        $("#output").animate({ scrollTop: previousScrollTop }, animationTime);
       }
     }, animationTime * index);
     revealButton($(".export-html-file"));
@@ -804,7 +847,7 @@ function hideIntroGif() {
 function removeStylingFromPastedText() {
   $(window).on("paste", function (event) {
     event.preventDefault();
-    var data = event.originalEvent.clipboardData.getData("Text");
+    var data = event.originalEvent.clipboardData.getData("Texts");
     document.execCommand("insertText", false, data);
   });
 }

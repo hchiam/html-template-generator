@@ -8,6 +8,8 @@ $("body").on("click", ".copy-template", function () {
   }, 0);
 });
 
+window.makeInputLabelsSmarter = makeInputLabelsSmarter;
+
 function makeInputLabelsSmarter(type, inputLabels) {
   (inputLabels || $(`input[type="${type}"] + label`)).each(function () {
     const inputLabel = $(this);
