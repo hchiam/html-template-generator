@@ -699,7 +699,8 @@ function generateHtmlFromSheet() {
   const noteColumn = headersArray.indexOf("Note");
   const inputs = dataRows.map((r) => r[inputTypeColumn]).filter((x) => x);
 
-  const animationTime = 0;
+  const animationTime = animatedOnceForGenerateHtmlFromSheet ? 0 : 100;
+  animatedOnceForGenerateHtmlFromSheet = true;
 
   $("#output").animate(
     { scrollTop: $("#output")[0].scrollHeight },
