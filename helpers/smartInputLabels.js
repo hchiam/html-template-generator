@@ -8,6 +8,8 @@ $("body").on("click", ".copy-template", function () {
   }, 0);
 });
 
+window.makeInputLabelsSmarter = makeInputLabelsSmarter;
+
 function makeInputLabelsSmarter(type, inputLabels) {
   (inputLabels || $(`input[type="${type}"] + label`)).each(function () {
     const inputLabel = $(this);
@@ -19,6 +21,9 @@ function makeInputLabelsSmarter(type, inputLabels) {
       } else if (isMultilineText(inputLabel[0].innerText)) {
         appendInputAndLabel(type, inputLabel);
       }
+    });
+    inputLabel.off("click").on("click", function (e) {
+      e.preventDefault(); // prevent click on label from selecting radio/checkbox
     });
   });
 }

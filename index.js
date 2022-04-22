@@ -7,8 +7,6 @@ https://cdn.jsdelivr.net/gh/hchiam/draggable@master/makeElementDraggableAndEdita
 
 */
 
-collapseButton($("#get_output_html_string"));
-collapseButton($("#html_to_excel"));
 attachEventListeners();
 const examples = $("#examples");
 const templates = [
@@ -56,10 +54,8 @@ function attachEventListeners() {
     $("#output").show();
     $("#output_html_controls").hide();
     $("#output_html_string").hide();
-    revealButton($("#html_to_excel"));
     revealButton($(".export-html-file"));
-    $("#sheet").hide();
-    spreadsheet.resetSheet();
+    generateSheetFromHtml();
   });
 
   $("body").on("click", ".toggle-template-display", function (event) {
@@ -73,74 +69,42 @@ function attachEventListeners() {
       button.prop("aria-label", "make template use inline-block display");
       template.css("display", "inline-block");
     }
+    generateSheetFromHtml();
   });
 
   $("body").on("click", ".move-template-earlier", function () {
-    moveContainerEarlier(this);
+    moveContainerEarlier(this, generateSheetFromHtml);
   });
 
   $("body").on("click", ".move-template-later", function () {
-    moveContainerLater(this);
+    moveContainerLater(this, generateSheetFromHtml);
   });
 
   $("body").on("click", ".delete-template", function () {
     deleteTemplateInstance(this);
+    generateSheetFromHtml();
   });
 
   document.execCommand("defaultParagraphSeparator", false, "br");
   $("body").on("keyup", ".edit-select-options", function () {
     editSelectOptions(this);
+    generateSheetFromHtml();
   });
+
+  $("body").on(
+    "keyup",
+    "#output [contenteditable], #output .notes",
+    function () {
+      generateSheetFromHtml();
+    }
+  );
 
   $(".copy-dynamic-template").on("click", function () {
     copyDynamicTemplate(this);
     $("#output").show();
     $("#output_html_controls").hide();
     $("#output_html_string").hide();
-    $("#sheet").hide();
-    spreadsheet.resetSheet();
-  });
-
-  $("#get_output_html_string").on("click", function () {
-    getOutputHtmlString();
-    $("#output").hide();
-    $("#output_html_controls").show();
-    $("#output_html_string").show();
-    revealButton($("#html_to_excel"));
-    $("#sheet").hide();
-    spreadsheet.resetSheet();
-    revealButton($("#output_html_controls"));
-    collapseButton($("#get_output_html_string"));
-  });
-
-  $("#html_to_excel").on("click", function () {
-    const usedTemplateContainers = $("#output .template-instance-container");
-    if (!usedTemplateContainers.length) {
-      collapseButton($("#html_to_excel"));
-      alert("Copy templates first.");
-    } else {
-      spreadsheet.resetSheet();
-      $("#output").hide();
-      $("#output_html_controls").show();
-      $("#output_html_string").hide();
-      collapseButton($("#html_to_excel"));
-      $("#sheet").show();
-      $("#generate_html_from_sheet").hide();
-      generateSheetFromHtml();
-      collapseButton($("#get_output_html_string"));
-      revealButton($("#output_html_controls"));
-    }
-  });
-
-  $("#hide_output_html_string").on("click", function () {
-    $("#output").show();
-    $("#output_html_controls").hide();
-    $("#output_html_string").hide();
-    revealButton($("#html_to_excel"));
-    $("#sheet").hide();
-    spreadsheet.resetSheet();
-    revealButton($("#get_output_html_string"));
-    collapseButton($("#output_html_controls"));
+    generateSheetFromHtml();
   });
 
   $("#export_html_file, .export-html-file").on("click", function () {
@@ -148,114 +112,19 @@ function attachEventListeners() {
     saveHtmlFile($("#output_html_string pre").text());
   });
 
-  $("#import_html_file").on("click", function () {
-    $("#output").show();
-    $("#sheet").hide();
-    spreadsheet.resetSheet();
-    $("#html_file_input").click(); // trigger file selector popup
-  });
-
-  $("#html_file_input").on("change", function (e) {
-    const file = e.target.files[0];
-    const reader = new FileReader();
-    reader.readAsText(file, "UTF-8");
-    reader.onload = (readerEvent) => {
-      const htmlString = readerEvent.target.result;
-      const htmlStringWithCommentsAsDivs = htmlString.replace(
-        /<!-- (.*?) -->/g,
-        '<div class="notes-line remove-from-final-output">$1</div>'
-      );
-      const html = $(`<div>${htmlStringWithCommentsAsDivs}</div>`);
-      html.find(".template-instance-container").append(
-        `
-        <div class="template-controls remove-from-final-output">
-          <button class="copy-template">Copy template</button>
-          <button class="delete-template">&nbsp;X&nbsp;</button>
-        </div>
-        <textarea
-          class="notes remove-from-final-output"
-          cols="55"
-          rows="2"
-          placeholder="Notes"
-        ></textarea>
-      `
-      );
-
-      // $("#output_html_string pre").text(htmlString);
-      $("#output").html(
-        `<span class="remove-from-final-output" hidden></span>${html.html()}`
-      );
-
-      $("#output").find("label, p").attr("contenteditable", true);
-      $("#output")
-        .find("select")
-        .each(function () {
-          const select = $(this);
-          const options = select.find("option");
-          const optionsString = Array.from(options)
-            .map((o) => $(o).text())
-            .join("\n");
-          $(`
-            <pre
-              class="edit-select-options remove-from-final-output"
-              contenteditable
-            >${optionsString}</pre>
-          `).insertAfter(select);
-        });
-      $("#output")
-        .find(".template-instance-container")
-        .each(function () {
-          const templateInstanceContainer = $(this);
-          commentsToTextarea(templateInstanceContainer);
-        });
-
-      $("#output").show();
-      $("#output_html_controls").hide();
-      $("#output_html_string").hide();
-      $("#sheet").hide();
-      spreadsheet.resetSheet();
-      revealButton($("#get_output_html_string"));
-      collapseButton($("#output_html_controls"));
-    };
-  });
-
-  let showedExperimentalMessage = false;
-  $("#copy_excel_data").on("click", function () {
-    if (!showedExperimentalMessage) {
-      alert("NOTE: this Excel feature is still experimental.");
-      showedExperimentalMessage = true;
-    }
-    $("#output").hide();
-    $("#output_html_controls").show();
-    $("#output_html_string").hide();
-    collapseButton($("#html_to_excel"));
-    $("#sheet").show();
-    $("#generate_html_from_sheet").show();
-    collapseButton($("#get_output_html_string"));
-    collapseButton($("#output_html_controls"));
-  });
-
-  $("#generate_html_from_sheet").on("click", function () {
-    const headersArray = spreadsheet.getHeaders();
-    const dataRows = spreadsheet.getRows();
-    generateHtmlFromSheet(headersArray, dataRows);
-  });
-
-  $("#toggle_advanced").on("click", function () {
-    const willShow = $("#advanced_buttons_group").hasClass("hide");
-    $("#advanced_buttons_group").toggleClass("hide", !willShow);
-    $(".template-generator").toggleClass("hide", !willShow);
-    $("#toggle_advanced").text(willShow ? "-" : "+");
-    $("#examples").animate(
-      {
-        scrollTop:
-          $("#examples")[0].scrollHeight - $("#examples")[0].clientHeight,
-      },
-      200
-    );
-  });
-
   $("#template_demo_container").on("click", hideIntroGif);
+
+  $("#toggle_examples").on("click", () => {
+    const hide = $("#toggle_examples").text() === "◀";
+    $("#examples").toggleClass("slide-left", hide);
+    $("#toggle_examples").text(hide ? "▶" : "◀");
+  });
+
+  $("#toggle_sheet").on("click", () => {
+    const hide = $("#toggle_sheet").text() === "▶";
+    $("#sheet").toggleClass("slide-right", hide);
+    $("#toggle_sheet").text(hide ? "◀" : "▶");
+  });
 }
 
 function deleteTemplateInstance(button) {
@@ -263,11 +132,6 @@ function deleteTemplateInstance(button) {
   if (isExample) return;
   $(button).closest(".template-instance-container").remove();
   clearOutputHtmlString();
-  const isOutputEmpty = !$("#output").find(":not(.remove-from-final-output)")
-    .length;
-  if (isOutputEmpty) {
-    collapseButton($("#get_output_html_string"));
-  }
 }
 
 function copyDynamicTemplate(button) {
@@ -293,18 +157,15 @@ ${templateHtmlLiteral}
     ? lastTemplateContainer
     : $("#output").children().first();
 
-  fillTemplateWith(templateHtmlLiteral);
-  const template = $("template")[0];
-  const clone = template.content.cloneNode(true);
+  const clone = cloneTemplateWith(templateHtmlLiteral);
 
   $(clone).insertAfter(lastTemplateInOutputContainer);
 
   stopFlashingColorAfterHoveredAClone();
   clearOutputHtmlString();
-  revealButton($("#get_output_html_string"));
 }
 
-function copyTemplate(button, extraData) {
+function copyTemplate(button, extraData, animationTime = 100) {
   const isExample = $(button).closest("#examples").length > 0;
 
   const templateContainer = $(button).closest(".template-instance-container");
@@ -319,9 +180,8 @@ function copyTemplate(button, extraData) {
   const thisHtml = `<div class="${templateContainer.prop(
     "class"
   )}">${templateContainer.html()}</div>`;
-  fillTemplateWith(thisHtml);
-  const template = $("template")[0];
-  const clone = template.content.cloneNode(true);
+
+  const clone = cloneTemplateWith(thisHtml);
 
   $(clone).insertAfter(
     isExample ? lastTemplateInOutputContainer : templateContainer
@@ -358,15 +218,21 @@ function copyTemplate(button, extraData) {
       {
         top: 0,
       },
-      100
+      animationTime
     );
   $("#output").ready(function () {
-    animateMove(templateContainer, destinationElement);
+    animateMove(templateContainer, destinationElement, animationTime);
   });
 
   stopFlashingColorAfterHoveredAClone();
   clearOutputHtmlString();
-  revealButton($("#get_output_html_string"));
+}
+
+function cloneTemplateWith(thisHtml) {
+  fillTemplateWith(thisHtml);
+  const template = $("template")[0];
+  const clone = template.content.cloneNode(true);
+  return clone;
 }
 
 function fillTemplateWith(thisHtml) {
@@ -374,8 +240,9 @@ function fillTemplateWith(thisHtml) {
 }
 
 function useExtraData(jQueryTemplateClone, extraData) {
-  const { id, required, label, note } = extraData;
+  const { id, type, required, texts, note, display } = extraData;
 
+  const textElements = [...jQueryTemplateClone.find("p, label, pre")];
   const ids = jQueryTemplateClone.find("[id]");
   const fors = jQueryTemplateClone.find("[for]");
   const hasOneInput = ids.length === 1;
@@ -395,29 +262,72 @@ function useExtraData(jQueryTemplateClone, extraData) {
     }
   }
 
+  if (type === "radio" || type === "checkbox") {
+    makeInputLabelsSmarter(type);
+  }
+
   if ("required" in extraData) {
     ids
       .toggleClass("isRequired", required)
       .toggleClass("notRequired", !required);
   }
 
-  if (label) {
-    if (hasOneInput) {
-      fors.text(label);
-    } else if (hasMultipleInputs) {
-      // assumes templates with multiple inputs have a p tag to put the label into
-      jQueryTemplateClone.find("p").text(label);
-    }
+  if (texts) {
+    texts.split(", ").forEach((text, index) => {
+      if (textElements[index]) {
+        textElements[index].innerText = text;
+        switch (type) {
+          case "radio":
+          case "checkbox":
+            makeInputLabelsSmarter(type);
+            $(textElements[index]).on("click", function (e) {
+              e.preventDefault(); // prevent click on label from selecting radio/checkbox
+            });
+            break;
+        }
+      } else {
+        // could be creating more inputs for radio / checkbox / dropdown:
+        switch (type) {
+          case "radio":
+            const radioHtml = $(".radio-template ul li:last-child")[0]
+              .outerHTML;
+            const radioHtmlClone = $(cloneTemplateWith(radioHtml));
+            radioHtmlClone.find("label").text(text);
+            radioHtmlClone.appendTo(jQueryTemplateClone.find("ul"));
+            break;
+          case "checkbox":
+            const checkboxHtml = $(".checkbox-template ul li:last-child")[0]
+              .outerHTML;
+            const checkboxHtmlClone = $(cloneTemplateWith(checkboxHtml));
+            checkboxHtmlClone.find("label").text(text);
+            checkboxHtmlClone.appendTo(jQueryTemplateClone.find("ul"));
+            break;
+          case "dropdown":
+          case "gender":
+          case "state":
+            // append to contenteditable text
+            const pre = jQueryTemplateClone.find("pre.edit-select-options");
+            // const options = texts.split(", ").slice(1);
+            pre.text(pre.text() + "\n" + text);
+            editSelectOptions(pre);
+            break;
+        }
+      }
+    });
   }
 
   if (note) {
     jQueryTemplateClone.find(".notes").val(note);
   }
+
+  jQueryTemplateClone.css("display", display);
 }
 
 function editSelectOptions(pre) {
   const preText = $(pre)
     .html()
+    .replaceAll("<div>", "\n")
+    .replaceAll("</div>", "")
     .replaceAll("<br>", "\n")
     .replaceAll("<br/>", "\n")
     .replace(/<div>(.+?)<\/div>/g, "\n$1")
@@ -469,13 +379,6 @@ function getOutputHtmlString() {
       );
       $("#output_html_string pre").css("visibility", "visible");
     });
-}
-
-function scrollToBottomOfElement(jQueryElement) {
-  const newScrollPosition =
-    jQueryElement[0].scrollHeight + jQueryElement[0].offsetHeight;
-  window.scrollTo(0, newScrollPosition);
-  console.log(jQueryElement[0].scrollHeight, newScrollPosition);
 }
 
 function stopFlashingColor() {
@@ -598,7 +501,11 @@ function saveHtmlFile(html) {
   }
 }
 
-function animateMove(originJQueryElement, destinationJQueryElement) {
+function animateMove(
+  originJQueryElement,
+  destinationJQueryElement,
+  animationTime = 100
+) {
   destinationJQueryElement.css("visibility", "hidden");
   const original = $(originJQueryElement);
   const originalMarginLeft = parseInt(original.css("marginLeft"));
@@ -623,62 +530,47 @@ function animateMove(originJQueryElement, destinationJQueryElement) {
       height: originalHeight,
     })
     .offset(originPosition)
-    .animate({
-      left: destinationPosition.left,
-      top: destinationPosition.top,
-      width: destinationWidth,
-      height: "auto", // destinationHeight,
-    });
+    .animate(
+      {
+        left: destinationPosition.left,
+        top: destinationPosition.top,
+        width: destinationWidth,
+        height: "auto", // destinationHeight,
+      },
+      animationTime
+    );
   setTimeout(() => {
     temp.remove();
     $(destinationJQueryElement).css("visibility", "visible");
     $("#output").removeAttr("data-animating", "");
-  }, 1000);
+  }, animationTime * 10);
 }
 
 function setUpJSpreadsheet() {
-  const defaultData = [
-    ["id1", "input", true, "Name:", "Some note."],
-    ["id2", "dropdown", false, "", ""],
-    ["id3", "state", false, "State:", ""],
-    [],
-  ];
+  const defaultData = [[]];
   const columnDefinitions = [
-    { type: "text", title: "ID", width: 125 },
+    { type: "text", title: "ID", width: 75 },
     {
       type: "dropdown",
       title: "Type of input",
       width: 125,
       source: templates,
     },
-    { type: "checkbox", title: "Required", width: 125 },
-    { type: "text", title: "Label", width: 200 },
-    { type: "text", title: "Note", width: 125 },
+    { type: "checkbox", title: "Required", width: 75 },
+    { type: "text", title: "Texts", width: 200 },
+    { type: "text", title: "Note", width: 200 },
+    { type: "text", title: "Display Mode", width: 125 },
   ];
 
   let spreadsheet = jspreadsheet(document.getElementById("spreadsheet"), {
     data: JSON.parse(JSON.stringify(defaultData)),
     columns: JSON.parse(JSON.stringify(columnDefinitions)),
     contextMenu: setUpJSpreadsheetContextMenu,
+    onchange: generateHtmlFromSheet,
   });
 
   $("#export_sheet").on("click", function () {
     spreadsheet.download();
-  });
-
-  $("#import_sheet").on("click", function () {
-    $("#csv_file_input").click();
-  });
-
-  $("#csv_file_input").on("change", function (e) {
-    const file = e.target.files[0];
-    // alert(file);
-    // spreadsheet = jspreadsheet(document.getElementById("spreadsheet"), {
-    //   csv: file,
-    //   csvHeaders: true,
-    //   tableOverflow: true,
-    //   columns: columnDefinitions,
-    // });
   });
 
   function resetSheet() {
@@ -720,6 +612,7 @@ function setUpJSpreadsheetContextMenu(obj, x, y, e) {
           obj.deleteColumn(
             obj.getSelectedColumns().length ? undefined : parseInt(x)
           );
+          generateHtmlFromSheet();
         },
       });
     }
@@ -729,6 +622,7 @@ function setUpJSpreadsheetContextMenu(obj, x, y, e) {
         title: obj.options.text.renameThisColumn,
         onclick: function () {
           obj.setHeader(x);
+          generateHtmlFromSheet();
         },
       });
     }
@@ -740,12 +634,14 @@ function setUpJSpreadsheetContextMenu(obj, x, y, e) {
         title: obj.options.text.orderAscending,
         onclick: function () {
           obj.orderBy(x, 0);
+          generateHtmlFromSheet();
         },
       });
       items.push({
         title: obj.options.text.orderDescending,
         onclick: function () {
           obj.orderBy(x, 1);
+          generateHtmlFromSheet();
         },
       });
     }
@@ -771,6 +667,7 @@ function setUpJSpreadsheetContextMenu(obj, x, y, e) {
         title: obj.options.text.deleteSelectedRows,
         onclick: function () {
           obj.deleteRow(obj.getSelectedRows().length ? undefined : parseInt(y));
+          generateHtmlFromSheet();
         },
       });
     }
@@ -818,8 +715,8 @@ function setUpJSpreadsheetContextMenu(obj, x, y, e) {
 }
 
 function generateSheetFromHtml() {
-  // id, type, required, label, note
-  const newData = []; // example: [["id1", "input", true, "Name:", "Some note."]]
+  // id, type, required, texts, note, display
+  const newData = []; // example: [["id1", "input", true, "Name:", "Some notes.", "block"]]
 
   const usedTemplateContainers = $("#output .template-instance-container");
 
@@ -833,54 +730,75 @@ function generateSheetFromHtml() {
       .trim()
       .replace("-template", "");
     const required = input.hasClass("isRequired");
-    const label = Array.from(container.find("p, label"))
-      .map((x) => x.innerText)
+    const texts = Array.from(container.find("p, label, pre"))
+      .map((x) => {
+        const parsed = x.innerHTML
+          .replaceAll("<div>", ", ")
+          .replaceAll("</div>", "")
+          .replaceAll("<br>", ", ")
+          .replaceAll("<br/>", ", ")
+          .replaceAll("\n", ", ")
+          .replaceAll("&nbsp;", " ");
+        return parsed;
+      })
+      .filter((hasValue) => hasValue)
       .join(", ");
     const note = container.find(".notes").val();
+    const display = container.css("display");
 
-    newData.push([id, type, required, label, note]);
+    newData.push([id, type, required, texts, note, display]);
   });
 
-  console.log(newData);
+  if (!newData.length) newData.push([]);
+
   spreadsheet.setData(newData);
 }
 
-function generateHtmlFromSheet(headersArray, dataRows) {
-  $("#output").show();
+function generateHtmlFromSheet() {
+  const headersArray = spreadsheet.getHeaders();
+  const dataRows = spreadsheet.getRows();
+
+  $("#output").html('<span class="remove-from-final-output" hidden></span>');
   $("#output_html_controls").hide();
   $("#output_html_string").hide();
-  revealButton($("#html_to_excel"));
-  $("#sheet").hide();
-  spreadsheet.resetSheet();
 
   const idColumn = headersArray.indexOf("ID");
   const inputTypeColumn = headersArray.indexOf("Type of input");
   const requiredColumn = headersArray.indexOf("Required");
-  const labelColumn = headersArray.indexOf("Label");
+  const textColumn = headersArray.indexOf("Texts");
   const noteColumn = headersArray.indexOf("Note");
+  const displayColumn = headersArray.indexOf("Display Mode");
+
   const inputs = dataRows.map((r) => r[inputTypeColumn]).filter((x) => x);
 
-  $("#output").animate({ scrollTop: $("#output")[0].scrollHeight });
+  const animationTime = 0;
+
+  const previousScrollTop = $("#output").scrollTop();
+
+  $("#output").animate({ scrollTop: previousScrollTop }, animationTime);
   inputs.map((input, index) => {
     const template = templateMap[input];
     const row = dataRows[index];
     const extraData = {
       id: row[idColumn],
+      type: row[inputTypeColumn],
       required: row[requiredColumn],
-      label: row[labelColumn],
+      texts: row[textColumn],
       note: row[noteColumn],
+      display: row[displayColumn],
     };
     setTimeout(() => {
-      copyTemplate(template, extraData);
+      copyTemplate(template, extraData, animationTime);
       const isLastInput = index === inputs.length - 1;
       if (isLastInput) {
-        $("#output").animate({ scrollTop: $("#output")[0].scrollHeight });
+        $("#output").animate({ scrollTop: previousScrollTop }, animationTime);
       }
-    }, 100 * index);
+    }, animationTime * index);
+    revealButton($(".export-html-file"));
   });
 }
 
-function moveContainerEarlier(button) {
+function moveContainerEarlier(button, callback) {
   const templateContainer = $(button).closest(".template-instance-container");
   const destinationElement = templateContainer.prev(
     ".template-instance-container"
@@ -892,10 +810,11 @@ function moveContainerEarlier(button) {
     animateMove(templateContainer, destinationElement);
     animateMove(destinationElement, templateContainer);
     templateContainer.insertBefore(destinationElement);
+    if (callback) callback();
   });
 }
 
-function moveContainerLater(button) {
+function moveContainerLater(button, callback) {
   const templateContainer = $(button).closest(".template-instance-container");
   const destinationElement = templateContainer.next(
     ".template-instance-container"
@@ -907,6 +826,7 @@ function moveContainerLater(button) {
     animateMove(templateContainer, destinationElement);
     animateMove(destinationElement, templateContainer);
     templateContainer.insertAfter(destinationElement);
+    if (callback) callback();
   });
 }
 
@@ -949,7 +869,7 @@ function hideIntroGif() {
 function removeStylingFromPastedText() {
   $(window).on("paste", function (event) {
     event.preventDefault();
-    var data = event.originalEvent.clipboardData.getData("Text");
+    var data = event.originalEvent.clipboardData.getData("Texts");
     document.execCommand("insertText", false, data);
   });
 }

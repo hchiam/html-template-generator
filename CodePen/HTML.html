@@ -1,6 +1,21 @@
 
     <template></template>
 
+    <button
+      id="toggle_examples"
+      aria-label="toggle templates panel"
+      title="Toggle templates panel"
+    >
+      ◀
+    </button>
+    <button
+      id="toggle_sheet"
+      aria-label="toggle table panel"
+      title="Toggle table panel"
+    >
+      ▶
+    </button>
+
     <section id="examples">
       <div id="fixed_side_panel_top">
         <div class="center-container">
@@ -84,6 +99,12 @@
           <div>
             <p contenteditable>Editable text</p>
             <ul style="padding: 0">
+              <li style="list-style: none">
+                <input id="_" type="checkbox" name="" />
+                <label for="" name="" contenteditable
+                  >Editable checkbox label</label
+                >
+              </li>
               <li style="list-style: none">
                 <input id="_" type="checkbox" name="" />
                 <label for="" name="" contenteditable
@@ -507,7 +528,7 @@
           ></textarea>
         </div>
 
-        <div class="template-instance-container template-generator hide">
+        <div class="template-instance-container template-generator">
           <pre
             contenteditable
             onpaste="return confirm('Make sure you trust the source before pasting! \n\nDo you want to continue?')"
@@ -521,36 +542,6 @@
               Copy <b><i>dynamic</i></b> template
             </button>
           </div>
-        </div>
-
-        <h2>Advanced:</h2>
-        <div id="toggle_advanced_container">
-          <button id="toggle_advanced">+</button>
-        </div>
-        <div id="advanced_buttons_group" class="hide">
-          <button id="get_output_html_string" class="hide">
-            Show HTML code
-          </button>
-          <div id="output_html_controls">
-            <div>
-              <button
-                id="hide_output_html_string"
-                title="Show the view that's closer to what a user would see."
-              >
-                Show normal view
-              </button>
-              <button
-                id="export_html_file"
-                class="export-html-file"
-                title="You could give an HTML file a developer, to speed up writing the code."
-              >
-                Export to .html file
-              </button>
-            </div>
-          </div>
-          <button id="copy_excel_data">Copy Excel data</button>
-          <button id="import_html_file">Import HTML file</button>
-          <button id="html_to_excel" class="hide">HTML -&gt; Excel</button>
         </div>
 
         <div class="version-number-container">
@@ -608,18 +599,9 @@
       <pre></pre>
     </section>
 
-    <section id="sheet" hidden>
-      <p>You can copy your Excel data into this table:</p>
+    <section id="sheet">
+      <h2>Table</h2>
+      <p>Copy sheet data into this table, or generate updates:</p>
       <div id="spreadsheet"></div>
-      <p>
-        <i><b>NOTE:</b></i> This is still experimental!
-      </p>
-      <div>
-        <button id="generate_html_from_sheet">Generate HTML</button>
-        <button id="export_sheet">Export sheet</button>
-        <button id="import_sheet" hidden>Import sheet</button>
-      </div>
+      <button id="export_sheet">Export sheet</button>
     </section>
-
-    <input id="html_file_input" type="file" name="name" style="display: none" />
-    <input id="csv_file_input" type="file" name="name" style="display: none" />
