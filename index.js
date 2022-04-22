@@ -683,6 +683,7 @@ function generateSheetFromHtml() {
 
 let animatedOnceForGenerateHtmlFromSheet = false;
 function generateHtmlFromSheet() {
+  // TODO: need to handle options, labels, width state, etc.
   const headersArray = spreadsheet.getHeaders();
   const dataRows = spreadsheet.getRows();
 
