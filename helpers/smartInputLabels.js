@@ -22,6 +22,9 @@ function makeInputLabelsSmarter(type, inputLabels) {
         appendInputAndLabel(type, inputLabel);
       }
     });
+    inputLabel.off("click").on("click", function (e) {
+      e.preventDefault(); // prevent click on label from selecting radio/checkbox
+    });
   });
 }
 

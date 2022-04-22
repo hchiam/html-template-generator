@@ -1,6 +1,21 @@
 
     <template></template>
 
+    <button
+      id="toggle_examples"
+      aria-label="toggle templates panel"
+      title="Toggle templates panel"
+    >
+      ◀
+    </button>
+    <button
+      id="toggle_sheet"
+      aria-label="toggle table panel"
+      title="Toggle table panel"
+    >
+      ▶
+    </button>
+
     <section id="examples">
       <div id="fixed_side_panel_top">
         <div class="center-container">
@@ -587,7 +602,5 @@
     <section id="sheet">
       <p>You can copy your Excel data into this table:</p>
       <div id="spreadsheet"></div>
-      <div>
-        <button id="export_sheet">Export sheet</button>
-      </div>
+      <button id="export_sheet">Export sheet</button>
     </section>

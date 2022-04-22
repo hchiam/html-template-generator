@@ -4,11 +4,16 @@
   --flash-color: black;
 }
 
+html,
+body {
+  height: 100%;
+}
+
 body {
   display: flex;
   padding: 0;
   margin: 0;
-  height: 100vh;
+  width: 100%;
   overflow: hidden;
 }
 
@@ -45,7 +50,7 @@ a:not(:disabled):focus {
 
 #template_demo_container {
   z-index: 15;
-  animation: slide-left 15s forwards;
+  animation: slide-gif-left 15s forwards;
   position: fixed;
   width: 100%;
   height: 100%;
@@ -54,6 +59,19 @@ a:not(:disabled):focus {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes slide-gif-left {
+    90% {
+      opacity: 1;
+      left: 0;
+    }
+    100% {
+      opacity: 0;
+      left: -100%;
+    }
+  }
 }
 
 #template_demo_container h1 {
@@ -82,6 +100,8 @@ a:not(:disabled):focus {
   box-shadow: inset 0 -30px 30px -30px black;
   display: flex;
   flex-direction: column;
+  min-width: 400px;
+  height: 100%;
 }
 
 #examples:after {
@@ -101,6 +121,46 @@ a:not(:disabled):focus {
   height: 100vh;
   overflow: auto;
   padding: 1rem;
+}
+
+#output {
+  border-radius: 0;
+}
+
+#sheet {
+  margin-left: 1rem;
+}
+
+#sheet,
+#sheet > p,
+#spreadsheet {
+  background: black;
+}
+
+#toggle_examples {
+  position: absolute;
+  top: 0;
+  left: 0;
+  text-decoration: none;
+  z-index: 1;
+}
+
+#toggle_sheet {
+  position: absolute;
+  top: 0;
+  right: 0;
+  text-decoration: none;
+  z-index: 1;
+}
+
+#toggle_examples:hover:after,
+#toggle_examples:focus:after {
+  content: " Toggle templates panel ";
+}
+
+#toggle_sheet:hover:before,
+#toggle_sheet:focus:before {
+  content: " Toggle table panel ";
 }
 
 #output_html_controls {
@@ -440,11 +500,13 @@ select + pre:before {
   animation: flash-of-color 0.3s 0.3s;
 }
 
-/* recommended usage: animation: flash-of-color 0.3s 0.3s; */
-@keyframes flash-of-color {
-  50% {
-    background: var(--flash-background);
-    color: var(--flash-color);
+@media (prefers-reduced-motion: no-preference) {
+  /* recommended usage: animation: flash-of-color 0.3s 0.3s; */
+  @keyframes flash-of-color {
+    50% {
+      background: var(--flash-background);
+      color: var(--flash-color);
+    }
   }
 }
 
@@ -639,14 +701,34 @@ input[type="range"]:focus::-ms-fill-upper {
   margin: auto;
 }
 
-@keyframes slide-left {
-  90% {
-    opacity: 1;
-    left: 0;
+.slide-left {
+  animation: slide-left 1s forwards;
+}
+
+.slide-right {
+  animation: slide-right 1s forwards;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes slide-left {
+    90% {
+      transform: translateX(-100vw);
+    }
+    100% {
+      transform: translateX(-100vw);
+      max-width: 0;
+      min-width: revert;
+    }
   }
-  100% {
-    opacity: 0;
-    left: -100%;
+  @keyframes slide-right {
+    90% {
+      transform: translateX(100vw);
+    }
+    100% {
+      transform: translateX(100vw);
+      max-width: 0;
+      min-width: revert;
+    }
   }
 }
 
@@ -670,24 +752,26 @@ input[type="range"]:focus::-ms-fill-upper {
   color: white;
 }
 
-@keyframes reveal-from-left {
-  from {
-    opacity: 0;
-    transform: rotate(2deg) scaleX(0);
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes reveal-from-left {
+    from {
+      opacity: 0;
+      transform: rotate(2deg) scaleX(0);
+    }
+    to {
+      opacity: 0.9;
+      transform: rotate(2deg) scaleX(1);
+    }
   }
-  to {
-    opacity: 0.9;
-    transform: rotate(2deg) scaleX(1);
-  }
-}
 
-@keyframes auto-hide {
-  90% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-    pointer-events: none;
+  @keyframes auto-hide {
+    90% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+      pointer-events: none;
+    }
   }
 }
 
