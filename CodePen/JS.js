@@ -93,9 +93,13 @@ function attachEventListeners() {
     generateSheetFromHtml();
   });
 
-  $("body").on("keyup", "#output [contenteditable]", function () {
-    generateSheetFromHtml();
-  });
+  $("body").on(
+    "keyup",
+    "#output [contenteditable], #output .notes",
+    function () {
+      generateSheetFromHtml();
+    }
+  );
 
   $(".copy-dynamic-template").on("click", function () {
     copyDynamicTemplate(this);
@@ -226,7 +230,7 @@ function fillTemplateWith(thisHtml) {
 }
 
 function useExtraData(jQueryTemplateClone, extraData) {
-  const { id, type, required, texts, note } = extraData;
+  const { id, type, required, display, texts, note } = extraData;
 
   const textElements = [...jQueryTemplateClone.find("p, label, pre")];
   const ids = jQueryTemplateClone.find("[id]");
@@ -253,6 +257,8 @@ function useExtraData(jQueryTemplateClone, extraData) {
       .toggleClass("isRequired", required)
       .toggleClass("notRequired", !required);
   }
+
+  jQueryTemplateClone.css("display", display);
 
   if (texts) {
     texts.split(", ").forEach((text, index) => {
@@ -537,6 +543,7 @@ function setUpJSpreadsheet() {
       source: templates,
     },
     { type: "checkbox", title: "Required", width: 125 },
+    { type: "text", title: "Display Mode", width: 125 },
     { type: "text", title: "Texts", width: 200 },
     { type: "text", title: "Note", width: 125 },
   ];
@@ -696,8 +703,8 @@ function setUpJSpreadsheetContextMenu(obj, x, y, e) {
 function generateSheetFromHtml() {
   // TODO: need to handle options, labels, width state, etc.
 
-  // id, type, required, texts, note
-  const newData = []; // example: [["id1", "input", true, "Name:", "Some notes."]]
+  // id, type, required, display, texts, note
+  const newData = []; // example: [["id1", "input", true, true, "Name:", "Some notes."]]
 
   const usedTemplateContainers = $("#output .template-instance-container");
 
@@ -711,6 +718,7 @@ function generateSheetFromHtml() {
       .trim()
       .replace("-template", "");
     const required = input.hasClass("isRequired");
+    const display = container.css("display");
     const texts = Array.from(container.find("p, label, pre"))
       .map((x) => {
         console.log(x.innerHTML);
@@ -725,10 +733,10 @@ function generateSheetFromHtml() {
       })
       .filter((hasValue) => hasValue)
       .join(", ");
-    // console.log(texts);
+
     const note = container.find(".notes").val();
 
-    newData.push([id, type, required, texts, note]);
+    newData.push([id, type, required, display, texts, note]);
   });
 
   if (!newData.length) newData.push([]);
@@ -748,6 +756,7 @@ function generateHtmlFromSheet() {
   const idColumn = headersArray.indexOf("ID");
   const inputTypeColumn = headersArray.indexOf("Type of input");
   const requiredColumn = headersArray.indexOf("Required");
+  const displayColumn = headersArray.indexOf("Display Mode");
   const noteColumn = headersArray.indexOf("Note");
   const textColumn = headersArray.indexOf("Texts");
   const inputs = dataRows.map((r) => r[inputTypeColumn]).filter((x) => x);
@@ -764,6 +773,7 @@ function generateHtmlFromSheet() {
       id: row[idColumn],
       type: row[inputTypeColumn],
       required: row[requiredColumn],
+      display: row[displayColumn],
       note: row[noteColumn],
       texts: row[textColumn],
     };
