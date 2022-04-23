@@ -549,7 +549,23 @@ function animateMove(
 }
 
 function setUpJSpreadsheet() {
-  const defaultData = [[]];
+  const defaultData = [
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+  ];
   const columnDefinitions = [
     { type: "text", title: "ID", width: 75 },
     {

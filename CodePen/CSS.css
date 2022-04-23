@@ -142,9 +142,30 @@ a:not(:disabled):focus {
 }
 
 #sheet,
-#sheet > p,
+#sheet_panel_header,
+#sheet_panel_header > p,
 #spreadsheet {
   background: black;
+  border-radius: 0;
+}
+
+#sheet_panel_header {
+  position: sticky;
+  top: -1rem;
+  left: -1rem;
+  isolation: isolate;
+  z-index: 1;
+  padding: 1rem 1rem 0 1rem;
+  margin: -1rem -1rem 0 -1rem;
+}
+
+#export_sheet {
+  position: absolute;
+  top: 1rem;
+}
+
+#spreadsheet {
+  isolation: isolate;
 }
 
 #toggle_examples {
@@ -160,7 +181,7 @@ a:not(:disabled):focus {
   top: 0;
   right: 0;
   text-decoration: none;
-  z-index: 1;
+  z-index: 2;
 }
 
 #toggle_examples:hover:after,
