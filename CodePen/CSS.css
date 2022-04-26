@@ -541,18 +541,18 @@ select + pre:before {
   }
 }
 
-.template-generator {
+.other-template {
   overflow: hidden;
   padding: 1rem;
 }
 
-.template-generator pre {
+.other-template pre {
   overflow: scroll;
   height: 100%;
   margin: 0;
 }
 
-.template-generator pre:not(.disable-hover):hover {
+.other-template pre:not(.disable-hover):hover {
   background: var(--accent-colour);
   color: black;
 }

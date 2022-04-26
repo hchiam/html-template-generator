@@ -30,9 +30,15 @@ const templates = [
 const templateMap = {};
 templates.forEach((template) => {
   const foundTemplate = examples.find(`.${template}-template`);
+  const foundCopyTemplate = foundTemplate.find(".copy-template");
+  const foundCopyDynamicTemplate = foundTemplate.find(".copy-dynamic-template");
+  const copyTemplateButton = foundCopyTemplate.length
+    ? foundCopyTemplate
+    : foundCopyDynamicTemplate;
+
   templateMap[template] =
     foundTemplate.length > 0
-      ? foundTemplate.find(".copy-template")
+      ? copyTemplateButton
       : examples.find(".paragraph-template").find(".copy-template");
 });
 const spreadsheet = setUpJSpreadsheet();
@@ -102,10 +108,12 @@ function attachEventListeners() {
   );
 
   $(".copy-dynamic-template").on("click", function () {
+    $("#output").attr("data-animating", true);
     copyDynamicTemplate(this);
     $("#output").show();
     $("#output_html_controls").hide();
     $("#output_html_string").hide();
+    revealButton($(".export-html-file"));
     generateSheetFromHtml();
   });
 
@@ -137,13 +145,13 @@ function deleteTemplateInstance(button) {
 }
 
 function copyDynamicTemplate(button) {
-  const templateContainer = $(button).closest(".template-generator");
+  const templateContainer = $(button).closest(".other-template");
   let templateHtmlLiteral = templateContainer
     .find("pre")
     .text()
     .replaceAll("<br>", "\n")
     .trim();
-  templateHtmlLiteral = `<div class="template-instance-container">
+  templateHtmlLiteral = `<div class="template-instance-container other-template">
 ${templateHtmlLiteral}
 <div class="template-controls remove-from-final-output">
 <button class="copy-template">Copy template</button>
@@ -249,6 +257,13 @@ function useExtraData(jQueryTemplateClone, extraData) {
   const fors = jQueryTemplateClone.find("[for]");
   const hasOneInput = ids.length === 1;
   const hasMultipleInputs = ids.length > 1;
+
+  if (type === "other") {
+    // generate dynamic template, not necessarily the same as the one in the templates panel
+    jQueryTemplateClone.empty();
+    jQueryTemplateClone.html(texts);
+    return;
+  }
 
   if (id) {
     if (hasOneInput) {
@@ -748,19 +763,24 @@ function generateSheetFromHtml() {
       .trim()
       .replace("-template", "");
     const required = input.hasClass("isRequired");
-    const texts = Array.from(container.find("p, label, pre"))
-      .map((x) => {
-        const parsed = x.innerHTML
-          .replaceAll("<div>", ", ")
-          .replaceAll("</div>", "")
-          .replaceAll("<br>", ", ")
-          .replaceAll("<br/>", ", ")
-          .replaceAll("\n", ", ")
-          .replaceAll("&nbsp;", " ");
-        return parsed;
-      })
-      .filter((hasValue) => hasValue)
-      .join(", ");
+    const texts =
+      type === "other"
+        ? [...container.find("> *:not(.remove-from-final-output)")]
+            .map((x) => x.outerHTML)
+            .join("")
+        : Array.from(container.find("p, label, pre"))
+            .map((x) => {
+              const parsed = x.innerHTML
+                .replaceAll("<div>", ", ")
+                .replaceAll("</div>", "")
+                .replaceAll("<br>", ", ")
+                .replaceAll("<br/>", ", ")
+                .replaceAll("\n", ", ")
+                .replaceAll("&nbsp;", " ");
+              return parsed;
+            })
+            .filter((hasValue) => hasValue)
+            .join(", ");
     const note = container.find(".notes").val();
     const display = container.css("display");
 
@@ -768,6 +788,8 @@ function generateSheetFromHtml() {
   });
 
   if (!newData.length) newData.push([]);
+
+  while (newData.length < spreadsheet.getData().length) newData.push([]);
 
   spreadsheet.setData(newData);
 }
