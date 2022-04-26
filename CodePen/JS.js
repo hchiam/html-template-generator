@@ -874,9 +874,7 @@ function showVersionNumber(versionNumber) {
   $(".version-number-container .version-number-link").text(
     `You're using version ${versionNumber}`
   );
-  $("#no_mobile_message .version-number-link").text(
-    `as of version ${versionNumber}`
-  );
+  $("#no_mobile_message .version-number-link").text(`version ${versionNumber}`);
 }
 
 function getVersionNumber(callback) {
