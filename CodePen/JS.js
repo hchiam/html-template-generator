@@ -46,8 +46,8 @@ console.log("https://codepen.io/hchiam/pen/jOBOaqm");
 console.log("https://github.com/hchiam/html-template-generator/issues");
 getVersionNumber((version) => {
   showVersionNumber(version);
-  const accentColour = getAccentColourFromVersion(version);
-  $(":root").css("--accent-colour", accentColour);
+  // const accentColour = getAccentColourFromVersion(version);
+  // $(":root").css("--accent-colour", accentColour);
 });
 const secondsToShowIntroGif = 15000;
 setTimeout(() => {
