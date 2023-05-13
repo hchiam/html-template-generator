@@ -907,8 +907,10 @@ function hideIntroGif() {
 function removeStylingFromPastedText() {
   $(window).on("paste", function (event) {
     event.preventDefault();
-    var data = event.originalEvent.clipboardData.getData("Texts");
-    document.execCommand("insertText", false, data);
+    if (event.originalEvent && event.originalEvent.clipboardData) {
+      const data = event.originalEvent.clipboardData.getData("text");
+      document.execCommand("insertText", false, data);
+    }
   });
 }
 makeInputLabelsSmarter("radio");
