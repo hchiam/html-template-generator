@@ -381,6 +381,10 @@ function getOutputHtmlString() {
   });
   outputClone.find(".notes").remove();
 
+  outputClone.find(".template-instance-container").each(function () {
+    $(this).replaceWith($(this).html());
+  });
+
   outputClone.find("[contenteditable]").removeAttr("contenteditable");
   outputClone = formattedHtml(outputClone.find("#output").html());
 
