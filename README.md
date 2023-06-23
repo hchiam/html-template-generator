@@ -22,3 +22,7 @@ yarn start
 ```
 
 (You'll need [`yarn`](https://github.com/hchiam/learning-yarn) set up. For deployment, I use [`surge`](https://github.com/hchiam/learning-surge).)
+
+## Future/Experimental
+
+https://github.com/hchiam/learning-gpt4all
