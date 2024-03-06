@@ -7,4 +7,14 @@ body > p:first-child {
   margin: auto;
   left: 50%;
   transform: translateX(-50%);
+  background: red;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 0.25rem;
+  color: white;
+}
+
+body > p:first-child a {
+  background: inherit;
 }
